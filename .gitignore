@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# OS
+.DS_Store
+
+# LaTeX
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.synctex.gz
+
+# Data
+*.pkl
+*.npy
+
+# Private
+NEXT_STEPS.md
+pmlr-license-agreement*.pdf
+uai2026_source.zip
