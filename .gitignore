@@ -21,3 +21,9 @@ __pycache__/
 NEXT_STEPS.md
 pmlr-license-agreement*.pdf
 uai2026_source.zip
+paper/figures/
+slides/*.nav
+slides/*.snm
+slides/*.toc
+slides/pdf_pages/
+slides/*.pptx
