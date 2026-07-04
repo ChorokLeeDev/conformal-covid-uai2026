@@ -84,7 +84,8 @@
 \begin{tikzpicture}
 \node[fill=uaiorange, rounded corners=12pt, inner sep=18pt, text width=0.96\textwidth, drop shadow={shadow xshift=2pt, shadow yshift=-2pt, opacity=0.2}] {
 \centering
-{\fontsize{38}{46}\selectfont\color{white}\bfseries KEY FINDING: \quad SHAP Concentration \Large($\varphi_1/\Sigma|\varphi_j|$) \fontsize{38}{46}\selectfont predicts CP failure with $\rho = 0.853$ \quad $\vert$ \quad 40\% threshold for vulnerability}
+{\fontsize{36}{44}\selectfont\color{white}\bfseries KEY FINDING: SHAP Concentration predicts CP failure in GBMs ($\rho = 0.853$)}\\[0.4em]
+{\fontsize{30}{38}\selectfont\color{white} 40\% threshold achieves 87.5\% LOO-CV accuracy \quad $\vert$ \quad \textbf{GBM models only}}
 };
 \end{tikzpicture}
 \end{center}
@@ -103,17 +104,9 @@
 \vspace{1cm}
 \fontsize{27}{34}\selectfont
 
-\textbf{Conformal Prediction (CP)} provides distribution-free uncertainty with \textbf{guaranteed coverage}.
+\textbf{Conformal Prediction (CP)} provides distribution-free uncertainty, but \textbf{distribution shift breaks guarantees}.
 
-\vspace{1em}
-\textbf{\color{alertred}The Challenge:}
-\begin{itemize}
-    \item[\color{alertred}$\blacktriangleright$] Real-world data has \textbf{distribution shift}
-    \item[\color{alertred}$\blacktriangleright$] COVID-19: \textbf{extreme temporal shifts}
-    \item[\color{alertred}$\blacktriangleright$] CP guarantees \textbf{break down}
-\end{itemize}
-
-\vspace{1em}
+\vspace{0.8em}
 \textbf{\color{uaiblue}Research Question:}
 \begin{center}
 \fcolorbox{uaiblue}{white}{\parbox{0.88\linewidth}{\centering\fontsize{25}{31}\selectfont
@@ -121,11 +114,11 @@ Can we \textbf{predict} when CP fails \textbf{before} deployment?
 }}
 \end{center}
 
-\vspace{1em}
+\vspace{0.8em}
 \begin{center}
 \includegraphics[width=0.92\linewidth]{../figures/fig1_covid_timeline.jpg}
 \end{center}
-{\fontsize{21}{26}\selectfont\textit{Fig 1: COVID-19 distribution shifts}}
+{\fontsize{21}{26}\selectfont\textit{Fig 1: COVID-19 distribution shifts (Feb--Jul 2020)}}
 }
 
 \vspace{0.8cm}
@@ -163,15 +156,15 @@ Models with \textbf{concentrated feature reliance} are vulnerable:
 %------------------------------------------------------------------------------
 % DATASET
 %------------------------------------------------------------------------------
-\posterbox{SALT COVID Dataset}{%
+\posterbox{SALT Supply Chain Dataset}{%
 \vspace{1cm}
 \fontsize{27}{34}\selectfont
 
-\textbf{Clinical Trials Database}
+\textbf{RelBench Supply Chain Benchmark}
 \begin{itemize}
-    \item \textbf{9 clinical domains}
-    \item \textbf{16 prediction tasks}
-    \item Pre $\rightarrow$ pandemic shift
+    \item \textbf{8 classification tasks}
+    \item \textbf{COVID-19 temporal split}
+    \item Feb--Jul 2020 (onset $\rightarrow$ peak)
 \end{itemize}
 
 \vspace{0.5em}
@@ -180,13 +173,13 @@ Models with \textbf{concentrated feature reliance} are vulnerable:
 {\fontsize{24}{30}\selectfont
 \begin{tabular}{lc}
 \toprule
-\textbf{Domain} & \textbf{Tasks} \\
+\textbf{Task Type} & \textbf{Count} \\
 \midrule
-Cardiovascular & 3 \\
-Respiratory & 2 \\
-Emergency / ICU & 4 \\
-Lab / Mortality & 4 \\
-Other & 3 \\
+Sales-level & 5 \\
+Item-level & 3 \\
+\midrule
+\textbf{Total SALT} & \textbf{8} \\
++ External & +8 \\
 \bottomrule
 \end{tabular}
 }
@@ -275,25 +268,30 @@ Other & 3 \\
 %------------------------------------------------------------------------------
 % MODEL COMPARISON
 %------------------------------------------------------------------------------
-\posterbox{Model Comparison}{%
-\vspace{0.8cm}
+\posterbox{Model Scope: GBM Only}{%
+\vspace{1cm}
 \fontsize{27}{34}\selectfont
 
 \begin{center}
 \renewcommand{\arraystretch}{1.4}
-{\fontsize{28}{34}\selectfont
+{\fontsize{26}{32}\selectfont
 \begin{tabular}{lcc}
 \toprule
-\textbf{Model} & \textbf{$\rho$} & \textbf{Rank} \\
+\textbf{Model} & \textbf{$\rho$} & \textbf{Works?} \\
 \midrule
-\rowcolor{goldaccent!30} \textbf{LightGBM} & \textbf{0.833} & \textbf{1} \\
-CatBoost & 0.786 & 2 \\
-XGBoost & 0.762 & 3 \\
-Random Forest & 0.714 & 4 \\
+\rowcolor{goldaccent!30} \textbf{LightGBM} & \textbf{0.833} & \color{successgreen}\checkmark \\
+CatBoost & 0.667 & \color{successgreen}\checkmark \\
+XGBoost & 0.548 & \color{successgreen}\checkmark \\
+\rowcolor{red!10} Random Forest & 0.30 & \color{alertred}$\times$ \\
+\rowcolor{red!10} MLP & 0.43 & \color{alertred}$\times$ \\
 \bottomrule
 \end{tabular}
 }
 \end{center}
+
+\vspace{0.4em}
+{\fontsize{22}{28}\selectfont\textit{GBM: concentrated-dependence}\\
+\textit{RF/MLP: global-sensitivity (different failure mode)}}
 }
 
 \end{minipage}%
@@ -303,37 +301,39 @@ Random Forest & 0.714 & 4 \\
 %------------------------------------------------------------------------------
 % EXTERNAL VALIDATION
 %------------------------------------------------------------------------------
-\posterbox{External Validation: Covertype}{%
+\posterbox{External Validation: WILDS + UCI}{%
 \vspace{1cm}
 \fontsize{27}{34}\selectfont
 
-\textbf{UCI Forest Covertype Dataset}
-\begin{itemize}
-    \item 581K samples, 54 features
-    \item Geographic distribution shift
-\end{itemize}
+\textbf{4 Benchmark Datasets}
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+{\fontsize{22}{28}\selectfont
+\begin{tabular}{lccc}
+\toprule
+\textbf{Dataset} & \textbf{Conc.} & \textbf{Cov.$\Delta$} & \textbf{Pred.} \\
+\midrule
+CivilComments & 26.2\% & -0.7pp & Robust \\
+Amazon & 1.9\% & +0.4pp & Robust \\
+Covertype & 12.5\% & +8.0pp & Robust \\
+Adult & 27.5\% & +1.4pp & Robust \\
+\bottomrule
+\end{tabular}
+}
+{\fontsize{18}{22}\selectfont\textit{Conc.=SHAP Concentration, Cov.$\Delta$=Coverage Change, Pred.=Prediction}}
+\end{center}
 
-\vspace{0.8em}
+\vspace{0.6em}
 \begin{center}
 \begin{tikzpicture}
-\node[fill=white, draw=alertred, line width=4pt, rounded corners=10pt, inner sep=15pt, drop shadow={shadow xshift=2pt, shadow yshift=-2pt, opacity=0.2}] {
+\node[fill=white, draw=successgreen, line width=4pt, rounded corners=10pt, inner sep=12pt] {
 \begin{minipage}{0.78\linewidth}
 \centering
-{\fontsize{75}{90}\selectfont\bfseries\color{alertred} 81.8pp}\\[0.2em]
-{\fontsize{28}{34}\selectfont Coverage Drop}\\[0.3em]
-{\fontsize{26}{32}\selectfont 90\% $\rightarrow$ \textbf{49.8\%}}
+{\fontsize{50}{60}\selectfont\bfseries\color{successgreen} 91.7\%}\\[0.2em]
+{\fontsize{26}{32}\selectfont Combined Accuracy (11/12)}
 \end{minipage}
 };
 \end{tikzpicture}
-\end{center}
-
-\vspace{0.8em}
-\begin{center}
-\fcolorbox{successgreen}{green!10}{\parbox{0.82\linewidth}{\centering
-\vspace{0.2em}
-{\fontsize{24}{30}\selectfont\color{successgreen}\bfseries Validates 40\% threshold across domains}
-\vspace{0.2em}
-}}
 \end{center}
 }
 
@@ -380,14 +380,17 @@ Random Forest & 0.714 & 4 \\
 
 \textbf{\color{successgreen}Contributions:}
 \begin{enumerate}
-    \item SHAP Concentration predicts CP failures
+    \item SHAP Concentration predicts CP failures \textbf{in GBMs}
     \item Strong correlation: $\rho=0.853$ ($p<0.001$)
-    \item Practical 40\% threshold
-    \item Validated on Covertype dataset
+    \item 40\% threshold: LOO-CV \textbf{87.5\%}, Cohen's d=3.08
+    \item WILDS validation: \textbf{91.7\%} combined
 \end{enumerate}
 
 \vspace{0.5em}
-\textbf{Future:} Adaptive CP, real-time monitoring, DL extension
+\textbf{\color{alertred}Scope:} GBM only (not RF/MLP)
+
+\vspace{0.3em}
+\textbf{Future:} Adaptive CP, real-time monitoring
 }
 
 \vspace{0.8cm}

@@ -22,6 +22,7 @@
 \usepackage{algorithm}
 \usepackage{algorithmic}
 \usepackage{xcolor}
+\usepackage{pifont}
 
 % Custom commands
 \newcommand{\rmark}{\textcolor{alertred}{\ding{55}}}
@@ -199,7 +200,9 @@ $\Rightarrow$ Cannot distinguish:
 \vspace{0.3em}
 
 For \alert{Adaptive Prediction Sets (APS)}:
-$$s(x,y) = \sum_{k: \hat{\pi}_k \geq \hat{\pi}_y} \hat{\pi}_k$$
+\begin{equation*}
+s(x,y) = \sum_{k: \hat{\pi}_k \geq \hat{\pi}_y} \hat{\pi}_k
+\end{equation*}
 
 \vspace{0.3em}
 \footnotesize{(Sum of probabilities of classes ranked above true class)}
@@ -236,6 +239,9 @@ $$\mathbb{P}(Y \in \mathcal{C}(X)) \geq 1 - \alpha$$
 \vspace{1em}
 \centering
 \textit{We use $\alpha = 0.1$ throughout (target: 90\% coverage)}
+
+\vspace{0.5em}
+\textcolor{kaistblue}{\textbf{Next:} What happens when the exchangeability assumption breaks?}
 \end{frame}
 
 %------------------------------------------------------------------------------
@@ -463,51 +469,87 @@ $\Rightarrow$ \alert{Concentration = fragility amplifier}
 
 %------------------------------------------------------------------------------
 
-\begin{frame}{Methodology Details}
+\begin{frame}{Models and Methods}
 
 \begin{columns}
 \begin{column}{0.55\textwidth}
-\textbf{Models:}
+\textbf{Models (GBM-specific diagnostic):}
+\vspace{0.5em}
 \begin{itemize}
-    \item LightGBM (primary)
-    \item CatBoost, XGBoost, Random Forest
+    \item \textbf{LightGBM} (primary): $\rho=0.833$
+    \item CatBoost, XGBoost: $\rho=0.55$--$0.67$
+    \item \textcolor{gray}{RF ($\rho=0.30$), MLP ($\rho=0.43$) -- not applicable}
 \end{itemize}
 
-\vspace{0.8em}
+\vspace{1em}
 
 \textbf{Conformal Method:}
 \begin{itemize}
     \item Adaptive Prediction Sets (APS)
     \item Target coverage: $1-\alpha = 90\%$
 \end{itemize}
+\end{column}
 
-\vspace{0.8em}
+\begin{column}{0.45\textwidth}
+\begin{center}
+\begin{tikzpicture}[scale=0.8]
+% Model comparison bar chart
+\draw[->] (0,0) -- (0,4) node[above,rotate=90,pos=0.5] {\small Correlation $\rho$};
+\draw[->] (0,0) -- (5,0);
+% Bars
+\draw[fill=kaistblue!80] (0.5,0) rectangle (1.2,3.33);
+\node[below,font=\tiny] at (0.85,-0.1) {LGB};
+\draw[fill=kaistblue!60] (1.5,0) rectangle (2.2,2.67);
+\node[below,font=\tiny] at (1.85,-0.1) {Cat};
+\draw[fill=kaistblue!40] (2.5,0) rectangle (3.2,2.19);
+\node[below,font=\tiny] at (2.85,-0.1) {XGB};
+\draw[fill=gray!40] (3.5,0) rectangle (4.2,1.2);
+\node[below,font=\tiny] at (3.85,-0.1) {RF};
+% Threshold line
+\draw[dashed,alertred,thick] (0,2) -- (4.5,2);
+\node[right,alertred,font=\tiny] at (4.5,2) {0.5};
+\end{tikzpicture}
+\end{center}
+\end{column}
+\end{columns}
 
+\vspace{0.5em}
+\centering
+\textit{Our diagnostic works best for gradient boosting models}
+\end{frame}
+
+%------------------------------------------------------------------------------
+
+\begin{frame}{Experimental Setup}
+
+\begin{columns}
+\begin{column}{0.5\textwidth}
 \textbf{Statistical Robustness:}
 \begin{itemize}
     \item 50 random seeds per experiment
     \item Spearman correlation with p-values
+    \item Bootstrap confidence intervals
 \end{itemize}
 
-\vspace{0.8em}
+\vspace{1em}
 
 \textbf{External Validation:}
 \begin{itemize}
-    \item 8 additional datasets (9 domains total)
-    \item Covertype, MNIST-C, ImageNet-C, ...
+    \item WILDS: CivilComments, Amazon
+    \item UCI: Covertype, Adult
+    \item Combined accuracy: \textbf{91.7\%} (11/12)
 \end{itemize}
 \end{column}
 
-\begin{column}{0.45\textwidth}
+\begin{column}{0.5\textwidth}
 \begin{table}
-\small
 \centering
 \begin{tabular}{lc}
 \toprule
 \textbf{Component} & \textbf{Setting} \\
 \midrule
-Calibration size & 1,000--5,000 \\
-Test size & 5,000--50,000 \\
+Calibration size & 1K--5K \\
+Test size & 5K--50K \\
 Features & 20--150 \\
 Classes & 2--10 \\
 $\alpha$ & 0.1 \\
@@ -686,14 +728,15 @@ $\Rightarrow$ \alert{Catastrophic failure} correctly predicted!\\
 \begin{columns}
 \begin{column}{0.5\textwidth}
 \centering
-\begin{tabular}{lc}
+\begin{tabular}{lcc}
 \toprule
-\textbf{Model} & \textbf{Correlation} ($\rho$) \\
+\textbf{Model} & \textbf{$\rho$} & \textbf{Diagnostic?} \\
 \midrule
-\textbf{LightGBM} & \textbf{0.833} \\
-CatBoost & 0.667 \\
-XGBoost & 0.548 \\
-Random Forest & 0.300 \\
+\textbf{LightGBM} & \textbf{0.833} & \textcolor{successgreen}{\checkmark} \\
+CatBoost & 0.667 & \textcolor{successgreen}{\checkmark} \\
+XGBoost & 0.548 & \textcolor{successgreen}{\checkmark} \\
+\rowcolor{gray!20} Random Forest & 0.300 & \textcolor{alertred}{$\times$} \\
+\rowcolor{gray!20} MLP & 0.430 & \textcolor{alertred}{$\times$} \\
 \bottomrule
 \end{tabular}
 \end{column}
@@ -701,9 +744,9 @@ Random Forest & 0.300 \\
 \begin{column}{0.5\textwidth}
 \textbf{Interpretation:}
 \begin{itemize}
-    \item Gradient boosting methods show stronger correlation
-    \item LightGBM: Best diagnostic signal
-    \item Random Forest: Weaker (ensemble averaging)
+    \item \textbf{GBM}: Sequential boosting $\Rightarrow$ concentrated dependence
+    \item \textbf{RF}: Bagging dilutes single-feature reliance
+    \item \textbf{MLP}: Global sensitivity failure mode
 \end{itemize}
 \end{column}
 \end{columns}
@@ -876,55 +919,28 @@ Empirically, $\mathcal{H} \geq 0.40$ indicates elevated vulnerability to coverag
 
 \begin{frame}{Limitations}
 
-\begin{columns}
-\begin{column}{0.5\textwidth}
-\textbf{Current Limitations:}
-
-\vspace{0.5em}
-
-\begin{enumerate}
-    \item \textbf{Tabular focus}
-    \begin{itemize}
-        \item Tested primarily on tabular data
-        \item Extension to images/text needs study
-    \end{itemize}
-
-    \vspace{0.5em}
-
-    \item \textbf{SHAP computation cost}
-    \begin{itemize}
-        \item TreeSHAP efficient for GBMs
-        \item Deep learning: KernelSHAP slower
-    \end{itemize}
-
-    \vspace{0.5em}
-
-    \item \textbf{Threshold calibration}
-    \begin{itemize}
-        \item 40\% is empirical
-        \item May vary by domain
-    \end{itemize}
-\end{enumerate}
-\end{column}
-
-\begin{column}{0.5\textwidth}
-\textbf{Scope Clarifications:}
-
-\vspace{0.5em}
-
-\begin{itemize}
-    \item Diagnostic tool, not a fix
-    \item Requires access to calibration data
-    \item Correlation $\neq$ causation (but theory supports mechanism)
-    \item Model-specific: works best with tree ensembles
-\end{itemize}
+\begin{center}
+\begin{tabular}{@{}p{4cm}p{7cm}@{}}
+\toprule
+\textbf{Limitation} & \textbf{Implication} \\
+\midrule
+\textbf{Tabular focus} & Extension to images/text needs further study \\[0.5em]
+\textbf{GBM-specific} & RF and MLP have different failure modes \\[0.5em]
+\textbf{40\% threshold} & Empirically derived; may vary by domain \\[0.5em]
+\textbf{Diagnostic only} & Indicates vulnerability, does not fix it \\
+\bottomrule
+\end{tabular}
+\end{center}
 
 \vspace{1em}
 
-\textcolor{gray}{\footnotesize Note: We do not claim SHAP concentration \textit{causes} failures; it \textit{indicates} vulnerability.}
-\end{column}
-\end{columns}
+\begin{alertblock}{Key Clarification}
+SHAP concentration \textbf{indicates} vulnerability to coverage failure under distribution shift --- it does not \textit{cause} the failure (but theory supports the mechanism).
+\end{alertblock}
 
+\vspace{0.5em}
+\centering
+\textit{See paper for detailed scope discussion}
 \end{frame}
 
 %------------------------------------------------------------------------------
@@ -994,14 +1010,18 @@ Empirically, $\mathcal{H} \geq 0.40$ indicates elevated vulnerability to coverag
 \begin{column}{0.6\textwidth}
 \textbf{Key Contributions:}
 \begin{enumerate}
-    \item \alert{Predictive metric:} SHAP concentration correlates with coverage failure ($\rho = 0.853$)
+    \item \alert{Predictive metric:} SHAP concentration correlates with coverage failure ($\rho = 0.853$) \textbf{in GBMs}
 
-    \item \alert{Theoretical grounding:} Monotonic bound on score perturbation
+    \item \alert{Threshold validation:} LOO-CV 87.5\%, WILDS 91.7\%
 
     \item \alert{Practical protocol:} 3-step framework with 40\% threshold
 \end{enumerate}
 
-\vspace{1em}
+\vspace{0.8em}
+
+\textbf{Scope:} GBM classifiers (not RF/MLP -- different failure modes)
+
+\vspace{0.5em}
 
 \textbf{Impact:}\\
 Enables \textit{proactive} identification of vulnerable deployments \textbf{before} failures occur
@@ -1014,9 +1034,16 @@ Enables \textit{proactive} identification of vulnerable deployments \textbf{befo
     \textbf{Code \& Data}\\[0.5em]
     \footnotesize{github.com/}\\
     \footnotesize{choroklee/}\\
-    \footnotesize{shap-cp-diagnostic}\\[1em]
-    \includegraphics[width=1.5cm]{example-image-a}\\
-    \footnotesize{(QR placeholder)}
+    \footnotesize{shap-cp-diagnostic}\\[0.8em]
+    % TODO: Generate real QR code using qrencode or online tool
+    \begin{tikzpicture}[scale=0.4]
+    \draw[fill=black] (0,0) grid[step=0.3] (3,3);
+    \draw[fill=white] (0.3,0.3) rectangle (0.9,0.9);
+    \draw[fill=white] (2.1,0.3) rectangle (2.7,0.9);
+    \draw[fill=white] (0.3,2.1) rectangle (0.9,2.7);
+    \draw[fill=white] (1.2,1.2) rectangle (1.8,1.8);
+    \end{tikzpicture}\\[0.3em]
+    \footnotesize{\textcolor{gray}{(stylized QR)}}
 };
 \end{tikzpicture}
 \end{column}
@@ -1078,7 +1105,13 @@ Robust = coverage maintained near target. Variable = high seed variance.}
 \vspace{1em}
 
 \textbf{Aggregation Method:}
-$$|\phi_j| = \frac{1}{n \cdot K} \sum_{i=1}^{n} \sum_{k=1}^{K} |\phi_j^{(k)}(x_i)|$$
+
+Per-sample, per-class SHAP: $\phi_j^{(k)}(x_i)$
+
+Averaged absolute importance:
+\begin{equation*}
+|\phi_j| = \frac{1}{n \cdot K} \sum_{i=1}^{n} \sum_{k=1}^{K} |\phi_j^{(k)}(x_i)|
+\end{equation*}
 
 \begin{itemize}
     \item Average absolute SHAP across samples and classes
