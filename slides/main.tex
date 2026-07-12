@@ -22,6 +22,7 @@
 \usepackage{algorithm}
 \usepackage{algorithmic}
 \usepackage{xcolor}
+\usepackage{colortbl}
 \usepackage{pifont}
 
 % Custom commands
@@ -76,16 +77,8 @@ $\Rightarrow$ True label in prediction set at least 90\% of the time
 \end{column}
 
 \begin{column}{0.45\textwidth}
-% Placeholder for figure
-\begin{tikzpicture}
-\draw[thick,kaistblue,fill=kaistblue!10] (0,0) rectangle (5,4);
-\node[align=center] at (2.5,2) {
-    \textbf{Figure Placeholder:}\\[0.5em]
-    Illustration of conformal\\
-    prediction sets\\[0.5em]
-    \footnotesize{[prediction\_sets.pdf]}
-};
-\end{tikzpicture}
+% CP illustration using methodology figure
+\includegraphics[width=\textwidth]{figures/fig2_cp_methodology.jpg}
 \end{column}
 \end{columns}
 
@@ -164,18 +157,19 @@ $\Rightarrow$ Cannot distinguish:
 \end{column}
 
 \begin{column}{0.5\textwidth}
-% Placeholder for comparison figure
-\begin{tikzpicture}
-\draw[thick,gray,fill=gray!10] (0,0) rectangle (5.5,5);
-\node[align=center] at (2.75,2.5) {
-    \textbf{Figure Placeholder:}\\[0.5em]
-    Scatter plot showing\\
-    standard detectors vs\\
-    coverage deviation\\[0.5em]
-    $\rho \leq 0.19$ (weak)\\[0.5em]
-    \footnotesize{[standard\_detectors\_scatter.pdf]}
-};
-\end{tikzpicture}
+% Standard detectors comparison - use text summary instead
+\begin{center}
+\textbf{Standard Detectors:}\\[0.5em]
+\begin{tabular}{lc}
+MMD & $\rho = 0.19$ \\
+C2ST & $\rho = 0.15$ \\
+PSI & $\rho = 0.12$ \\
+\end{tabular}
+
+\vspace{1em}
+\textcolor{gray}{\textit{All detect shift,}}\\
+\textcolor{gray}{\textit{none predict severity}}
+\end{center}
 \end{column}
 \end{columns}
 
@@ -192,56 +186,33 @@ $\Rightarrow$ Cannot distinguish:
 
 \textbf{Setup:} Classification with $K$ classes, base model outputs $\hat{\pi}(y|x)$
 
-\vspace{1em}
+\vspace{0.8em}
 
 \begin{columns}
 \begin{column}{0.48\textwidth}
-\textbf{1. Define nonconformity score}
-\vspace{0.3em}
+\textbf{1. Nonconformity score}
+$$s(x,y) = \sum_{k: \hat{\pi}_k \geq \hat{\pi}_y} \hat{\pi}_k$$
 
-For \alert{Adaptive Prediction Sets (APS)}:
-\begin{equation*}
-s(x,y) = \sum_{k: \hat{\pi}_k \geq \hat{\pi}_y} \hat{\pi}_k
-\end{equation*}
+\vspace{0.5em}
 
-\vspace{0.3em}
-\footnotesize{(Sum of probabilities of classes ranked above true class)}
-\end{column}
-
-\begin{column}{0.48\textwidth}
-\textbf{2. Calibrate threshold}
-\vspace{0.3em}
-
-From calibration set $\{(x_i, y_i)\}_{i=1}^n$:
-$$\hat{q} = \text{Quantile}_{1-\alpha}\left(\{s(x_i, y_i)\}_{i=1}^n\right)$$
-\end{column}
-\end{columns}
-
-\vspace{1em}
-
-\begin{columns}
-\begin{column}{0.48\textwidth}
-\textbf{3. Form prediction sets}
-\vspace{0.3em}
-
+\textbf{3. Prediction sets}
 $$\mathcal{C}(x) = \{y : s(x,y) \leq \hat{q}\}$$
 \end{column}
 
 \begin{column}{0.48\textwidth}
-\textbf{4. Coverage guarantee}
-\vspace{0.3em}
+\textbf{2. Calibrate threshold}
+$$\hat{q} = \text{Quantile}_{1-\alpha}\left(\{s_i\}_{i=1}^n\right)$$
 
+\vspace{0.5em}
+
+\textbf{4. Coverage guarantee}
 $$\mathbb{P}(Y \in \mathcal{C}(X)) \geq 1 - \alpha$$
-\textcolor{gray}{\footnotesize (Under exchangeability)}
 \end{column}
 \end{columns}
 
 \vspace{1em}
 \centering
 \textit{We use $\alpha = 0.1$ throughout (target: 90\% coverage)}
-
-\vspace{0.5em}
-\textcolor{kaistblue}{\textbf{Next:} What happens when the exchangeability assumption breaks?}
 \end{frame}
 
 %------------------------------------------------------------------------------
@@ -258,8 +229,8 @@ $$\mathbb{P}(Y \in \mathcal{C}(X)) \geq 1 - \alpha$$
 
 % Middle - mild
 \node[align=center] at (5,3.5) {\textbf{Mild Shift}};
-\draw[thick,orange,fill=orange!20] (3.5,0) rectangle (6.5,2.3);
-\node at (5,1.15) {\Large 85.1\%};
+\draw[thick,orange,fill=orange!20] (3.5,0) rectangle (6.5,2.1);
+\node at (5,1.05) {\Large 85.1\%};
 \node[below] at (5,-0.3) {Slight undercoverage};
 
 % Right - catastrophic
@@ -270,7 +241,7 @@ $$\mathbb{P}(Y \in \mathcal{C}(X)) \geq 1 - \alpha$$
 
 % Target line
 \draw[dashed,thick,kaistblue] (-2,2.25) -- (12,2.25);
-\node[right,kaistblue] at (12,2.25) {90\% target};
+\node[above left,kaistblue] at (11.5,2.25) {90\% target};
 \end{tikzpicture}
 \end{center}
 
@@ -344,7 +315,7 @@ $\Rightarrow$ \textcolor{alertred}{\textbf{Vulnerable}}
 
 \vspace{1em}
 \centering
-We measure concentration using \alert{Shannon entropy} of SHAP importance distribution
+We measure concentration as the \alert{fraction of importance in the top feature}
 \end{frame}
 
 %------------------------------------------------------------------------------
@@ -388,45 +359,22 @@ Single feature dominates\\
 
 \begin{frame}{Why Does Concentration Matter?}
 
+\begin{center}
+% Feature importance dynamics figure - maximized
+\includegraphics[width=0.9\textwidth,height=0.65\textheight,keepaspectratio]{figures/figure3_feature_importance.pdf}
+\end{center}
+
 \begin{columns}
-\begin{column}{0.55\textwidth}
-\textbf{Intuition:}
-\vspace{0.5em}
-
-When model relies on \textbf{few features}:
-\begin{itemize}
-    \item Shift in those features $\Rightarrow$ \alert{large score perturbation}
-    \item Calibrated threshold becomes invalid
-    \item Coverage collapses
-\end{itemize}
-
-\vspace{1em}
-
-When model relies on \textbf{many features}:
-\begin{itemize}
-    \item Shift averages out across features
-    \item Score distribution more stable
-    \item Coverage maintained
-\end{itemize}
-
-\vspace{1em}
-$\Rightarrow$ \alert{Concentration = fragility amplifier}
+\begin{column}{0.5\textwidth}
+\centering
+\textbf{Few features} $\Rightarrow$ \alert{Large perturbation}
 \end{column}
-
-\begin{column}{0.45\textwidth}
-% Placeholder for intuition diagram
-\begin{tikzpicture}
-\draw[thick,gray,fill=gray!10] (0,0) rectangle (5,5.5);
-\node[align=center] at (2.5,2.75) {
-    \textbf{Figure Placeholder:}\\[0.5em]
-    Diagram showing how\\
-    concentrated SHAP\\
-    amplifies score shifts\\[0.5em]
-    \footnotesize{[concentration\_mechanism.pdf]}
-};
-\end{tikzpicture}
+\begin{column}{0.5\textwidth}
+\centering
+\textbf{Many features} $\Rightarrow$ \textcolor{successgreen}{Stable coverage}
 \end{column}
 \end{columns}
+
 \end{frame}
 
 %==============================================================================
@@ -450,14 +398,15 @@ $\Rightarrow$ \alert{Concentration = fragility amplifier}
 
 \vspace{1em}
 
-\textbf{Tasks:}
-\begin{enumerate}
-    \item Seller return rate
-    \item Product conversion
-    \item Delivery delay
-    \item Customer churn
-    \item ... (4 more)
-\end{enumerate}
+\textbf{8 Tasks:}\\[0.3em]
+{\small
+\begin{tabular}{@{}ll@{}}
+1. s-payterms & 5. s-office \\
+2. s-shipcond & 6. i-incoterms \\
+3. i-shippoint & 7. i-plant \\
+4. s-group & 8. s-incoterms \\
+\end{tabular}
+}
 \end{column}
 
 \begin{column}{0.5\textwidth}
@@ -568,17 +517,19 @@ Seeds & 50 \\
 
 \begin{frame}{Main Result: Strong Correlation}
 
+\vspace{-0.5em}
+
 \begin{center}
 % Main correlation scatter plot (FigureLabs generated)
-\includegraphics[width=0.75\textwidth]{figures/fig3_correlation.jpg}
+\includegraphics[width=0.65\textwidth,height=0.6\textheight,keepaspectratio]{figures/fig3_correlation.jpg}
 \end{center}
 
-\vspace{0.3em}
+\vspace{-0.3em}
 
-\begin{alertblock}{Primary Finding}
+\begin{block}{Primary Finding}
 SHAP concentration \textbf{strongly predicts} coverage failure severity\\
-($\rho = 0.853$, $p < 0.001$, $n = 16$ tasks across 9 domains)
-\end{alertblock}
+\centering $\rho = 0.853$, $p < 0.001$, $n = 16$ multiclass tasks across 9 domains
+\end{block}
 
 \end{frame}
 
@@ -586,77 +537,62 @@ SHAP concentration \textbf{strongly predicts} coverage failure severity\\
 
 \begin{frame}{Within SALT COVID Tasks}
 
-\begin{columns}
-\begin{column}{0.55\textwidth}
-% Placeholder for SALT-specific plot
-\begin{tikzpicture}
-\draw[thick,kaistblue,fill=kaistblue!5] (0,0) rectangle (6,5);
-\node[align=center] at (3,2.5) {
-    \textbf{Figure Placeholder:}\\[0.5em]
-    Scatter: 8 SALT tasks\\
-    SHAP Conc. vs Coverage Dev.\\[0.5em]
-    $\rho = 0.833$, $p = 0.010$\\[0.5em]
-    \footnotesize{[salt\_correlation.pdf]}
-};
-\end{tikzpicture}
-\end{column}
+\begin{center}
+\textbf{8 tasks, same COVID shift, different outcomes}
 
-\begin{column}{0.45\textwidth}
-\textbf{COVID Shift Results:}
+\vspace{1em}
 
-\vspace{0.5em}
-\begin{tabular}{@{}lcc@{}}
+\begin{tabular}{lccc}
 \toprule
-Task & $\conc$ & Cov. \\
+\textbf{Task} & \textbf{Conc. (\%)} & \textbf{Coverage} & \textbf{Drop (pp)} \\
 \midrule
-Task A & 0.21 & 88.2\% \\
-Task B & 0.28 & 85.7\% \\
-Task C & 0.35 & 82.1\% \\
-Task D & 0.42 & 78.3\% \\
-Task E & 0.51 & 73.5\% \\
-\textcolor{alertred}{Task F} & \textcolor{alertred}{0.67} & \textcolor{alertred}{65.2\%} \\
+s-payterms & 54.2 & 13.7\% & \textcolor{alertred}{77.1} \\
+s-shipcond & 50.7 & 21.8\% & \textcolor{alertred}{71.6} \\
+s-group & 47.3 & 12.4\% & \textcolor{alertred}{71.2} \\
+i-shippoint & 48.8 & 72.7\% & 18.5 \\
+s-office & 42.6 & 99.9\% & 0.1 \\
+i-incoterms & 28.9 & 83.7\% & 11.3 \\
+i-plant & 23.9 & 81.4\% & 10.6 \\
+s-incoterms & 23.7 & 87.0\% & 8.5 \\
 \bottomrule
 \end{tabular}
 
 \vspace{1em}
-\footnotesize{Higher concentration $\Rightarrow$ worse coverage}
-\end{column}
-\end{columns}
 
-\vspace{0.5em}
-\centering
-\textit{Correlation holds specifically within COVID-induced shifts}
+$\rho = 0.833$, $p = 0.010$ (within SALT, $n=8$)
+\end{center}
+
 \end{frame}
 
 %------------------------------------------------------------------------------
 
 \begin{frame}{Comparison: SHAP vs Standard Detectors}
 
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\includegraphics[width=\textwidth]{figures/figure_n16_correlation.pdf}
+\end{column}
+
+\begin{column}{0.5\textwidth}
 \begin{center}
-\begin{tikzpicture}
-\draw[thick,gray,fill=gray!5] (0,0) rectangle (11,5.5);
-\node[align=center] at (5.5,2.75) {
-    \textbf{Figure Placeholder:}\\[0.5em]
-    \Large Bar chart comparing correlations:\\[0.5em]
-    \begin{tabular}{lcc}
-    \textbf{Metric} & $\rho$ & \textbf{Interpretation} \\
-    \hline
-    \alert{SHAP Concentration} & \alert{0.853} & \alert{Strong} \\
-    MMD & 0.19 & Weak \\
-    C2ST & 0.15 & Weak \\
-    PSI & 0.12 & Negligible \\
-    \end{tabular}\\[0.5em]
-    \footnotesize{[detector\_comparison.pdf]}
-};
-\end{tikzpicture}
+\begin{tabular}{lcc}
+\toprule
+\textbf{Metric} & $\rho$ & $p$-value \\
+\midrule
+\alert{SHAP Conc.} & \alert{0.853} & $<$0.001 \\
+MMD & 0.19 & 0.48 \\
+C2ST & 0.15 & 0.58 \\
+PSI & 0.12 & 0.66 \\
+\bottomrule
+\end{tabular}
 \end{center}
 
 \vspace{0.5em}
 
-\begin{block}{Why Standard Detectors Fail}
-They measure \textbf{marginal} distribution shift, not shift in \textbf{model-relevant} features.\\
-All tasks show similar MMD/C2ST/PSI, but vastly different coverage outcomes.
-\end{block}
+\textbf{Why standard detectors fail:}\\
+They measure \textbf{marginal} shift, not shift in \textbf{model-relevant} features.
+\end{column}
+\end{columns}
 
 \end{frame}
 
@@ -665,43 +601,27 @@ All tasks show similar MMD/C2ST/PSI, but vastly different coverage outcomes.
 \begin{frame}{External Validation: Covertype Geographic Shift}
 
 \begin{columns}
-\begin{column}{0.5\textwidth}
-\textbf{Covertype Dataset:}
+\begin{column}{0.32\textwidth}
+\textbf{Covertype:}
 \begin{itemize}
-    \item Forest cover type prediction
-    \item 7 classes, 54 features
-    \item \alert{Geographic split:} Areas 1--2 $\rightarrow$ Area 4
+    \item 7 classes
+    \item Geographic split
 \end{itemize}
 
-\vspace{1em}
+\vspace{0.3em}
 
 \textbf{Results:}
 \begin{itemize}
-    \item SHAP Concentration: $C = 49.8\%$
-    \item Target Coverage: 90\%
-    \item \textcolor{alertred}{Actual Coverage: 8.2\%}
-    \item \textcolor{alertred}{Coverage Drop: 81.8 pp}
+    \item $C = 49.8\%$
+    \item \textcolor{alertred}{8.2\% cov.}
+    \item \textcolor{alertred}{81.8pp drop}
 \end{itemize}
 
-\vspace{0.5em}
-$\Rightarrow$ \alert{Catastrophic failure} correctly predicted!\\
-\footnotesize{(10/10 seeds deterministic)}
+\alert{Correctly predicted!}
 \end{column}
 
-\begin{column}{0.5\textwidth}
-% Placeholder for covertype visualization
-\begin{tikzpicture}
-\draw[thick,alertred,fill=alertred!10] (0,0) rectangle (5.5,5.5);
-\node[align=center] at (2.75,2.75) {
-    \textbf{Figure Placeholder:}\\[0.5em]
-    Covertype coverage\\
-    distribution under\\
-    geographic shift\\[0.5em]
-    Target: 90\%\\
-    \textcolor{alertred}{Actual: 8.2\%}\\[0.5em]
-    \footnotesize{[covertype\_failure.pdf]}
-};
-\end{tikzpicture}
+\begin{column}{0.68\textwidth}
+\includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{figures/conformity_score_cdfs.pdf}
 \end{column}
 \end{columns}
 
@@ -712,42 +632,39 @@ $\Rightarrow$ \alert{Catastrophic failure} correctly predicted!\\
 \begin{frame}{Model Sensitivity Analysis}
 
 \begin{center}
-% Placeholder for model comparison
-\begin{tikzpicture}
-\draw[thick,kaistblue,fill=kaistblue!5] (0,0) rectangle (10,4.5);
-\node[align=center] at (5,2.25) {
-    \textbf{Figure Placeholder:}\\[0.5em]
-    Bar/line chart showing correlation by model type\\[0.5em]
-    \footnotesize{[model\_sensitivity.pdf]}
-};
-\end{tikzpicture}
-\end{center}
-
-\vspace{0.5em}
-
-\begin{columns}
-\begin{column}{0.5\textwidth}
-\centering
-\begin{tabular}{lcc}
+\begin{tabular}{lccc}
 \toprule
-\textbf{Model} & \textbf{$\rho$} & \textbf{Diagnostic?} \\
+\textbf{Model} & \textbf{Method} & \textbf{$\rho$} & \textbf{Diagnostic?} \\
 \midrule
-\textbf{LightGBM} & \textbf{0.833} & \textcolor{successgreen}{\checkmark} \\
-CatBoost & 0.667 & \textcolor{successgreen}{\checkmark} \\
-XGBoost & 0.548 & \textcolor{successgreen}{\checkmark} \\
-\rowcolor{gray!20} Random Forest & 0.300 & \textcolor{alertred}{$\times$} \\
-\rowcolor{gray!20} MLP & 0.430 & \textcolor{alertred}{$\times$} \\
+\textbf{LightGBM} & Boosting (GOSS) & \textbf{0.833} & \textcolor{successgreen}{\checkmark} \\
+CatBoost & Boosting (ordered) & 0.667 & \textcolor{successgreen}{\checkmark} \\
+XGBoost & Boosting (histogram) & 0.548 & \textcolor{successgreen}{\checkmark} \\
+Random Forest & Bagging & 0.300 & \textcolor{alertred}{$\times$} \\
+MLP & Neural Network & 0.430 & \textcolor{alertred}{$\times$} \\
 \bottomrule
 \end{tabular}
-\end{column}
+\end{center}
 
-\begin{column}{0.5\textwidth}
-\textbf{Interpretation:}
-\begin{itemize}
-    \item \textbf{GBM}: Sequential boosting $\Rightarrow$ concentrated dependence
-    \item \textbf{RF}: Bagging dilutes single-feature reliance
-    \item \textbf{MLP}: Global sensitivity failure mode
-\end{itemize}
+\vspace{1em}
+
+\begin{columns}
+\begin{column}{0.33\textwidth}
+\centering
+\textbf{GBM} \textcolor{successgreen}{\checkmark}\\[0.3em]
+Sequential boosting\\
+$\Rightarrow$ concentrated dependence
+\end{column}
+\begin{column}{0.33\textwidth}
+\centering
+\textbf{RF} \textcolor{alertred}{$\times$}\\[0.3em]
+Bagging\\
+$\Rightarrow$ dilutes reliance
+\end{column}
+\begin{column}{0.33\textwidth}
+\centering
+\textbf{MLP} \textcolor{alertred}{$\times$}\\[0.3em]
+Global sensitivity\\
+$\Rightarrow$ different failure mode
 \end{column}
 \end{columns}
 
@@ -844,29 +761,29 @@ When shift hits the dominant feature in a concentrated model, the weighted impac
 \begin{frame}{Operational Framework: 3-Step Protocol}
 
 \begin{center}
-\begin{tikzpicture}[node distance=2cm, scale=0.9, every node/.style={scale=0.9}]
+\begin{tikzpicture}[node distance=2cm, scale=0.8, every node/.style={scale=0.8}]
 % Nodes
-\node[draw, rounded corners, fill=kaistblue!20, minimum width=3cm, minimum height=1.2cm] (step1) {\textbf{Step 1:} Compute $\mathcal{H}$};
-\node[draw, rounded corners, fill=kaistblue!20, minimum width=3cm, minimum height=1.2cm, right=of step1] (step2) {\textbf{Step 2:} Check threshold};
-\node[draw, rounded corners, fill=kaistblue!20, minimum width=3cm, minimum height=1.2cm, right=of step2] (step3) {\textbf{Step 3:} Decide action};
+\node[draw, rounded corners, fill=kaistblue!20, minimum width=2.5cm, minimum height=0.9cm] (step1) {\textbf{Step 1:} Compute $C$};
+\node[draw, rounded corners, fill=kaistblue!20, minimum width=2.5cm, minimum height=0.9cm, right=of step1] (step2) {\textbf{Step 2:} Check 40\%};
+\node[draw, rounded corners, fill=kaistblue!20, minimum width=2.5cm, minimum height=0.9cm, right=of step2] (step3) {\textbf{Step 3:} Decide};
 
 % Arrows
 \draw[->,thick] (step1) -- (step2);
 \draw[->,thick] (step2) -- (step3);
 
 % Decision outcomes
-\node[draw, rounded corners, fill=successgreen!30, below left=1.5cm and -0.5cm of step3] (safe) {Deploy with CP};
-\node[draw, rounded corners, fill=alertred!30, below right=1.5cm and -0.5cm of step3] (unsafe) {Mitigate first};
+\node[draw, rounded corners, fill=successgreen!30, minimum width=2.2cm, below left=1.2cm and -0.3cm of step3] (safe) {Deploy};
+\node[draw, rounded corners, fill=alertred!30, minimum width=2.2cm, below right=1.2cm and -0.3cm of step3] (unsafe) {Mitigate};
 
-\draw[->,thick] (step3) -- node[left,pos=0.7] {\small $\mathcal{H} < 0.4$} (safe);
-\draw[->,thick] (step3) -- node[right,pos=0.7] {\small $\mathcal{H} \geq 0.4$} (unsafe);
+\draw[->,thick] (step3) -- node[left,pos=0.6] {\small $C < 0.4$} (safe);
+\draw[->,thick] (step3) -- node[right,pos=0.6] {\small $C \geq 0.4$} (unsafe);
 \end{tikzpicture}
 \end{center}
 
-\vspace{1em}
+\vspace{0.8em}
 
 \begin{alertblock}{The 40\% Threshold}
-Empirically, $\mathcal{H} \geq 0.40$ indicates elevated vulnerability to coverage failure under distribution shift.
+Empirically, $C \geq 0.40$ indicates elevated vulnerability to coverage failure under distribution shift.
 \end{alertblock}
 
 \end{frame}
@@ -875,7 +792,10 @@ Empirically, $\mathcal{H} \geq 0.40$ indicates elevated vulnerability to coverag
 
 \begin{frame}{Mitigation Strategies}
 
-\textbf{When SHAP Concentration exceeds threshold:}
+\vspace{0.5em}
+\textbf{When $C > 40\%$:}
+
+\vspace{0.8em}
 
 \begin{columns}
 \begin{column}{0.45\textwidth}
@@ -885,7 +805,7 @@ Empirically, $\mathcal{H} \geq 0.40$ indicates elevated vulnerability to coverag
     \item Reduce dominant feature reliance
 \end{itemize}
 
-\vspace{0.5em}
+\vspace{0.8em}
 
 \textbf{2. Model Regularization}
 \begin{itemize}
@@ -893,7 +813,7 @@ Empirically, $\mathcal{H} \geq 0.40$ indicates elevated vulnerability to coverag
     \item Ensemble with diverse subsets
 \end{itemize}
 
-\vspace{0.5em}
+\vspace{0.8em}
 
 \textbf{3. Monitoring}
 \begin{itemize}
@@ -908,7 +828,7 @@ Empirically, $\mathcal{H} \geq 0.40$ indicates elevated vulnerability to coverag
 \end{column}
 \end{columns}
 
-\vspace{0.5em}
+\vspace{0.8em}
 \centering
 \fbox{\textbf{Key:} Address concentration \textit{before} deployment, not after failure}
 \end{frame}
@@ -920,13 +840,14 @@ Empirically, $\mathcal{H} \geq 0.40$ indicates elevated vulnerability to coverag
 \begin{frame}{Limitations}
 
 \begin{center}
-\begin{tabular}{@{}p{4cm}p{7cm}@{}}
+\begin{tabular}{@{}p{3.5cm}p{7.5cm}@{}}
 \toprule
 \textbf{Limitation} & \textbf{Implication} \\
 \midrule
-\textbf{Tabular focus} & Extension to images/text needs further study \\[0.5em]
-\textbf{GBM-specific} & RF and MLP have different failure modes \\[0.5em]
-\textbf{40\% threshold} & Empirically derived; may vary by domain \\[0.5em]
+\textbf{Tabular focus} & Extension to images/text needs further study \\[0.3em]
+\textbf{GBM-specific} & RF ($\rho$=0.30), MLP ($\rho$=0.43) have different failure modes \\[0.3em]
+\textbf{K$\geq$4 classes} & Binary/ternary APS has structural ceiling \\[0.3em]
+\textbf{40\% threshold} & Exploratory (n=8); requires prospective validation \\[0.3em]
 \textbf{Diagnostic only} & Indicates vulnerability, does not fix it \\
 \bottomrule
 \end{tabular}
@@ -938,9 +859,6 @@ Empirically, $\mathcal{H} \geq 0.40$ indicates elevated vulnerability to coverag
 SHAP concentration \textbf{indicates} vulnerability to coverage failure under distribution shift --- it does not \textit{cause} the failure (but theory supports the mechanism).
 \end{alertblock}
 
-\vspace{0.5em}
-\centering
-\textit{See paper for detailed scope discussion}
 \end{frame}
 
 %------------------------------------------------------------------------------
@@ -987,7 +905,7 @@ SHAP concentration \textbf{indicates} vulnerability to coverage failure under di
 \textbf{Open Questions:}
 \begin{itemize}
     \item Can we design models that are \textit{intrinsically} low-concentration?
-    \item Relationship to other robustness notions (adversarial, OOD)?
+    \item Prospective validation of 40\% threshold on new domains
     \item Online/streaming conformal prediction with concentration monitoring?
 \end{itemize}
 
@@ -1000,65 +918,43 @@ SHAP concentration \textbf{indicates} vulnerability to coverage failure under di
 \begin{frame}{Conclusion}
 
 \begin{center}
-\Large
+\large
 \textbf{SHAP Concentration: A Pre-Deployment Diagnostic\\for Conformal Prediction Vulnerability}
 \end{center}
 
-\vspace{1em}
+\vspace{0.8em}
 
-\begin{columns}
-\begin{column}{0.6\textwidth}
 \textbf{Key Contributions:}
 \begin{enumerate}
-    \item \alert{Predictive metric:} SHAP concentration correlates with coverage failure ($\rho = 0.853$) \textbf{in GBMs}
+    \item \alert{Predictive metric:} SHAP concentration correlates with coverage failure ($\rho = 0.853$, 95\% CI [0.50, 0.96]) \textbf{in GBMs}
 
-    \item \alert{Threshold validation:} LOO-CV 87.5\%, WILDS 91.7\%
+    \item \alert{Validation:} LOO-CV 87.5\%, External 91.7\% (11/12)
 
     \item \alert{Practical protocol:} 3-step framework with 40\% threshold
 \end{enumerate}
 
 \vspace{0.8em}
 
-\textbf{Scope:} GBM classifiers (not RF/MLP -- different failure modes)
-
-\vspace{0.5em}
-
-\textbf{Impact:}\\
-Enables \textit{proactive} identification of vulnerable deployments \textbf{before} failures occur
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\textbf{Scope:} GBM classifiers with K$\geq$4 classes
 \end{column}
-
-\begin{column}{0.4\textwidth}
-\begin{tikzpicture}
-\draw[thick,kaistblue,fill=kaistblue!10,rounded corners] (0,0) rectangle (4.5,4);
-\node[align=center] at (2.25,2) {
-    \textbf{Code \& Data}\\[0.5em]
-    \footnotesize{github.com/}\\
-    \footnotesize{choroklee/}\\
-    \footnotesize{shap-cp-diagnostic}\\[0.8em]
-    % TODO: Generate real QR code using qrencode or online tool
-    \begin{tikzpicture}[scale=0.4]
-    \draw[fill=black] (0,0) grid[step=0.3] (3,3);
-    \draw[fill=white] (0.3,0.3) rectangle (0.9,0.9);
-    \draw[fill=white] (2.1,0.3) rectangle (2.7,0.9);
-    \draw[fill=white] (0.3,2.1) rectangle (0.9,2.7);
-    \draw[fill=white] (1.2,1.2) rectangle (1.8,1.8);
-    \end{tikzpicture}\\[0.3em]
-    \footnotesize{\textcolor{gray}{(stylized QR)}}
-};
-\end{tikzpicture}
+\begin{column}{0.5\textwidth}
+\textbf{Impact:} Proactive identification of vulnerable deployments \textbf{before} failures occur
 \end{column}
 \end{columns}
 
-\vspace{0.5em}
+\vspace{0.8em}
 \centering
-\textbf{Thank you!} \quad Questions?
+\textbf{Code \& Data:} \texttt{github.com/ChorokLeeDev/conformal-covid-uai2026}
+
 \end{frame}
 
 %==============================================================================
 % BACKUP SLIDES (Slides 24-26)
 %==============================================================================
 
-\begin{frame}[noframenumbering]{Backup: Full Results Table}
+\begin{frame}{Backup: Full Results Table}
 
 \begin{center}
 \scriptsize
@@ -1076,22 +972,25 @@ SALT & i-plant & 23.9 & 81.4\% & 10.6 & Temporal \\
 SALT & s-incoterms & 23.7 & 87.0\% & 8.5 & Temporal \\
 \midrule
 Covertype & Geographic & 49.8 & 8.2\% & \textcolor{alertred}{81.8} & Geographic \\
-Gas Sensor & Temporal & 7.3 & Robust & --- & Temporal \\
 KDDCup99 & Attack dist. & 21.1 & Variable & 15.9 & Distribution \\
 PAMAP2 & Subject & 19.2 & Robust & --- & Population \\
+Gas Sensor & Temporal & 7.3 & Robust & --- & Temporal \\
+Shuttle & Random & 30.7 & Robust & --- & None \\
+Pendigits & Pre-defined & 14.5 & Robust & --- & None \\
+Satimage & Random & 9.0 & Robust & --- & None \\
+Avila & Random & 20.5 & Robust & --- & None \\
 \bottomrule
 \end{tabular}
 \end{center}
 
-\vspace{0.3em}
-\footnotesize{$C$ = SHAP Concentration (top-1/total). pp = percentage points drop from 90\% target.\\
-Robust = coverage maintained near target. Variable = high seed variance.}
+\vspace{0.2em}
+\footnotesize{$C$ = SHAP Concentration. pp = percentage points. 8 SALT + 8 external = 16 multiclass tasks across 9 domains.}
 
 \end{frame}
 
 %------------------------------------------------------------------------------
 
-\begin{frame}[noframenumbering]{Backup: SHAP Computation Details}
+\begin{frame}{Backup: SHAP Computation Details}
 
 \textbf{TreeSHAP Implementation:}
 
@@ -1102,24 +1001,16 @@ Robust = coverage maintained near target. Variable = high seed variance.}
     \item Computation time: $\sim$1 second per 1,000 samples
 \end{itemize}
 
-\vspace{1em}
+\vspace{0.8em}
 
 \textbf{Aggregation Method:}
 
 Per-sample, per-class SHAP: $\phi_j^{(k)}(x_i)$
 
 Averaged absolute importance:
-\begin{equation*}
-|\phi_j| = \frac{1}{n \cdot K} \sum_{i=1}^{n} \sum_{k=1}^{K} |\phi_j^{(k)}(x_i)|
-\end{equation*}
+$|\phi_j| = \frac{1}{n \cdot K} \sum_{i=1}^{n} \sum_{k=1}^{K} |\phi_j^{(k)}(x_i)|$
 
-\begin{itemize}
-    \item Average absolute SHAP across samples and classes
-    \item Normalization ensures $\sum_j p_j = 1$
-    \item Entropy computed with natural log
-\end{itemize}
-
-\vspace{1em}
+\vspace{0.8em}
 
 \textbf{Robustness:}
 \begin{itemize}
@@ -1131,7 +1022,7 @@ Averaged absolute importance:
 
 %------------------------------------------------------------------------------
 
-\begin{frame}[noframenumbering]{Backup: Statistical Analysis}
+\begin{frame}{Backup: Statistical Analysis}
 
 \textbf{Correlation Analysis:}
 
