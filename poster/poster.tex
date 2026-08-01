@@ -95,7 +95,8 @@
 %==============================================================================
 % MAIN CONTENT - 3 COLUMNS
 %==============================================================================
-\begin{minipage}[t]{0.31\textwidth}
+\begin{minipage}[t]{0.30\textwidth}
+\vspace{0pt}
 
 %------------------------------------------------------------------------------
 % PROBLEM / MOTIVATION
@@ -188,42 +189,43 @@ Item-level & 3 \\
 
 \end{minipage}%
 \hfill
-\begin{minipage}[t]{0.36\textwidth}
+\begin{minipage}[t]{0.38\textwidth}
+\vspace{0pt}
 
 %------------------------------------------------------------------------------
 % SHAP CONCENTRATION METHOD
 %------------------------------------------------------------------------------
 \posterbox{SHAP Concentration Method}{%
-\vspace{1cm}
-\fontsize{27}{34}\selectfont
+\vspace{0.7cm}
+\fontsize{26}{32}\selectfont
 
 \textbf{Definition:}
-\vspace{0.4em}
+\vspace{0.25em}
 \begin{center}
 \fcolorbox{uaiblue}{uailight}{\parbox{0.9\linewidth}{\centering
 \vspace{0.4em}
-{\fontsize{38}{46}\selectfont $\displaystyle\text{SHAP Conc.} = \frac{\varphi_1}{\sum_{j=1}^{p} |\varphi_j|}$}
+{\fontsize{36}{44}\selectfont $\displaystyle\text{SHAP Conc.} = \frac{\varphi_1}{\sum_{j=1}^{p} |\varphi_j|}$}
 \vspace{0.4em}
 }}
 \end{center}
 
-\vspace{0.4em}
+\vspace{0.25em}
 {\fontsize{24}{30}\selectfont $\varphi_1$ = Top feature SHAP; $\sum|\varphi_j|$ = Total SHAP}
 
-\vspace{0.8em}
+\vspace{0.45em}
 \textbf{Decision Threshold (40\%):}
 \begin{center}
 \begin{tabular}{cc}
-\fcolorbox{successgreen}{green!10}{\parbox{3.8cm}{\centering\vspace{0.2em}\color{successgreen}\fontsize{30}{38}\selectfont\bfseries $<$ 40\%\\[0.2em]\fontsize{24}{30}\selectfont\color{uaidark} Robust\vspace{0.2em}}} &
-\fcolorbox{alertred}{red!10}{\parbox{3.8cm}{\centering\vspace{0.2em}\color{alertred}\fontsize{30}{38}\selectfont\bfseries $\geq$ 40\%\\[0.2em]\fontsize{24}{30}\selectfont\color{uaidark} Vulnerable\vspace{0.2em}}}
+\fcolorbox{successgreen}{green!10}{\parbox{4.4cm}{\centering\vspace{0.2em}\color{successgreen}\fontsize{30}{38}\selectfont\bfseries $<$ 40\%\\[0.2em]\fontsize{24}{30}\selectfont\color{uaidark} Robust\vspace{0.2em}}} &
+\fcolorbox{alertred}{red!10}{\parbox{4.4cm}{\centering\vspace{0.2em}\color{alertred}\fontsize{30}{38}\selectfont\bfseries $\geq$ 40\%\\[0.2em]\fontsize{24}{30}\selectfont\color{uaidark} Vulnerable\vspace{0.2em}}}
 \end{tabular}
 \end{center}
 
-\vspace{0.6em}
+\vspace{0.35em}
 \begin{center}
-\includegraphics[width=0.92\linewidth]{../figures/figure3_feature_importance.pdf}
+\makebox[\linewidth][c]{\includegraphics[width=1.04\linewidth]{../figures/figure3_feature_importance.pdf}}
 \end{center}
-{\fontsize{21}{26}\selectfont\textit{Fig 2: Feature importance concentration}}
+{\fontsize{22}{28}\selectfont\textit{Fig 2: Feature importance concentration}}
 }
 
 \vspace{0.8cm}
@@ -296,13 +298,14 @@ XGBoost & 0.548 & \color{successgreen}\checkmark \\
 
 \end{minipage}%
 \hfill
-\begin{minipage}[t]{0.31\textwidth}
+\begin{minipage}[t]{0.30\textwidth}
+\vspace{0pt}
 
 %------------------------------------------------------------------------------
 % EXTERNAL VALIDATION
 %------------------------------------------------------------------------------
 \posterbox{External Validation: WILDS + UCI}{%
-\vspace{1cm}
+\vspace{0.65cm}
 \fontsize{27}{34}\selectfont
 
 \textbf{4 Benchmark Datasets}
@@ -319,6 +322,7 @@ Covertype & 12.5\% & +8.0pp & Robust \\
 Adult & 27.5\% & +1.4pp & Robust \\
 \bottomrule
 \end{tabular}
+\par\vspace{0.25em}
 }
 {\fontsize{18}{22}\selectfont\textit{Conc.=SHAP Concentration, Cov.$\Delta$=Coverage Change, Pred.=Prediction}}
 \end{center}
@@ -359,7 +363,7 @@ Adult & 27.5\% & +1.4pp & Robust \\
 
 \node[draw=successgreen, line width=2.5pt, fill=green!15, rounded corners=6pt, minimum width=3.2cm, minimum height=1.4cm, align=center] (safe) at (-2.2,0.4) {\color{successgreen}\fontsize{24}{30}\selectfont\bfseries $<$40\%\\[0.1em]\fontsize{20}{24}\selectfont Deploy};
 
-\node[draw=alertred, line width=2.5pt, fill=red!15, rounded corners=6pt, minimum width=3.2cm, minimum height=1.4cm, align=center] (risk) at (2.2,0.4) {\color{alertred}\fontsize{24}{30}\selectfont\bfseries $\geq$40\%\\[0.1em]\fontsize{20}{24}\selectfont Monitor};
+\node[draw=alertred, line width=2.5pt, fill=red!15, rounded corners=6pt, minimum width=3.2cm, minimum height=1.4cm, align=center] (risk) at (2.2,0.4) {\color{alertred}\fontsize{24}{30}\selectfont\bfseries $\geq$40\%\\[0.1em]\fontsize{20}{24}\selectfont Mitigate};
 
 \draw[-{Stealth[length=6mm,width=4mm]}, line width=2.5pt, uaiblue] (train) -- (shap);
 \draw[-{Stealth[length=6mm,width=4mm]}, line width=2.5pt, uaiblue] (shap) -- (conc);
@@ -374,23 +378,24 @@ Adult & 27.5\% & +1.4pp & Robust \\
 %------------------------------------------------------------------------------
 % CONCLUSIONS
 %------------------------------------------------------------------------------
-\posterbox{Conclusions}{%
-\vspace{1cm}
-\fontsize{27}{34}\selectfont
+\posterbox{Conclusions \& Future Work}{%
+\vspace{0.75cm}
+\fontsize{25}{31}\selectfont
 
-\textbf{\color{successgreen}Contributions:}
-\begin{enumerate}
-    \item SHAP Concentration predicts CP failures \textbf{in GBMs}
-    \item Strong correlation: $\rho=0.853$ ($p<0.001$)
-    \item 40\% threshold: LOO-CV \textbf{87.5\%}, Cohen's d=3.08
-    \item WILDS validation: \textbf{91.7\%} combined
-\end{enumerate}
+\textbf{\color{successgreen}Takeaways:}
+\begin{itemize}
+    \item SHAP Concentration predicts CP failures \textbf{in GBMs}: $\rho=0.853$ ($p<0.001$)
+    \item 40\% threshold: LOO-CV \textbf{87.5\%}; external validation \textbf{91.7\%}
+    \item \textbf{Scope:} GBM classifiers; RF/MLP need different diagnostics
+\end{itemize}
 
-\vspace{0.5em}
-\textbf{\color{alertred}Scope:} GBM only (not RF/MLP)
-
-\vspace{0.3em}
-\textbf{Future:} Adaptive CP, real-time monitoring
+\vspace{0.25em}
+\textbf{\color{uaiblue}Future Directions:}
+\begin{itemize}
+    \item \textbf{Mitigation:} diversify features, add dropout/ensembles, trigger retraining
+    \item \textbf{Prospective validation:} recalibrate the 40\% threshold on new domains
+    \item \textbf{Streaming CP:} monitor concentration and coverage drift online
+\end{itemize}
 }
 
 \vspace{0.8cm}
@@ -403,22 +408,16 @@ Adult & 27.5\% & +1.4pp & Robust \\
 \begin{minipage}{0.55\linewidth}
 \fontsize{24}{30}\selectfont
 \textbf{Paper \& Code:}\\[0.2em]
-{\fontsize{20}{24}\selectfont\texttt{github.com/chorok-lee/conformal-covid}}\\[0.8em]
+{\fontsize{18}{22}\selectfont\texttt{github.com/ChorokLeeDev/}}\\[-0.05em]
+{\fontsize{18}{22}\selectfont\texttt{conformal-covid-uai2026}}\\[0.65em]
 \textbf{Contact:}\\[0.2em]
 {\fontsize{20}{24}\selectfont\texttt{chorok.lee@kaist.ac.kr}}
 \end{minipage}%
 \hfill
 \begin{minipage}{0.38\linewidth}
 \begin{center}
-\begin{tikzpicture}
-\draw[uaiblue, line width=2pt, rounded corners=4pt] (0,0) rectangle (3.5,3.5);
-\node at (1.75,2) {\fontsize{18}{22}\selectfont\bfseries Scan for};
-\node at (1.75,1.4) {\fontsize{18}{22}\selectfont\bfseries Paper \& Code};
-\draw[uaiblue, fill=uaiblue] (0.4,0.4) rectangle (0.8,0.8);
-\draw[uaiblue, fill=uaiblue] (2.7,0.4) rectangle (3.1,0.8);
-\draw[uaiblue, fill=uaiblue] (0.4,2.7) rectangle (0.8,3.1);
-\draw[uaiblue, fill=uaiblue] (2.7,2.7) rectangle (3.1,3.1);
-\end{tikzpicture}
+\fcolorbox{uaiblue}{white}{\includegraphics[width=4.4cm]{qr_code.png}}\\[-0.1em]
+{\fontsize{16}{20}\selectfont\bfseries Scan for paper \& code}
 \end{center}
 \end{minipage}
 };
