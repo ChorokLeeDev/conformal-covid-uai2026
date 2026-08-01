@@ -13,6 +13,10 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 from scipy.stats import spearmanr
 
+matplotlib.rcParams['pdf.fonttype'] = 42
+matplotlib.rcParams['ps.fonttype'] = 42
+matplotlib.rcParams['font.family'] = 'DejaVu Sans'
+
 # ── Data ──────────────────────────────────────────────────────────────────────
 # 8 SALT tasks (supply-chain domain, COVID temporal shift)
 salt_tasks = [
@@ -45,7 +49,7 @@ rho, p  = spearmanr(all_c, all_d)
 print(f"n=16 Spearman rho={rho:.3f}, p={p:.4f}")
 
 # ── Plot ──────────────────────────────────────────────────────────────────────
-fig, ax = plt.subplots(figsize=(5.5, 4.2))
+fig, ax = plt.subplots(figsize=(6.2, 4.4))
 
 # SALT points (dark filled circles)
 salt_c = [t[1] for t in salt_tasks]
@@ -59,29 +63,28 @@ ext_d = [t[2] for t in ext_tasks]
 ax.scatter(ext_c, ext_d, color='#c55a11', s=60, zorder=5,
            marker='^', label='External (8 domains, 10 seeds)')
 
-# 40% threshold
-ax.axvline(40, color='gray', linestyle='--', linewidth=1.2, alpha=0.8, label='40\\% threshold')
+# 40% threshold, shown as an exploratory decision boundary rather than a result.
+ax.axvline(40, color='#555555', linestyle='--', linewidth=1.4, alpha=0.8)
+ax.text(40.8, -10.5, '40% exploratory cutoff', rotation=90,
+        fontsize=9.5, color='#555555', va='bottom', ha='left')
 
-# Labels for key points
+# Label only the points needed to read the scientific story at poster distance.
 labels = {
-    "Covertype":   ( 1.5, -3),
-    "s-payterms":  (-12,   2),
-    "s-shipcond":  (-13,   2),
+    "Covertype":   ( 1.5, -4),
+    "s-payterms":  (-13,  3),
+    "s-shipcond":  (-14, -3),
     "s-group":     ( 1.5,  2),
-    "s-office":    ( 1.5,  2),
-    "KDDCup99":    ( 1.5,  2),
-    "Gas Sensor":  ( 1.5, -5),
+    "s-office":    ( 1.5,  4),   # high C but protected/stable feature
+    "KDDCup99":    ( 1.5,  3),   # low C but nonzero drop
 }
 
-# Add task labels for SALT
-for name, c, d in salt_tasks:
-    short = name.replace("s-", "s-").replace("i-", "i-")
-    ax.annotate(short, (c, d), fontsize=8, color='#1f4e79',
-                xytext=(2, 2), textcoords='offset points')
-
-for name, c, d in ext_tasks:
-    ax.annotate(name, (c, d), fontsize=8, color='#c55a11',
-                xytext=(2, 2), textcoords='offset points')
+for name, c, d in salt_tasks + ext_tasks:
+    if name not in labels:
+        continue
+    dx, dy = labels[name]
+    color = '#1f4e79' if name.startswith(('s-', 'i-')) else '#c55a11'
+    ax.annotate(name, (c, d), fontsize=9, color=color,
+                xytext=(dx, dy), textcoords='offset points')
 
 # Annotation box
 ax.text(0.04, 0.97,
@@ -89,16 +92,17 @@ ax.text(0.04, 0.97,
         transform=ax.transAxes, fontsize=11, va='top',
         bbox=dict(boxstyle='round,pad=0.3', facecolor='white', edgecolor='gray', alpha=0.9))
 
-ax.set_xlabel('SHAP Concentration $C$ (\\%)', fontsize=12)
+ax.set_xlabel('SHAP Concentration $C$ (%)', fontsize=12)
 ax.set_ylabel('Coverage Drop (pp)', fontsize=12)
-ax.set_title('SHAP Concentration vs.~Coverage Drop\n(16 multiclass tasks, 9 domains)',
-             fontsize=12)
-ax.legend(fontsize=10, loc='lower right')
+ax.set_title('Pre-deployment SHAP Concentration vs. Coverage Drop',
+             fontsize=13, pad=8)
+ax.legend(fontsize=9.5, loc='upper center', bbox_to_anchor=(0.5, -0.16),
+          ncol=2, frameon=False)
 ax.set_xlim(-2, 65)
 ax.set_ylim(-15, 90)
 ax.grid(True, alpha=0.3)
 
-plt.tight_layout()
-out = '/Users/i767700/Github/ai-in-finance/papers/conformal_covid/results/figure_n16_correlation.pdf'
+plt.tight_layout(rect=(0, 0.08, 1, 1))
+out = 'figures/figure_n16_correlation.pdf'
 plt.savefig(out, dpi=150, bbox_inches='tight')
 print(f"Saved: {out}")

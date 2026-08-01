@@ -19,6 +19,9 @@
 \usepackage{fancybox}
 \usepackage{helvet}
 \renewcommand{\familydefault}{\sfdefault}
+\hyphenpenalty=9000
+\exhyphenpenalty=9000
+\emergencystretch=2em
 
 % Remove page numbers
 \pagestyle{empty}
@@ -32,25 +35,43 @@
 \definecolor{successgreen}{RGB}{46,139,87}
 \definecolor{goldaccent}{RGB}{255,193,7}
 
+\newcommand{\pct}{\char37}
+\newcommand{\boxtabfont}{\bfseries\fontsize{25}{30}\selectfont}
+\newcommand{\herotabfont}{\bfseries\fontsize{27}{32}\selectfont}
+
+\newcommand{\tightfigcaption}[2]{%
+\par\noindent\begin{minipage}{\linewidth}
+\raggedright
+{\fontsize{20}{23}\selectfont\textit{#1}\par}
+\vspace{0.08em}
+{\fontsize{20}{23}\selectfont\bfseries #2\par}
+\end{minipage}
+}
+
+\newcommand{\posterboxtop}{\vspace{0.42cm}}
+\newcommand{\posterboxbottom}{\par\vspace{0.38cm}}
+\newcommand{\heroboxtop}{\vspace{0.50cm}}
+\newcommand{\heroboxbottom}{\par\vspace{0.42cm}}
+
 % Custom box commands with shadows
 \newcommand{\posterbox}[2]{%
 \begin{tikzpicture}
-\node[draw=uaiblue, line width=3pt, fill=white, rounded corners=10pt, inner sep=18pt, text width=0.93\linewidth, drop shadow={shadow xshift=2pt, shadow yshift=-2pt, opacity=0.25}] (box) {#2};
-\node[fill=uaiblue, text=white, font=\bfseries\LARGE, rounded corners=5pt, inner sep=10pt, anchor=south west] at ($(box.north west)+(0.5cm,-0.25cm)$) {#1};
+\node[draw=uaiblue, line width=3pt, fill=white, rounded corners=10pt, inner sep=18pt, text width=0.93\linewidth, align=left, drop shadow={shadow xshift=2pt, shadow yshift=-2pt, opacity=0.25}] (box) {\posterboxtop#2\posterboxbottom};
+\node[fill=uaiblue, text=white, font=\boxtabfont, rounded corners=5pt, inner sep=10pt, anchor=south west] at ($(box.north west)+(0.5cm,-0.25cm)$) {#1};
 \end{tikzpicture}
 }
 
 \newcommand{\alertbox}[2]{%
 \begin{tikzpicture}
-\node[draw=uaiorange, line width=4pt, fill=white, rounded corners=10pt, inner sep=18pt, text width=0.93\linewidth, drop shadow={shadow xshift=2pt, shadow yshift=-2pt, opacity=0.25}] (box) {#2};
-\node[fill=uaiorange, text=white, font=\bfseries\LARGE, rounded corners=5pt, inner sep=10pt, anchor=south west] at ($(box.north west)+(0.5cm,-0.25cm)$) {#1};
+\node[draw=uaiorange, line width=4pt, fill=white, rounded corners=10pt, inner sep=18pt, text width=0.93\linewidth, align=left, drop shadow={shadow xshift=2pt, shadow yshift=-2pt, opacity=0.25}] (box) {\posterboxtop#2\posterboxbottom};
+\node[fill=uaiorange, text=white, font=\boxtabfont, rounded corners=5pt, inner sep=10pt, anchor=south west] at ($(box.north west)+(0.5cm,-0.25cm)$) {#1};
 \end{tikzpicture}
 }
 
 \newcommand{\herobox}[2]{%
 \begin{tikzpicture}
-\node[draw=uaiorange, line width=5pt, fill=uailight, rounded corners=12pt, inner sep=20pt, text width=0.93\linewidth, drop shadow={shadow xshift=3pt, shadow yshift=-3pt, opacity=0.3}] (box) {#2};
-\node[fill=uaiorange, text=white, font=\bfseries\huge, rounded corners=6pt, inner sep=12pt, anchor=south west] at ($(box.north west)+(0.5cm,-0.3cm)$) {#1};
+\node[draw=uaiorange, line width=5pt, fill=uailight, rounded corners=12pt, inner sep=20pt, text width=0.93\linewidth, align=left, drop shadow={shadow xshift=3pt, shadow yshift=-3pt, opacity=0.3}] (box) {\heroboxtop#2\heroboxbottom};
+\node[fill=uaiorange, text=white, font=\herotabfont, rounded corners=6pt, inner sep=12pt, anchor=south west] at ($(box.north west)+(0.5cm,-0.3cm)$) {#1};
 \end{tikzpicture}
 }
 
@@ -61,14 +82,13 @@
 %==============================================================================
 \begin{center}
 \begin{tikzpicture}
-\node[fill=uaiblue!8, rounded corners=15pt, inner sep=0pt, drop shadow={shadow xshift=3pt, shadow yshift=-3pt, opacity=0.15}] {
+\node[fill=uaiblue!8, rounded corners=15pt, inner sep=0pt, drop shadow={shadow xshift=3pt, shadow yshift=-3pt, opacity=0.15}] (titlebox) {
 \begin{minipage}{0.98\textwidth}
 \vspace{0.8cm}
 \centering
-{\fontsize{72}{86}\selectfont\bfseries\color{uaiblue}Diagnosing Conformal Prediction Failures Under Distribution Shift}\\[0.6cm]
+{\fontsize{68}{81}\selectfont\bfseries\color{uaiblue}Diagnosing Conformal Prediction Failures Under Distribution Shift}\\[0.6cm]
 {\fontsize{44}{52}\selectfont\color{uaidark}A COVID-19 Case Study}\\[1cm]
-{\fontsize{38}{46}\selectfont\color{uaidark}\textbf{Chorok Lee} \quad $\cdot$ \quad KAIST}\\[0.5cm]
-{\fontsize{30}{36}\selectfont\color{uaiorange}\textbf{UAI 2026 --- Amsterdam, Netherlands}}
+{\fontsize{34}{41}\selectfont\color{uaidark}\textbf{Chorok Lee} $\cdot$ KAIST \quad \textcolor{uaiorange}{\textbf{UAI 2026 --- Amsterdam, Netherlands}}}
 \vspace{0.6cm}
 \end{minipage}
 };
@@ -82,162 +102,149 @@
 %==============================================================================
 \begin{center}
 \begin{tikzpicture}
-\node[fill=uaiorange, rounded corners=12pt, inner sep=18pt, text width=0.96\textwidth, drop shadow={shadow xshift=2pt, shadow yshift=-2pt, opacity=0.2}] {
+\node[fill=uaiblue, draw=uaiblue!35, line width=4pt, rounded corners=12pt, inner sep=30pt, text width=0.96\textwidth, drop shadow={shadow xshift=2pt, shadow yshift=-2pt, opacity=0.22}] {
 \centering
-{\fontsize{36}{44}\selectfont\color{white}\bfseries KEY FINDING: SHAP Concentration predicts CP failure in GBMs ($\rho = 0.853$)}\\[0.4em]
-{\fontsize{30}{38}\selectfont\color{white} 40\% threshold achieves 87.5\% LOO-CV accuracy \quad $\vert$ \quad \textbf{GBM models only}}
+{\fontsize{38}{45}\selectfont\color{white}\bfseries Top-1\hspace{0.18em}SHAP\hspace{0.18em}Concentration\hspace{0.18em}Flags\hspace{0.18em}GBM\hspace{0.18em}CP\hspace{0.18em}Risk}\\[0.62em]
+{\fontsize{30}{36}\selectfont\color{white}\bfseries Pre-deployment signal for multiclass APS\hspace{0.18em}conformal prediction.}\\[0.95em]
+{\setlength{\fboxsep}{8pt}%
+\makebox[\linewidth][c]{%
+\begin{tabular}{@{}c@{\hspace{1.0cm}}c@{\hspace{1.0cm}}c@{}}
+\fcolorbox{white}{white}{\parbox{13.8cm}{\centering\fontsize{25}{30}\selectfont\color{uaiblue}\bfseries\boldmath $\rho = 0.853$\\[0.08em]\fontsize{19}{23}\selectfont\color{uaidark}16-task correlation}} &
+\fcolorbox{white}{white}{\parbox{13.8cm}{\centering\fontsize{25}{30}\selectfont\color{uaiblue}\bfseries 40\pct\\[0.08em]\fontsize{19}{23}\selectfont\color{uaidark}exploratory cutoff}} &
+\fcolorbox{white}{white}{\parbox{13.8cm}{\centering\fontsize{25}{30}\selectfont\color{uaiblue}\bfseries 91.7\pct\\[0.08em]\fontsize{19}{23}\selectfont\color{uaidark}12-check audit}}
+\end{tabular}
+}
+}
 };
 \end{tikzpicture}
 \end{center}
 
-\vspace{0.8cm}
+\vspace{0.65cm}
 
 %==============================================================================
 % MAIN CONTENT - 3 COLUMNS
 %==============================================================================
-\begin{minipage}[t]{0.30\textwidth}
+\begin{minipage}[t]{0.255\textwidth}
 \vspace{0pt}
 
 %------------------------------------------------------------------------------
 % PROBLEM / MOTIVATION
 %------------------------------------------------------------------------------
 \posterbox{Problem \& Motivation}{%
-\vspace{1cm}
-\fontsize{27}{34}\selectfont
+\fontsize{26}{33}\selectfont
+\raggedright
 
-\textbf{Conformal Prediction (CP)} provides distribution-free uncertainty, but \textbf{distribution shift breaks guarantees}.
+\textbf{Conformal Prediction (CP):}\par
+distribution-free uncertainty.\par\vspace{0.12em}
+\textbf{Problem:} shift can break coverage.
 
 \vspace{0.8em}
 \textbf{\color{uaiblue}Research Question:}
+\par\vspace{0.28em}
 \begin{center}
-\fcolorbox{uaiblue}{white}{\parbox{0.88\linewidth}{\centering\fontsize{25}{31}\selectfont
+{\setlength{\fboxsep}{12pt}%
+\fcolorbox{uaiblue}{white}{\parbox{0.80\linewidth}{\centering\fontsize{25}{31}\selectfont
+\vspace{0.05em}
 Can we \textbf{predict} when CP fails \textbf{before} deployment?
-}}
+\vspace{0.05em}
+}}}
 \end{center}
 
 \vspace{0.8em}
 \begin{center}
 \includegraphics[width=0.92\linewidth]{../figures/fig1_covid_timeline.jpg}
 \end{center}
-{\fontsize{21}{26}\selectfont\textit{Fig 1: COVID-19 distribution shifts (Feb--Jul 2020)}}
 }
 
-\vspace{0.8cm}
+\vspace{0.6cm}
 
 %------------------------------------------------------------------------------
 % KEY INSIGHT
 %------------------------------------------------------------------------------
-\alertbox{Key Insight}{%
-\vspace{1cm}
-\fontsize{27}{34}\selectfont
+\posterbox{Key Insight}{%
+\fontsize{26}{33}\selectfont
 
-Models with \textbf{concentrated feature reliance} are vulnerable:
+Models with \textbf{concentrated feature reliance} are at risk:
 
 \vspace{0.6em}
 \begin{itemize}
-    \item[\color{uaiorange}$\bullet$] Single feature drift $\Rightarrow$ large impact
-    \item[\color{uaiorange}$\bullet$] No redundant features for backup
-    \item[\color{uaiorange}$\bullet$] Calibration misalignment
+    \item[\color{uaiblue}$\bullet$] Single feature drift $\Rightarrow$ large impact
+    \item[\color{uaiblue}$\bullet$] Less redundancy across features
+    \item[\color{uaiblue}$\bullet$] APS scores inflate after shift
 \end{itemize}
 
 \vspace{0.8em}
 \begin{center}
-\fcolorbox{uaiorange}{goldaccent!20}{\parbox{0.82\linewidth}{\centering
-\vspace{0.3em}
-{\fontsize{32}{40}\selectfont\bfseries High Concentration}\\[0.2em]
-{\fontsize{28}{34}\selectfont $\Downarrow$}\\[0.2em]
-{\fontsize{32}{40}\selectfont\bfseries\color{alertred} High Vulnerability}
-\vspace{0.3em}
+\fcolorbox{uaiblue}{uailight}{\parbox{0.72\linewidth}{\centering
+\vspace{0.22em}
+{\fontsize{27}{33}\selectfont\bfseries High concentration}\\[0.12em]
+{\fontsize{23}{29}\selectfont $\Downarrow$}\\[0.12em]
+{\fontsize{27}{33}\selectfont\bfseries\color{uaiblue} Risk flag}
+\vspace{0.22em}
 }}
 \end{center}
 }
 
-\vspace{0.8cm}
+\vspace{0.6cm}
 
 %------------------------------------------------------------------------------
 % DATASET
 %------------------------------------------------------------------------------
-\posterbox{SALT Supply Chain Dataset}{%
-\vspace{1cm}
-\fontsize{27}{34}\selectfont
+\posterbox{SALT Case Study \& Analysis Set}{%
+\fontsize{26}{33}\selectfont
 
 \textbf{RelBench Supply Chain Benchmark}
 \begin{itemize}
     \item \textbf{8 classification tasks}
     \item \textbf{COVID-19 temporal split}
     \item Feb--Jul 2020 (onset $\rightarrow$ peak)
+    \item LightGBM multiclass APS conformal prediction
 \end{itemize}
 
-\vspace{0.5em}
-\begin{center}
-\renewcommand{\arraystretch}{1.25}
-{\fontsize{24}{30}\selectfont
-\begin{tabular}{lc}
-\toprule
-\textbf{Task Type} & \textbf{Count} \\
-\midrule
-Sales-level & 5 \\
-Item-level & 3 \\
-\midrule
-\textbf{Total SALT} & \textbf{8} \\
-+ External & +8 \\
-\bottomrule
-\end{tabular}
+\vspace{0.25em}
+{\fontsize{22}{27}\selectfont Primary correlation adds \textbf{8 external multiclass tasks}, yielding \textbf{16 tasks across 9 domains}.}
+
 }
+
+\vspace{0.6cm}
+
+%------------------------------------------------------------------------------
+% SHIFT TEST CONTRAST
+%------------------------------------------------------------------------------
+\posterbox{Why Not Standard Shift Tests?}{%
+\fontsize{25}{31}\selectfont
+\raggedright
+
+MMD/C2ST/PSI detect dataset shift.\par\vspace{0.16em}
+They do not say which CP model will lose coverage.
+
+\vspace{0.55em}
+\begin{center}
+\fcolorbox{uaiblue}{uailight}{\parbox{0.84\linewidth}{\centering
+\vspace{0.25em}
+{\fontsize{30}{37}\selectfont\bfseries\color{uaiblue}$\rho \leq 0.19$}\\[-0.02em]
+{\fontsize{21}{26}\selectfont weak relation to SALT coverage drop}
+\vspace{0.25em}
+}}
 \end{center}
+
+\vspace{0.35em}
+\textbf{Interpretation:} SHAP concentration asks whether one fragile model direction already dominates.
 }
 
 \end{minipage}%
 \hfill
-\begin{minipage}[t]{0.38\textwidth}
+\begin{minipage}[t]{0.45\textwidth}
 \vspace{0pt}
-
-%------------------------------------------------------------------------------
-% SHAP CONCENTRATION METHOD
-%------------------------------------------------------------------------------
-\posterbox{SHAP Concentration Method}{%
-\vspace{0.7cm}
-\fontsize{26}{32}\selectfont
-
-\textbf{Definition:}
-\vspace{0.25em}
-\begin{center}
-\fcolorbox{uaiblue}{uailight}{\parbox{0.9\linewidth}{\centering
-\vspace{0.4em}
-{\fontsize{36}{44}\selectfont $\displaystyle\text{SHAP Conc.} = \frac{\varphi_1}{\sum_{j=1}^{p} |\varphi_j|}$}
-\vspace{0.4em}
-}}
-\end{center}
-
-\vspace{0.25em}
-{\fontsize{24}{30}\selectfont $\varphi_1$ = Top feature SHAP; $\sum|\varphi_j|$ = Total SHAP}
-
-\vspace{0.45em}
-\textbf{Decision Threshold (40\%):}
-\begin{center}
-\begin{tabular}{cc}
-\fcolorbox{successgreen}{green!10}{\parbox{4.4cm}{\centering\vspace{0.2em}\color{successgreen}\fontsize{30}{38}\selectfont\bfseries $<$ 40\%\\[0.2em]\fontsize{24}{30}\selectfont\color{uaidark} Robust\vspace{0.2em}}} &
-\fcolorbox{alertred}{red!10}{\parbox{4.4cm}{\centering\vspace{0.2em}\color{alertred}\fontsize{30}{38}\selectfont\bfseries $\geq$ 40\%\\[0.2em]\fontsize{24}{30}\selectfont\color{uaidark} Vulnerable\vspace{0.2em}}}
-\end{tabular}
-\end{center}
-
-\vspace{0.35em}
-\begin{center}
-\makebox[\linewidth][c]{\includegraphics[width=1.04\linewidth]{../figures/figure3_feature_importance.pdf}}
-\end{center}
-{\fontsize{22}{28}\selectfont\textit{Fig 2: Feature importance concentration}}
-}
-
-\vspace{0.8cm}
 
 %------------------------------------------------------------------------------
 % MAIN RESULTS - HERO SECTION
 %------------------------------------------------------------------------------
-\herobox{MAIN RESULTS}{%
-\vspace{1cm}
-
+\herobox{MAIN RESULT}{%
 \begin{center}
-{\fontsize{32}{40}\selectfont\bfseries\color{uaidark}Strong Correlation: SHAP Concentration vs Coverage Drop}
+{\fontsize{31}{37}\selectfont\bfseries\color{uaidark}Pre-deployment risk signal}\\[0.08em]
+{\fontsize{31}{37}\selectfont\bfseries\color{uaidark}predicts\hspace{0.32em}coverage\hspace{0.32em}drop}\\[0.14em]
+{\fontsize{22}{27}\selectfont\color{uaidark}LightGBM/GBM\hspace{0.18em}multiclass\hspace{0.18em}APS\hspace{0.18em}conformal predictors under shift}
 \end{center}
 
 \vspace{0.5em}
@@ -246,183 +253,237 @@ Item-level & 3 \\
 \node[fill=white, draw=uaiorange, line width=5pt, rounded corners=12pt, inner sep=18pt, drop shadow={shadow xshift=3pt, shadow yshift=-3pt, opacity=0.25}] {
 \begin{minipage}{0.86\linewidth}
 \centering
-{\fontsize{120}{140}\selectfont\bfseries\color{uaiblue} $\rho = 0.853$}\\[0.4em]
-{\fontsize{32}{40}\selectfont Spearman Correlation}\\[0.3em]
-{\fontsize{28}{34}\selectfont\bfseries\color{uaiorange} $p < 0.001$ \quad $\vert$ \quad $n = 16$ tasks \quad $\vert$ \quad 9 domains}
+{\fontsize{78}{94}\selectfont\bfseries\color{uaiblue} $\rho = 0.853$}\\[0.2em]
+{\fontsize{30}{36}\selectfont Spearman Correlation}\\[0.28em]
+{\fontsize{26}{32}\selectfont\bfseries\boldmath\color{uaiorange} $p < 0.001$ \quad $\vert$ \quad $n = 16$ tasks \quad $\vert$ \quad 9 domains}
 \end{minipage}
 };
 \end{tikzpicture}
 \end{center}
 
-\vspace{0.8em}
-\fontsize{27}{34}\selectfont
-\textbf{SALT COVID (n=8):} \quad {\fontsize{50}{60}\selectfont\bfseries\color{uaiblue}$\rho = 0.833$} {\small($p = 0.010$)}
-
-\vspace{0.8em}
+\vspace{0.65em}
 \begin{center}
-\includegraphics[width=0.95\linewidth]{../figures/figure_n16_correlation.pdf}
+\includegraphics[width=0.98\linewidth]{../figures/figure_n16_correlation.pdf}
 \end{center}
-{\fontsize{21}{26}\selectfont\textit{Fig 3: SHAP Concentration vs Coverage Drop (n=16)}}
+{\fontsize{20}{24}\selectfont\itshape Fig. 1: Each point is a task. $C$ is measured before deployment; coverage drop is validation-to-post-shift loss in percentage points. The dashed line is the exploratory SALT-derived cutoff.\par}
+\vspace{0.15em}
+\begin{center}
+\fcolorbox{uaiblue}{uailight}{\parbox{0.94\linewidth}{\centering
+\vspace{0.26em}
+{\fontsize{24}{29}\selectfont\bfseries\color{uaiblue}Takeaway: higher concentration tracks larger\hspace{0.18em}CP\hspace{0.18em}coverage loss.}\\[0.42em]
+{\fontsize{18}{22}\selectfont Across 16 tasks, high-\(C\)\ models occupy the high-drop region.}
+\vspace{0.26em}
+}}
+\end{center}
 }
 
-\vspace{0.8cm}
+\vspace{0.55cm}
 
 %------------------------------------------------------------------------------
-% MODEL COMPARISON
+% SHAP CONCENTRATION METHOD
 %------------------------------------------------------------------------------
-\posterbox{Model Scope: GBM Only}{%
-\vspace{1cm}
-\fontsize{27}{34}\selectfont
+\posterbox{Mechanism \& Theory}{%
+\fontsize{25}{31}\selectfont
 
+\textbf{Top-1 concentration: share of mean absolute SHAP importance}
+\vspace{0.22em}
 \begin{center}
-\renewcommand{\arraystretch}{1.4}
-{\fontsize{26}{32}\selectfont
-\begin{tabular}{lcc}
-\toprule
-\textbf{Model} & \textbf{$\rho$} & \textbf{Works?} \\
-\midrule
-\rowcolor{goldaccent!30} \textbf{LightGBM} & \textbf{0.833} & \color{successgreen}\checkmark \\
-CatBoost & 0.667 & \color{successgreen}\checkmark \\
-XGBoost & 0.548 & \color{successgreen}\checkmark \\
-\rowcolor{red!10} Random Forest & 0.30 & \color{alertred}$\times$ \\
-\rowcolor{red!10} MLP & 0.43 & \color{alertred}$\times$ \\
-\bottomrule
-\end{tabular}
-}
+\fcolorbox{uaiblue}{uailight}{\parbox{0.92\linewidth}{\centering
+\vspace{0.32em}
+{\fontsize{34}{42}\selectfont $\displaystyle C = \frac{\max_j \mathbb{E}|\phi_j|}{\sum_{j=1}^{p} \mathbb{E}|\phi_j|}$}
+\vspace{0.32em}
+}}
 \end{center}
 
-\vspace{0.4em}
-{\fontsize{22}{28}\selectfont\textit{GBM: concentrated-dependence}\\
-\textit{RF/MLP: global-sensitivity (different failure mode)}}
+\vspace{0.22em}
+\begin{center}
+\fcolorbox{uaiblue}{uailight}{\parbox{0.95\linewidth}{\centering
+\vspace{0.24em}
+{\fontsize{19}{23}\selectfont\bfseries\color{uaiblue}Idealized theorem: concentration amplifies APS score inflation}\\[0.15em]
+{\fontsize{18}{22}\selectfont
+$\displaystyle
+\mathbb{E}[s_{\mathrm{test}}] \geq C\bigl(1-(K-1)\epsilon\bigr) + (1-C)\bigl(1-(K-1)\bar h\bigr)$}\\[0.45em]
+\begin{minipage}{0.92\linewidth}
+{\fontsize{18}{22}\selectfont\raggedright
+If the dominant shifted feature gives weaker true-class support ($\epsilon<\bar h$), larger $C$ puts more weight on that damaged signal. APS test scores rise while the CP cutoff stays fixed, so coverage drops.\par
+}
+\end{minipage}
+\vspace{0.24em}
+}}
+\end{center}
+
+\vspace{0.45em}
+\begin{center}
+\makebox[\linewidth][c]{\includegraphics[width=0.99\linewidth]{../figures/figure3_feature_importance.png}}
+\end{center}
+{\fontsize{20}{24}\selectfont\itshape Fig. 2: Catastrophic tasks concentrate SHAP mass on one shifted feature; robust/protected tasks keep reliance distributed or stable.\par}
+\vspace{0.18em}
+{\fontsize{18}{22}\selectfont
+\setlength{\tabcolsep}{0.3em}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.49\linewidth}>{\raggedright\arraybackslash}p{0.49\linewidth}@{}}
+\textbf{A. Failure:} SHAP mass jumps to one feature. &
+\textbf{B. Robust:} importance stays distributed. \\
+\textbf{C. Ratio:} failing task has a top-feature spike. &
+\textbf{D. Stability:} robust tasks keep feature order. \\
+\end{tabular}\par
+}
+\vspace{0.2em}
+\begin{center}
+\fcolorbox{uaiblue}{uailight}{\parbox{0.94\linewidth}{\centering
+\vspace{0.18em}
+{\fontsize{21}{25}\selectfont\bfseries\color{uaiblue}Mechanism: high-\(C\) GBMs can create a single point of failure.}\\[0.12em]
+{\fontsize{18}{22}\selectfont The claim is directional: stable/protective top features can be exceptions.}
+\vspace{0.18em}
+}}
+\end{center}
 }
 
 \end{minipage}%
 \hfill
-\begin{minipage}[t]{0.30\textwidth}
+\begin{minipage}[t]{0.275\textwidth}
 \vspace{0pt}
 
 %------------------------------------------------------------------------------
 % EXTERNAL VALIDATION
 %------------------------------------------------------------------------------
-\posterbox{External Validation: WILDS + UCI}{%
-\vspace{0.65cm}
-\fontsize{27}{34}\selectfont
+\posterbox{Specificity Check: Low-$C$ Holds Out}{%
+\fontsize{25}{31}\selectfont
 
-\textbf{4 Benchmark Datasets}
+\textbf{Low-$C$ checks avoid catastrophic loss.}
+{\fontsize{18}{22}\selectfont\par\textit{Negative control: below-cutoff tasks should remain low risk.}}
 \begin{center}
 \renewcommand{\arraystretch}{1.2}
 {\fontsize{22}{28}\selectfont
 \begin{tabular}{lccc}
 \toprule
-\textbf{Dataset} & \textbf{Conc.} & \textbf{Cov.$\Delta$} & \textbf{Pred.} \\
+\textbf{Dataset} & \textbf{Top-1 $C$} & \textbf{Drop} & \textbf{Flag} \\
 \midrule
-CivilComments & 26.2\% & -0.7pp & Robust \\
-Amazon & 1.9\% & +0.4pp & Robust \\
-Covertype & 12.5\% & +8.0pp & Robust \\
-Adult & 27.5\% & +1.4pp & Robust \\
+CivilComments & 26.2\pct & -0.7pp & Low risk \\
+Amazon & 1.9\pct & +0.4pp & Low risk \\
+Covertype$^{\ast}$ & 12.5\pct & +8.0pp & Low risk \\
+Adult & 27.5\pct & +1.4pp & Low risk \\
 \bottomrule
 \end{tabular}
 \par\vspace{0.25em}
 }
-{\fontsize{18}{22}\selectfont\textit{Conc.=SHAP Concentration, Cov.$\Delta$=Coverage Change, Pred.=Prediction}}
+{\fontsize{18}{22}\selectfont\textit{Drop = coverage loss in pp; $^{\ast}$ different split/protocol from Fig. 1 Covertype.}}
 \end{center}
 
 \vspace{0.6em}
 \begin{center}
 \begin{tikzpicture}
-\node[fill=white, draw=successgreen, line width=4pt, rounded corners=10pt, inner sep=12pt] {
+\node[fill=white, draw=uaiblue, line width=4pt, rounded corners=10pt, inner sep=12pt] {
 \begin{minipage}{0.78\linewidth}
 \centering
-{\fontsize{50}{60}\selectfont\bfseries\color{successgreen} 91.7\%}\\[0.2em]
-{\fontsize{26}{32}\selectfont Combined Accuracy (11/12)}
+{\fontsize{42}{50}\selectfont\bfseries\color{uaiblue} 91.7\pct}\\[0.14em]
+{\fontsize{22}{27}\selectfont 11/12 rule labels matched}\\[0.02em]
+{\fontsize{18}{22}\selectfont 8 SALT + 4 specificity checks}
 \end{minipage}
 };
 \end{tikzpicture}
 \end{center}
 }
 
-\vspace{0.8cm}
-
-%------------------------------------------------------------------------------
-% PRACTICAL FRAMEWORK
-%------------------------------------------------------------------------------
-\alertbox{Practical Framework}{%
-\vspace{1cm}
-\fontsize{27}{34}\selectfont
-
-\textbf{Pre-Deployment Assessment}
-
-\vspace{0.8em}
-\begin{center}
-\begin{tikzpicture}[scale=1.7, every node/.style={font=\fontsize{21}{26}\selectfont}]
-\node[draw=uaiblue, line width=2pt, fill=uailight, rounded corners=6pt, minimum width=7.5cm, minimum height=1.7cm, align=center] (train) at (0,7.5) {\textbf{1. Train Model}};
-
-\node[draw=uaiblue, line width=2pt, fill=uailight, rounded corners=6pt, minimum width=7.5cm, minimum height=1.7cm, align=center] (shap) at (0,5.2) {\textbf{2. Compute SHAP}};
-
-\node[draw=uaiblue, line width=2pt, fill=uailight, rounded corners=6pt, minimum width=7.5cm, minimum height=1.7cm, align=center] (conc) at (0,2.9) {\textbf{3. Calc Concentration}};
-
-\node[draw=successgreen, line width=2.5pt, fill=green!15, rounded corners=6pt, minimum width=3.2cm, minimum height=1.4cm, align=center] (safe) at (-2.2,0.4) {\color{successgreen}\fontsize{24}{30}\selectfont\bfseries $<$40\%\\[0.1em]\fontsize{20}{24}\selectfont Deploy};
-
-\node[draw=alertred, line width=2.5pt, fill=red!15, rounded corners=6pt, minimum width=3.2cm, minimum height=1.4cm, align=center] (risk) at (2.2,0.4) {\color{alertred}\fontsize{24}{30}\selectfont\bfseries $\geq$40\%\\[0.1em]\fontsize{20}{24}\selectfont Mitigate};
-
-\draw[-{Stealth[length=6mm,width=4mm]}, line width=2.5pt, uaiblue] (train) -- (shap);
-\draw[-{Stealth[length=6mm,width=4mm]}, line width=2.5pt, uaiblue] (shap) -- (conc);
-\draw[-{Stealth[length=6mm,width=4mm]}, line width=2.5pt, successgreen] (conc.south west) -- (safe.north);
-\draw[-{Stealth[length=6mm,width=4mm]}, line width=2.5pt, alertred] (conc.south east) -- (risk.north);
-\end{tikzpicture}
-\end{center}
-}
-
-\vspace{0.8cm}
+\vspace{0.55cm}
 
 %------------------------------------------------------------------------------
 % CONCLUSIONS
 %------------------------------------------------------------------------------
 \posterbox{Conclusions \& Future Work}{%
-\vspace{0.75cm}
 \fontsize{25}{31}\selectfont
 
-\textbf{\color{successgreen}Takeaways:}
+\textbf{\color{uaiblue}Takeaways:}
 \begin{itemize}
-    \item SHAP Concentration predicts CP failures \textbf{in GBMs}: $\rho=0.853$ ($p<0.001$)
-    \item 40\% threshold: LOO-CV \textbf{87.5\%}; external validation \textbf{91.7\%}
-    \item \textbf{Scope:} GBM classifiers; RF/MLP need different diagnostics
+    \setlength\itemsep{0.12em}
+    \item Top-1 SHAP concentration predicts APS CP coverage loss \textbf{in GBMs}: $\rho=0.853$ ($p<0.001$)
+    \item The 40\pct{} cutoff is exploratory: \textbf{91.7\pct} label agreement across 12 checks (11/12)
 \end{itemize}
 
-\vspace{0.25em}
+\vspace{0.35em}
 \textbf{\color{uaiblue}Future Directions:}
 \begin{itemize}
-    \item \textbf{Mitigation:} diversify features, add dropout/ensembles, trigger retraining
-    \item \textbf{Prospective validation:} recalibrate the 40\% threshold on new domains
-    \item \textbf{Streaming CP:} monitor concentration and coverage drift online
+    \setlength\itemsep{0.12em}
+    \item \textbf{Prospective validation:} test the cutoff on new domains
+    \item \textbf{Protective factors:} detect stable top features that prevent failure
+    \item \textbf{Neural diagnostics:} gradient-based explanations for MLPs
+    \item \textbf{Mitigation:} reduce concentration via features, dropout, ensembles
 \end{itemize}
 }
 
-\vspace{0.8cm}
+\vspace{0.45cm}
+
+%------------------------------------------------------------------------------
+% MODEL SCOPE
+%------------------------------------------------------------------------------
+\posterbox{Scope \& Model Sensitivity}{%
+\fontsize{22}{27}\selectfont
+
+\begin{center}
+\renewcommand{\arraystretch}{1.12}
+{\fontsize{19}{23}\selectfont
+\begin{tabular}{lc>{\raggedright\arraybackslash}p{10.6cm}}
+\toprule
+\textbf{Model} & \textbf{$\rho$} & \textbf{Why} \\
+\midrule
+\rowcolor{uaiblue!8} \textbf{GBM} & 0.55--0.83 & SALT-only model-family sensitivity; the headline $\rho=0.853$ is the 16-task LightGBM endpoint. \\
+RF & 0.30 & Bagging dilutes single-feature dependence. \\
+MLP & 0.43 & Failures may be distributed/global; needs neural diagnostics. \\
+\bottomrule
+\end{tabular}
+}
+\end{center}
+
+\vspace{0.15em}
+{\fontsize{18}{22}\selectfont\textit{Scope: GBM multiclass APS CP. SHAP concentration captures concentrated-dependence failures, not every model failure mode.}}
+}
+
+\vspace{0.45cm}
+
+%------------------------------------------------------------------------------
+% OPEN QUESTIONS
+%------------------------------------------------------------------------------
+\posterbox{Open Questions}{%
+\fontsize{23}{29}\selectfont
+\begin{itemize}
+    \setlength\itemsep{0.14em}
+    \item Can we design models that are \textbf{intrinsically low-concentration}?
+    \item Does the \textbf{40\pct{} threshold} hold prospectively across new domains?
+    \item When does high concentration stay safe because the top feature is stable?
+    \item Can \textbf{streaming CP} monitor concentration and trigger mitigation before failure?
+\end{itemize}
+}
+
+\vspace{0.45cm}
 
 %------------------------------------------------------------------------------
 % CONTACT / QR
 %------------------------------------------------------------------------------
-\begin{tikzpicture}
-\node[draw=uaiblue, line width=2pt, fill=uaiblue!5, rounded corners=6pt, inner sep=12pt, text width=0.93\linewidth] {
-\begin{minipage}{0.55\linewidth}
+\posterbox{Paper, Code \& Contact}{%
+\begin{minipage}{0.58\linewidth}
 \fontsize{24}{30}\selectfont
-\textbf{Paper \& Code:}\\[0.2em]
-{\fontsize{18}{22}\selectfont\texttt{github.com/ChorokLeeDev/}}\\[-0.05em]
-{\fontsize{18}{22}\selectfont\texttt{conformal-covid-uai2026}}\\[0.65em]
-\textbf{Contact:}\\[0.2em]
-{\fontsize{20}{24}\selectfont\texttt{chorok.lee@kaist.ac.kr}}
+\textbf{Repository}\par\vspace{0.15em}
+{\fontsize{18}{22}\selectfont\texttt{github.com/ChorokLeeDev/}}\par
+{\fontsize{18}{22}\selectfont\texttt{conformal-covid-uai2026}}\par\vspace{0.65em}
+\textbf{Contact}\par\vspace{0.15em}
+{\fontsize{20}{24}\selectfont\texttt{choroklee@kaist.ac.kr}}
 \end{minipage}%
 \hfill
-\begin{minipage}{0.38\linewidth}
-\begin{center}
-\fcolorbox{uaiblue}{white}{\includegraphics[width=4.4cm]{qr_code.png}}\\[-0.1em]
-{\fontsize{16}{20}\selectfont\bfseries Scan for paper \& code}
-\end{center}
+\begin{minipage}{0.36\linewidth}
+\centering
+\fcolorbox{uaiblue}{white}{\includegraphics[width=6.0cm]{qr_code.png}}\par\vspace{0.18em}
+{\fontsize{18}{22}\selectfont\bfseries Scan for paper \& code}
 \end{minipage}
-};
-\end{tikzpicture}
+}
 
 \end{minipage}
+
+\begin{tikzpicture}[remember picture, overlay]
+\node[anchor=south] at ([xshift=-21.0cm,yshift=0.55cm]current page.south) {%
+\includegraphics[width=13.5cm,trim=360 1560 360 1000,clip]{kaistlogo_hi.jpg}%
+};
+\node[anchor=south] at ([xshift=21.0cm,yshift=0.55cm]current page.south) {%
+\includegraphics[height=4.2cm,trim=55 470 120 390,clip]{saplogo_hi.png}%
+};
+\end{tikzpicture}
 
 \end{document}
