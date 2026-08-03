@@ -203,7 +203,7 @@ def panel_d_ranking_shift(ax, cat_results, rob_results):
                 ha='center', va='bottom', fontsize=20, fontweight='bold')
 
     # Add interpretation
-    ax.text(0.5, 0.95, 'Lower = More stable feature importance',
+    ax.text(0.5, 0.95, 'Lower = More stable feature ranking',
             transform=ax.transAxes, fontsize=16, va='top', ha='center',
             bbox=dict(boxstyle='round', facecolor='white', alpha=0.8))
 

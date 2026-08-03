@@ -17,6 +17,7 @@
 \usepackage{colortbl}
 \usepackage{multicol}
 \usepackage{fancybox}
+\usepackage{eso-pic}
 \usepackage{helvet}
 \renewcommand{\familydefault}{\sfdefault}
 \hyphenpenalty=9000
@@ -77,6 +78,17 @@
 
 \begin{document}
 
+\AddToShipoutPictureBG*{%
+\begin{tikzpicture}[remember picture, overlay]
+\node[anchor=south] at ([xshift=-21.0cm,yshift=0.4cm]current page.south) {%
+\includegraphics[width=13.5cm,trim=360 1560 360 1000,clip]{kaistlogo_hi.jpg}%
+};
+\node[anchor=south] at ([xshift=21.0cm,yshift=0.4cm]current page.south) {%
+\includegraphics[height=4.2cm,trim=55 470 120 390,clip]{saplogo_hi.png}%
+};
+\end{tikzpicture}%
+}
+
 %==============================================================================
 % TITLE SECTION
 %==============================================================================
@@ -135,7 +147,7 @@
 \raggedright
 
 \textbf{Conformal Prediction (CP):}\par
-distribution-free uncertainty.\par\vspace{0.12em}
+distribution-free uncertainty; true label in prediction set with prob $\geq 1{-}\alpha$ (e.g., 90\pct).\par\vspace{0.12em}
 \textbf{Problem:} shift can break coverage.
 
 \vspace{0.8em}
@@ -143,7 +155,7 @@ distribution-free uncertainty.\par\vspace{0.12em}
 \par\vspace{0.28em}
 \begin{center}
 {\setlength{\fboxsep}{12pt}%
-\fcolorbox{uaiblue}{white}{\parbox{0.80\linewidth}{\centering\fontsize{25}{31}\selectfont
+\fcolorbox{uaiblue}{white}{\parbox{0.80\linewidth}{\centering\fontsize{28}{34}\selectfont
 \vspace{0.05em}
 Can we \textbf{predict} when CP fails \textbf{before} deployment?
 \vspace{0.05em}
@@ -215,8 +227,8 @@ Models with \textbf{concentrated feature reliance} are at risk:
 \fontsize{25}{31}\selectfont
 \raggedright
 
-MMD/C2ST/PSI detect dataset shift.\par\vspace{0.16em}
-They do not say which CP model will lose coverage.
+MMD, C2ST, and PSI detect dataset shift.\par\vspace{0.16em}
+They detect shift, not CP failure severity.
 
 \vspace{0.55em}
 \begin{center}
@@ -232,9 +244,30 @@ They do not say which CP model will lose coverage.
 \textbf{Interpretation:} SHAP concentration asks whether one fragile model direction already dominates.
 }
 
+\vspace{0.45cm}
+
+%------------------------------------------------------------------------------
+% KEYWORDS / ABBREVIATIONS
+%------------------------------------------------------------------------------
+\posterbox{Keywords}{%
+\fontsize{20}{25}\selectfont
+\raggedright
+
+\newcommand{\keyrow}[2]{%
+\noindent\makebox[3.5cm][l]{\bfseries\color{uaiblue}#1}%
+\begin{minipage}[t]{13.8cm}#2\end{minipage}\par\vspace{0.35em}}
+\keyrow{CP}{Conformal Prediction; builds prediction sets with validity guarantees.}
+\keyrow{Coverage}{Fraction of samples where true label is in the prediction set (target: 90\pct).}
+\keyrow{APS}{Adaptive Prediction Sets; ranks labels by model probability. The score says how far down the list the true label appears.}
+\keyrow{SHAP}{SHapley Additive exPlanations; feature attribution for concentration.}
+\keyrow{SALT}{Supply chain ALlocaTion; RelBench supply-chain benchmark.}
+\keyrow{GBM}{Gradient Boosting Machine; LightGBM/XGBoost/CatBoost family.}
+\keyrow{MLP}{Multilayer Perceptron; neural-network baseline.}
+}
+
 \end{minipage}%
-\hfill
-\begin{minipage}[t]{0.45\textwidth}
+\hspace{0.015\textwidth}%
+\begin{minipage}[t]{0.44\textwidth}
 \vspace{0pt}
 
 %------------------------------------------------------------------------------
@@ -242,8 +275,7 @@ They do not say which CP model will lose coverage.
 %------------------------------------------------------------------------------
 \herobox{MAIN RESULT}{%
 \begin{center}
-{\fontsize{31}{37}\selectfont\bfseries\color{uaidark}Pre-deployment risk signal}\\[0.08em]
-{\fontsize{31}{37}\selectfont\bfseries\color{uaidark}predicts\hspace{0.32em}coverage\hspace{0.32em}drop}\\[0.14em]
+{\fontsize{31}{37}\selectfont\bfseries\color{uaidark}Pre-deployment risk signal predicts coverage drop}\\[0.14em]
 {\fontsize{22}{27}\selectfont\color{uaidark}LightGBM/GBM\hspace{0.18em}multiclass\hspace{0.18em}APS\hspace{0.18em}conformal predictors under shift}
 \end{center}
 
@@ -253,9 +285,9 @@ They do not say which CP model will lose coverage.
 \node[fill=white, draw=uaiorange, line width=5pt, rounded corners=12pt, inner sep=18pt, drop shadow={shadow xshift=3pt, shadow yshift=-3pt, opacity=0.25}] {
 \begin{minipage}{0.86\linewidth}
 \centering
-{\fontsize{78}{94}\selectfont\bfseries\color{uaiblue} $\rho = 0.853$}\\[0.2em]
-{\fontsize{30}{36}\selectfont Spearman Correlation}\\[0.28em]
-{\fontsize{26}{32}\selectfont\bfseries\boldmath\color{uaiorange} $p < 0.001$ \quad $\vert$ \quad $n = 16$ tasks \quad $\vert$ \quad 9 domains}
+{\fontsize{62}{74}\selectfont\bfseries\color{uaiblue} $\rho = 0.853$}\\[0.15em]
+{\fontsize{26}{32}\selectfont Spearman Correlation}\\[0.22em]
+{\fontsize{22}{27}\selectfont\bfseries\boldmath\color{uaiorange} $p < 0.001$ \quad $\vert$ \quad $n = 16$ tasks \quad $\vert$ \quad 9 domains}
 \end{minipage}
 };
 \end{tikzpicture}
@@ -265,7 +297,7 @@ They do not say which CP model will lose coverage.
 \begin{center}
 \includegraphics[width=0.98\linewidth]{../figures/figure_n16_correlation.pdf}
 \end{center}
-{\fontsize{20}{24}\selectfont\itshape Fig. 1: Each point is a task. $C$ is measured before deployment; coverage drop is validation-to-post-shift loss in percentage points. The dashed line is the exploratory SALT-derived cutoff.\par}
+{\fontsize{20}{24}\selectfont\itshape Fig. 1: Each point is a task. $C$ is measured before deployment; coverage drop = validation coverage $-$ post-shift test coverage, in percentage points. The dashed line is the exploratory SALT-derived cutoff.\par}
 \vspace{0.15em}
 \begin{center}
 \fcolorbox{uaiblue}{uailight}{\parbox{0.94\linewidth}{\centering
@@ -277,7 +309,7 @@ They do not say which CP model will lose coverage.
 \end{center}
 }
 
-\vspace{0.55cm}
+\vspace{0.5cm}
 
 %------------------------------------------------------------------------------
 % SHAP CONCENTRATION METHOD
@@ -291,7 +323,10 @@ They do not say which CP model will lose coverage.
 \fcolorbox{uaiblue}{uailight}{\parbox{0.92\linewidth}{\centering
 \vspace{0.32em}
 {\fontsize{34}{42}\selectfont $\displaystyle C = \frac{\max_j \mathbb{E}|\phi_j|}{\sum_{j=1}^{p} \mathbb{E}|\phi_j|}$}
-\vspace{0.32em}
+\vspace{0.25em}
+
+{\fontsize{18}{22}\selectfont $C$ = concentration, \quad $\phi_j$ = SHAP value for feature $j$, \quad $p$ = number of features}
+\vspace{0.22em}
 }}
 \end{center}
 
@@ -304,8 +339,8 @@ They do not say which CP model will lose coverage.
 $\displaystyle
 \mathbb{E}[s_{\mathrm{test}}] \geq C\bigl(1-(K-1)\epsilon\bigr) + (1-C)\bigl(1-(K-1)\bar h\bigr)$}\\[0.45em]
 \begin{minipage}{0.92\linewidth}
-{\fontsize{18}{22}\selectfont\raggedright
-If the dominant shifted feature gives weaker true-class support ($\epsilon<\bar h$), larger $C$ puts more weight on that damaged signal. APS test scores rise while the CP cutoff stays fixed, so coverage drops.\par
+{\fontsize{17}{21}\selectfont\raggedright
+APS score = how far down the ranked label list we go to reach the true label. If the dominant shifted feature weakens true-class support ($\epsilon<\bar h$), high $C$ raises that score; with the pre-shift CP cutoff fixed, coverage drops.\par
 }
 \end{minipage}
 \vspace{0.24em}
@@ -316,15 +351,15 @@ If the dominant shifted feature gives weaker true-class support ($\epsilon<\bar 
 \begin{center}
 \makebox[\linewidth][c]{\includegraphics[width=0.99\linewidth]{../figures/figure3_feature_importance.png}}
 \end{center}
-{\fontsize{20}{24}\selectfont\itshape Fig. 2: Catastrophic tasks concentrate SHAP mass on one shifted feature; robust/protected tasks keep reliance distributed or stable.\par}
+{\fontsize{20}{24}\selectfont\itshape Fig. 2: Catastrophic failure keeps SHAP mass concentrated on one shifted feature; the robust example redistributes importance across several top features.\par}
 \vspace{0.18em}
 {\fontsize{18}{22}\selectfont
 \setlength{\tabcolsep}{0.3em}
 \begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.49\linewidth}>{\raggedright\arraybackslash}p{0.49\linewidth}@{}}
-\textbf{A. Failure:} SHAP mass jumps to one feature. &
-\textbf{B. Robust:} importance stays distributed. \\
+\textbf{A. Catastrophic (77pp drop):} SHAP mass jumps to one feature. &
+\textbf{B. Robust (8pp drop):} importance shared across top features. \\
 \textbf{C. Ratio:} failing task has a top-feature spike. &
-\textbf{D. Stability:} robust tasks keep feature order. \\
+\textbf{D. Stability:} catastrophic locks onto one feature (stable but fragile); robust redistributes (less stable but resilient). \\
 \end{tabular}\par
 }
 \vspace{0.2em}
@@ -339,8 +374,8 @@ If the dominant shifted feature gives weaker true-class support ($\epsilon<\bar 
 }
 
 \end{minipage}%
-\hfill
-\begin{minipage}[t]{0.275\textwidth}
+\hspace{0.008\textwidth}%
+\begin{minipage}[t]{0.285\textwidth}
 \vspace{0pt}
 
 %------------------------------------------------------------------------------
@@ -349,24 +384,25 @@ If the dominant shifted feature gives weaker true-class support ($\epsilon<\bar 
 \posterbox{Specificity Check: Low-$C$ Holds Out}{%
 \fontsize{25}{31}\selectfont
 
-\textbf{Low-$C$ checks avoid catastrophic loss.}
-{\fontsize{18}{22}\selectfont\par\textit{Negative control: below-cutoff tasks should remain low risk.}}
+\textbf{Low-$C$ checks avoid observed catastrophic loss.}
+{\fontsize{18}{22}\selectfont\par\textit{Cutoff predicts low risk; observed drop validates it.}}
 \begin{center}
 \renewcommand{\arraystretch}{1.2}
 {\fontsize{22}{28}\selectfont
 \begin{tabular}{lccc}
 \toprule
-\textbf{Dataset} & \textbf{Top-1 $C$} & \textbf{Drop} & \textbf{Flag} \\
+\textbf{Dataset} & \textbf{Top-1 $C$} & \textbf{Obs. drop} & \textbf{Rule} \\
 \midrule
-CivilComments & 26.2\pct & -0.7pp & Low risk \\
-Amazon & 1.9\pct & +0.4pp & Low risk \\
-Covertype$^{\ast}$ & 12.5\pct & +8.0pp & Low risk \\
-Adult & 27.5\pct & +1.4pp & Low risk \\
+CivilComments & 26.2\pct & -0.7pp & No flag \\
+Amazon & 1.9\pct & +0.4pp & No flag \\
+Covertype$^{\ast}$ & 12.5\pct & +8.0pp & No flag \\
+Adult & 27.5\pct & +1.4pp & No flag \\
 \bottomrule
 \end{tabular}
 \par\vspace{0.25em}
 }
-{\fontsize{18}{22}\selectfont\textit{Drop = coverage loss in pp; $^{\ast}$ different split/protocol from Fig. 1 Covertype.}}
+{\fontsize{18}{22}\selectfont\textit{No flag = $C<40\pct$; max observed drop is +8.0pp.}}\par
+{\fontsize{18}{22}\selectfont\textit{$^{\ast}$ Different split from Fig. 1 Covertype ($C=49.8\pct$, 81.8pp drop).}}
 \end{center}
 
 \vspace{0.6em}
@@ -384,7 +420,34 @@ Adult & 27.5\pct & +1.4pp & Low risk \\
 \end{center}
 }
 
-\vspace{0.55cm}
+\vspace{0.5cm}
+
+%------------------------------------------------------------------------------
+% MODEL SCOPE
+%------------------------------------------------------------------------------
+\posterbox{Scope \& Model Sensitivity}{%
+\fontsize{25}{31}\selectfont
+
+\begin{center}
+\renewcommand{\arraystretch}{1.12}
+{\fontsize{20}{25}\selectfont
+\begin{tabular}{lc>{\raggedright\arraybackslash}p{10.6cm}}
+\toprule
+\textbf{Model} & \textbf{$\rho$} & \textbf{Why} \\
+\midrule
+\rowcolor{uaiblue!8} \textbf{GBM} & 0.55--0.83 & Headline $\rho=0.853$ is 16-task LightGBM. \\
+RF & 0.30 & Bagging dilutes single-feature dependence. \\
+MLP & 0.43 & Failures may be distributed/global; needs neural diagnostics. \\
+\bottomrule
+\end{tabular}
+}
+\end{center}
+
+\vspace{0.15em}
+{\fontsize{18}{22}\selectfont\textit{Scope: GBM multiclass APS CP. SHAP concentration captures concentrated dependence failures, not every failure mode.}}
+}
+
+\vspace{0.5cm}
 
 %------------------------------------------------------------------------------
 % CONCLUSIONS
@@ -404,46 +467,19 @@ Adult & 27.5\pct & +1.4pp & Low risk \\
 \begin{itemize}
     \setlength\itemsep{0.12em}
     \item \textbf{Prospective validation:} test the cutoff on new domains
+    \item \textbf{Top-N concentration:} explore top-2, top-3 variants
     \item \textbf{Protective factors:} detect stable top features that prevent failure
     \item \textbf{Neural diagnostics:} gradient-based explanations for MLPs
-    \item \textbf{Mitigation:} reduce concentration via features, dropout, ensembles
 \end{itemize}
 }
 
-\vspace{0.45cm}
-
-%------------------------------------------------------------------------------
-% MODEL SCOPE
-%------------------------------------------------------------------------------
-\posterbox{Scope \& Model Sensitivity}{%
-\fontsize{22}{27}\selectfont
-
-\begin{center}
-\renewcommand{\arraystretch}{1.12}
-{\fontsize{19}{23}\selectfont
-\begin{tabular}{lc>{\raggedright\arraybackslash}p{10.6cm}}
-\toprule
-\textbf{Model} & \textbf{$\rho$} & \textbf{Why} \\
-\midrule
-\rowcolor{uaiblue!8} \textbf{GBM} & 0.55--0.83 & SALT-only model-family sensitivity; the headline $\rho=0.853$ is the 16-task LightGBM endpoint. \\
-RF & 0.30 & Bagging dilutes single-feature dependence. \\
-MLP & 0.43 & Failures may be distributed/global; needs neural diagnostics. \\
-\bottomrule
-\end{tabular}
-}
-\end{center}
-
-\vspace{0.15em}
-{\fontsize{18}{22}\selectfont\textit{Scope: GBM multiclass APS CP. SHAP concentration captures concentrated-dependence failures, not every model failure mode.}}
-}
-
-\vspace{0.45cm}
+\vspace{0.5cm}
 
 %------------------------------------------------------------------------------
 % OPEN QUESTIONS
 %------------------------------------------------------------------------------
 \posterbox{Open Questions}{%
-\fontsize{23}{29}\selectfont
+\fontsize{25}{31}\selectfont
 \begin{itemize}
     \setlength\itemsep{0.14em}
     \item Can we design models that are \textbf{intrinsically low-concentration}?
@@ -453,14 +489,14 @@ MLP & 0.43 & Failures may be distributed/global; needs neural diagnostics. \\
 \end{itemize}
 }
 
-\vspace{0.45cm}
+\vspace{0.5cm}
 
 %------------------------------------------------------------------------------
 % CONTACT / QR
 %------------------------------------------------------------------------------
 \posterbox{Paper, Code \& Contact}{%
 \begin{minipage}{0.58\linewidth}
-\fontsize{24}{30}\selectfont
+\fontsize{25}{31}\selectfont
 \textbf{Repository}\par\vspace{0.15em}
 {\fontsize{18}{22}\selectfont\texttt{github.com/ChorokLeeDev/}}\par
 {\fontsize{18}{22}\selectfont\texttt{conformal-covid-uai2026}}\par\vspace{0.65em}
@@ -476,14 +512,5 @@ MLP & 0.43 & Failures may be distributed/global; needs neural diagnostics. \\
 }
 
 \end{minipage}
-
-\begin{tikzpicture}[remember picture, overlay]
-\node[anchor=south] at ([xshift=-21.0cm,yshift=0.55cm]current page.south) {%
-\includegraphics[width=13.5cm,trim=360 1560 360 1000,clip]{kaistlogo_hi.jpg}%
-};
-\node[anchor=south] at ([xshift=21.0cm,yshift=0.55cm]current page.south) {%
-\includegraphics[height=4.2cm,trim=55 470 120 390,clip]{saplogo_hi.png}%
-};
-\end{tikzpicture}
 
 \end{document}
