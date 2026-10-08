@@ -1,6 +1,18 @@
 # Diagnosing Conformal Prediction Failures Under Distribution Shift: A COVID-19 Case Study
 
-**Accepted at UAI 2026**
+**Original repository status: accepted at UAI 2026. Statistical audit revision in progress.**
+
+The active manuscript now documents material statistical and reproducibility
+limitations. Historical numerical results have **not** been reproduced under a
+corrected common protocol: supplied scripts use different APS membership rules,
+fit preprocessing with test information, and reuse calibration labels for early
+stopping. Original submitted PDFs and ZIPs are preserved unchanged.
+
+See [initial audit](audit/2026-10-08/initial-review.md) and
+[revision record](audit/2026-10-08/revision-record.md). The new
+`src/aps_reference.py` is a separately labeled reference for future reruns, not
+the code that generated the historical tables. Run the focused statistical
+counterexamples with `python audit/2026-10-08/check_statistical_claims.py`.
 
 Chorok Lee  
 Korea Advanced Institute of Science and Technology (KAIST)  
@@ -8,16 +20,20 @@ choroklee@kaist.ac.kr
 
 ## Abstract
 
-Conformal prediction provides distribution-free coverage guarantees, but these degrade under distribution shift—and practitioners lack tools to anticipate which deployed models will fail before observing test data. We propose SHapley Additive exPlanations (SHAP) concentration—the fraction of feature importance concentrated in the top feature—as a pre-deployment diagnostic for conformal prediction vulnerability in gradient-boosted classifiers. Using COVID-19 as a naturalistic case study, eight supply chain tasks experience identical temporal shift yet coverage drops ranging from negligible to catastrophic. Feature-importance concentration is strongly associated with failure severity across 16 multiclass tasks in 9 domains (ρ = 0.853, p < 0.001), while standard distributional shift detectors cannot distinguish catastrophic from robust outcomes.
+Historical summaries suggest an association between SHAP concentration and
+coverage degradation. The selected 16-task summaries give ρ = 0.853; including
+the excluded three-class task gives ρ = 0.654 across 17 tasks. These correlations
+can be checked from rounded reported points. They do not establish prospective
+validity, causal mechanisms, or replication of the missing original experiments.
 
-## Key Results
+## Historical Reported Results (underlying experiments unverified)
 
 | Metric | Value |
 |--------|-------|
 | Primary correlation (n=16) | ρ = 0.853, p < 0.001 |
 | Bootstrap 95% CI | [0.50, 0.96] |
 | Within SALT (n=8) | ρ = 0.833, p = 0.010 |
-| Covertype (external) | C = 49.8%, drop = 81.8pp ✓ |
+| Covertype (external) | C = 49.8%, drop = 81.8pp (historical report) |
 
 ## Repository Structure
 
