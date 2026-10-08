@@ -8,6 +8,15 @@ corrected common protocol: supplied scripts use different APS membership rules,
 fit preprocessing with test information, and reuse calibration labels for early
 stopping. Original submitted PDFs and ZIPs are preserved unchanged.
 
+The account-wide recovery found pinned SALT raw data and **24 separate follow-up
+models**. Their stored predictions and native SHAP values replay exactly from
+raw inputs and models; a fresh fixed-protocol refit reproduces all 528 saved arrays. Across all eight tasks, the concentration/drop correlation
+is **−0.238** under inclusive APS and **−0.262** under crossing sets: this panel
+does not reproduce the historical positive association. A default date-truncated
+entity join misses every test ID on the pinned snapshot. Original 50-seed
+predictions remain unrecovered, so this does not identify the published collapse's
+cause. See [recovery report](audit/2026-10-08/recovery/README.md).
+
 See [initial audit](audit/2026-10-08/initial-review.md) and
 [revision record](audit/2026-10-08/revision-record.md). The new
 `src/aps_reference.py` is a separately labeled reference for future reruns, not

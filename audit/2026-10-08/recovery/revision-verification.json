@@ -1,0 +1,9 @@
+{
+  "stage": "recovery+raw replay+24 fixed refits",
+  "manuscript_sha256": "0f58c6ed08fb0440d2e9cb737685df6f1235b01f490eac2850dacae31a0a5cbf",
+  "revised_pdf_sha256": "f93b03dcb5916e5544de17687857402fd69d8522e00c3ae0cc0bf5d03ebcb349",
+  "original_artifacts_unchanged": true,
+  "pdf_pages": 24,
+  "latex_undefined_references": false,
+  "latex_overfull_boxes": false
+}

@@ -37,7 +37,7 @@
 \maketitle
 
 \begin{abstract}
-We examine the reported association between feature-importance concentration and conformal coverage degradation in a COVID-era supply-chain case study and external datasets. Rounded historical summaries yield Spearman $\rho=0.853$ for a selected 16-task subset and $\rho=0.654$ for all 17 reported tasks. A statistical audit identified test-aware preprocessing, reuse of calibration labels for early stopping, different prediction-set conventions across cohorts, and missing numerical artifacts. These findings limit the original pre-deployment and replication claims; the historical experiments have not been rerun under a corrected common protocol. We give a conditional score bound for an idealized probability mixture, whose weight is distinct from measured SHAP concentration, and withdraw unsupported class-count and ICC interpretations. The diagnostic and 40\% threshold remain exploratory hypotheses requiring prospective validation.
+We examine the reported association between feature-importance concentration and conformal coverage degradation in a COVID-era supply-chain case study and external datasets. Rounded historical summaries yield Spearman $\rho=0.853$ for a selected 16-task subset and $\rho=0.654$ for all 17 reported tasks. A statistical audit identified test-aware preprocessing, reuse of calibration labels for early stopping, different prediction-set conventions across cohorts, and missing numerical artifacts. These findings limit the original pre-deployment and replication claims. A recovered, separate follow-up panel of all eight SALT tasks (three fixed seeds per task) gives $\rho=-0.238$ under inclusive score inversion and $-0.262$ under crossing sets. Its frozen predictions and SHAP concentrations were independently regenerated from raw inputs and stored models, and all 24 follow-up fits were rerun. This panel does not reproduce the historical positive association; the original 50-seed models remain unavailable. We give a conditional score bound for an idealized probability mixture, whose weight is distinct from measured SHAP concentration, and withdraw unsupported class-count and ICC interpretations. The diagnostic and 40\% threshold are unvalidated; no deployment rule is supported by these results.
 \end{abstract}
 
 \section{Introduction}\label{sec:intro}
@@ -49,11 +49,11 @@ We propose \textbf{SHAP concentration}---the fraction of total feature importanc
 Our contributions:
 
 \begin{enumerate}
-    \item \textbf{Exploratory diagnostic}: The reported SHAP concentration summaries correlate with coverage-drop summaries: $\rho=0.853$ across the selected 16 tasks and $\rho=0.654$ across all 17 tasks including Stack Overflow. These correlations can be recomputed from rounded published points, but the underlying experiment ledgers are missing and historical SALT/external set conventions differ. Prospective diagnostic value requires a common protocol without test-aware preprocessing.
+    \item \textbf{Exploratory diagnostic}: The reported SHAP concentration summaries correlate with coverage-drop summaries: $\rho=0.853$ across the selected 16 tasks and $\rho=0.654$ across all 17 tasks including Stack Overflow. These correlations can be recomputed from rounded published points, but the underlying experiment ledgers are missing and historical SALT/external set conventions differ. The recovered eight-task follow-up panel does not reproduce the positive association (Section~\ref{sec:recovered}). Prospective diagnostic value remains unestablished.
 
     \item \textbf{Conditional theory}: Theorem~\ref{thm:score_inflation} bounds an idealized probability mixture with explicit assumptions and a weight distinct from measured SHAP concentration. It does not verify those assumptions empirically or establish a guarantee for the archived experiments. Historical shift-detector comparisons are descriptive and await reproducible outputs.
 
-    \item \textbf{Exploratory framework}: A 40\% concentration rule and protective-factor check summarize observed cases. They are retrospective hypotheses, with one external false negative and a protective rule derived from one false positive. Historical single-seed retraining evidence is suggestive (Holm-adjusted $p=0.11$), not a validated deployment recommendation.
+    \item \textbf{Exploratory framework}: A 40\% concentration rule and protective-factor check summarize observed cases. They are retrospective hypotheses, with one external false negative and a protective rule derived from one false positive. Recovered single-seed retraining logs mix validation and test months; neither they nor the non-replicating follow-up panel validate a deployment recommendation.
 \end{enumerate}
 
 \section{Related Work}\label{sec:related}
@@ -198,7 +198,7 @@ The proposition does not identify $\lambda$ with the mean-absolute TreeSHAP rati
 
 \subsection{Coverage Degradation Across Tasks}
 
-Despite experiencing common COVID-era temporal periods, the 8 supply chain tasks exhibit dramatically different coverage degradation (Table~\ref{tab:main_results}). All coverage drops are statistically significant (paired Wilcoxon $p \leq 0.005$, 95\% CIs from the $t$-distribution), yet range from 0.1\% to 77.1\%.
+Despite experiencing common COVID-era temporal periods, the 8 supply chain tasks exhibit dramatically different coverage degradation (Table~\ref{tab:main_results}). The historical code uses a one-sided paired Wilcoxon alternative for positive drops and reports $p\leq0.005$, with $t$ intervals over seeds. Without the seed ledger these tests cannot be verified. Reported mean drops range from 0.1\% to 77.1\%.
 
 \begin{table*}[t]
 \centering
@@ -258,7 +258,7 @@ Drop = mean val $-$ mean test coverage (50 seeds).
 
 \subsection{SHAP Concentration Correlates with Failure}\label{sec:shap_results}
 
-Across all 8 SALT multiclass tasks, SHAP concentration correlates with coverage degradation: Spearman $\rho = 0.833$, $p = 0.010$ (Table~\ref{tab:stratified_correlation}, Figure~\ref{fig:n16_correlation}). Bootstrap 95\% CI: $[0.30, 1.00]$ (10,000 resamples, percentile method; a BCa interval has not been computed and no claim is made about its direction or width). The correlation magnitude is stable under leave-one-out analysis ($\rho \in [0.75, 0.96]$), though statistical significance is not maintained for 2 of 8 jackknife samples ($p = 0.052$) due to reduced power at $n=7$. SHAP concentration values are highly stable: bootstrap resampling (1,000 resamples of 10K validation samples) yields coefficient of variation below 1\% for all tasks, with 95\% CIs within $\pm$1 percentage point.
+Across all 8 SALT multiclass tasks, SHAP concentration correlates with coverage degradation: Spearman $\rho = 0.833$, $p = 0.010$ (Table~\ref{tab:stratified_correlation}, Figure~\ref{fig:n16_correlation}). A newly rerun percentile task bootstrap of the rounded summaries gives $[0.29,1.00]$ (10,000 resamples, seed 42), versus the historical report $[0.30,1.00]$. Treating shared-domain tasks as exchangeable resampling units is not justified by this calculation; it is a sensitivity summary, not an established population interval. A BCa interval has not been computed. The correlation magnitude is stable under leave-one-out analysis ($\rho \in [0.75, 0.96]$), though statistical significance is not maintained for 2 of 8 jackknife samples ($p = 0.052$) due to reduced power at $n=7$. SHAP concentration values are highly stable: bootstrap resampling (1,000 resamples of 10K validation samples) yields coefficient of variation below 1\% for all tasks, with 95\% CIs within $\pm$1 percentage point.
 
 \textbf{Mechanism.} Figure~\ref{fig:shap} reveals the distinction. Catastrophic tasks: the dominant feature experiences a concentrated importance explosion (4.5$\times$ increase). Robust tasks: importance redistributes across features with ranking reshuffle (10--20$\times$ increases distributed). These observations do not verify the probability-mixture assumptions of Theorem~\ref{thm:score_inflation}.
 
@@ -304,7 +304,7 @@ $^\S$Combined row includes all 17 tasks (8 SALT + 9 external, 10 domains: SALT $
 \begin{figure}[t]
 \centering
 \includegraphics[width=\linewidth]{figures/figure_n16_correlation}
-\caption{\textbf{SHAP Concentration Correlates with Coverage Degradation (Primary Result).} Spearman $\rho=0.853$, $p<0.001$ across all 16 multiclass tasks in 9 domains (dark circles: 8 SALT supply-chain tasks; orange triangles: 8 external domains, 10-seed means). The 40\% threshold (dashed) is an exploratory historical cutoff. Within SALT alone: $\rho=0.833$, $p=0.010$ ($n=8$).}\label{fig:n16_correlation}
+\caption{\textbf{Historical Summary Association (Original Runs Unverified).} Spearman $\rho=0.853$, $p<0.001$ across all 16 multiclass tasks in 9 domains (dark circles: 8 SALT supply-chain tasks; orange triangles: 8 external domains, 10-seed means). The plotted pre-deployment label and 40\% cutoff are historical claims, not validated prospective performance; the recovered full follow-up panel does not reproduce this positive association. Within SALT alone: $\rho=0.833$, $p=0.010$ ($n=8$).}\label{fig:n16_correlation}
 \end{figure}
 
 \subsection{Diagnostic Comparison}\label{sec:baselines}
@@ -349,38 +349,62 @@ The historical clipped ACI variant reports coverage improvements on severe tasks
 
 \subsection{Alternative Conformal Scoring}\label{sec:raps}
 
-Regularized Adaptive Prediction Sets (RAPS)~\citep{angelopoulos2021uncertainty} shows mechanism-dependent benefit: substantially reduces drops for high-cardinality tasks (s-group: $73.5\%\rightarrow10.4\%$; s-payterms: $79.9\%\rightarrow35.1\%$) but not the most concentrated task (s-shipcond: $60.4\%\rightarrow67.8\%$). This matches Section~\ref{sec:theory}: regularization controls class-accumulation effects, not concentrated single-feature dependence (Appendix~\ref{app:raps}; RAPS used random 50/50 calibration splits vs.\ deterministic main-experiment splits---within-experiment comparisons are unaffected).
+The historical Regularized Adaptive Prediction Sets (RAPS)~\citep{angelopoulos2021uncertainty} summaries report task-dependent differences: substantially reduces drops for high-cardinality tasks (s-group: $73.5\%\rightarrow10.4\%$; s-payterms: $79.9\%\rightarrow35.1\%$) but not the most concentrated task (s-shipcond: $60.4\%\rightarrow67.8\%$). These differences do not establish the idealized mechanism in Section~\ref{sec:theory}; its mixture weight is not measured SHAP concentration (Appendix~\ref{app:raps}; RAPS used random 50/50 calibration splits vs.\ deterministic main-experiment splits---within-experiment comparisons are unaffected).
 
 \subsection{Comparison with Standard Shift Detection}\label{sec:shift_detection}
 
-The historical summary reports MMD $p<0.002$, C2ST accuracy $>99.9\%$, PSI $>0.002$, and weak severity correlations on eight SALT tasks. Raw taskwise detector outputs are unavailable and the supplied detector script does not parse. A nonzero PSI alone is not a significance test. These observations, if reproduced, would describe this suite; they do not establish that generic shift detectors cannot predict severity in other settings.
+The historical summary reports MMD $p<0.002$, C2ST accuracy $>99.9\%$, PSI $>0.002$, and weak severity correlations on eight SALT tasks. Taskwise summaries and a parseable upstream script were recovered; the original supplementary copy does not parse. Recomputing correlations from these summaries reproduces their reported arithmetic, but does not reproduce the original detector fitting. The recovered PSI code discards observations outside training-bin endpoints and returns zero for a fully displaced uniform distribution or a constant binary feature changing from zero to one. Its historical severity comparison is therefore not a valid test of PSI. C2ST also uses its evaluation fold for early stopping. A nonzero PSI alone is not a significance test. These observations, if reproduced, would describe this suite; they do not establish that generic shift detectors cannot predict severity in other settings.
 
 \subsection{Retraining Analysis}
 
-Quarterly retraining improves s-shipcond by +18.9~pp ($p=0.036$, unadjusted, single-seed; Holm-corrected $p=0.11$ over 3 severe tasks), partially improves s-payterms (+15.5~pp, non-significant), and is ineffective for s-group ($0.0\%\rightarrow2.2\%$). Improvement concentrates in the final two months of the window; robust tasks remain near-ceiling without intervention.
+Recovered single-seed shipping-condition logs identify the reported +18.9~pp as an equal-weight mean over eleven months, February--December 2020, pooling validation and test periods. It is not a test-only, per-record effect. From the rounded monthly log entries, July--December improvement averages 36.08~pp, with most of that change in November--December. Serial dependence, this denominator change, and the default entity-join defect preclude a general quarterly-retraining recommendation. The original $p=0.036$ and three-task Holm-adjusted $p=0.11$ remain unverified historical inference; the other two severe-task input ledgers are still unavailable.
 
 \subsection{Cross-Domain and External Validation}\label{sec:cross_domain}
 
-Historical external reports cover nine datasets, with the selected eight multiclass datasets contributing to the pooled association. Covertype and Gas Sensor have supplied geographic/temporal loader definitions. The supplied KDD loader uses a positional split of one file rather than the claimed official train/test separation; PAMAP2 and the four reported null-shift controls lack generating code/results in this package. Whether those controls experience no relevant shift cannot be established from split names alone. These gaps prevent interpreting the pooled result as a validated cross-domain replication.
+Historical external reports cover nine datasets, with the selected eight multiclass datasets contributing to the pooled association. Covertype and Gas Sensor have supplied geographic/temporal loader definitions. The supplied KDD loader uses a positional split of one file rather than the claimed official train/test separation; Additional external/WILDS code has since been recovered, but code and manuscript protocols disagree (including Adult age 40 versus 50, CivilComments 200 versus 1,000 text features, and positional versus wilderness-based Covertype splits). Original per-record results remain missing. Whether those controls experience no relevant shift cannot be established from split names alone. These gaps prevent interpreting the pooled result as a validated cross-domain replication.
 
 \subsection{Placebo Test}
 
-The historical pre-COVID placebo reports lower degradation for seven tasks, with ratios about 6--143 where the rounded denominator is positive; sales-office has a reported ratio of one. These summaries and asymmetric training windows do not isolate a causal COVID effect, and the generating code/results are unavailable.
+The historical pre-COVID placebo reports lower degradation for seven tasks, with ratios about 6--143 where the rounded denominator is positive; sales-office has a reported ratio of one. These summaries and asymmetric training windows do not isolate a causal COVID effect, and the newly recovered generating code does not restore the missing original result ledger.
 
 \section{Decision Framework}\label{sec:framework}
 
-The following rule is a retrospective hypothesis requiring validation before operational use. Its historical evaluation depends on the unresolved implementation/provenance issues above:
+The original 40\% rule and protective-factor exception are retained only as historical hypotheses. The recovered complete SALT panel has no task with a mean drop above 15~pp, despite concentrations above 40\% for three tasks. It cannot estimate sensitivity to severe failures, and it does not support interpreting high concentration as an operational vulnerability label. Monitoring, retraining and abstention policies require separately specified utilities, feedback delays and prospective validation. No retraining deferral or deployment decision should follow from the historical threshold alone.
 
-\begin{enumerate}
-    \item \textbf{Compute} $C = \phi_1 / \sum_j \phi_j$ (Eq.~\ref{eq:concentration}). If $C \leq 40\%$: lower observed risk. If $C > 40\%$: check protective factors---secondary features with train-validation Jaccard $> 0.5$ and importance $> 15\%$ (thresholds empirically derived from a single observed case; treat as provisional); absent these, flag as \textbf{vulnerable}. If $C \in [35\%, 45\%]$: treat as \textbf{uncertain risk} with monitoring regardless of other factors.
-    \item \textbf{If vulnerable}: consider quarterly retraining (suggestive effect; Holm-corrected $p=0.11$; single-seed; Appendix~\ref{app:framework}).
-    \item \textbf{Monitor} empirical coverage continuously; defer retraining for lower-risk tasks.
-\end{enumerate}
+\section{Recovered Evidence and Failed Replication}\label{sec:recovered}
+
+The owner's separate research archive supplied pinned SALT tables, fitted models and per-record probability arrays for a later, explicitly different experiment. The fixed panel contains all eight tasks and seeds 42--44: 10,000 training rows, 3,000 distinct rows each for tuning, calibration and source audit, and 6,000 target rows per fit. Preprocessing dictionaries use sampled training only; the label alphabet uses full historical training. Model tuning and calibration are separated chronologically. Other task targets are excluded, while uppercase entity keys are retained by the declared feature contract. Temporal separation does not establish exchangeability or universal availability of every covariate at decision time.
+
+The October audit restored the checksum-verified archive and independently reconstructed model inputs from raw entity IDs. All 24 stored models reproduced their calibration, audit and target probabilities exactly; native raw-margin TreeSHAP concentrations on the specified first 128 calibration rows also matched exactly. The audit then recomputed exact calibration order statistics and both set rules using fixed stable ties. A fixed-protocol refit of all 24 models also reproduced all 528 saved arrays and scientific metadata exactly. Model serialization differed only by an empty unused GPU-list field; every tree and other parameter matched. This is a current-snapshot reproduction, not recovery of the original 50-seed fitted models or their SHAP protocol.
+
+\begin{table}[htbp]
+\centering
+\caption{Recovered follow-up panel, three-seed task means. Concentration is native raw-margin TreeSHAP; drop is source-audit minus target coverage in percentage points. Both set rules use the same exact threshold.}\label{tab:recovered}
+\small
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+Task & $C$ (\%) & Incl. drop & Cross. drop \\
+\midrule
+item-incoterms & 26.06 & 7.52 & 3.78 \\
+item-plant & 22.56 & 2.63 & 2.28 \\
+item-shippoint & 28.80 & 1.36 & 1.57 \\
+sales-group & 52.10 & 3.70 & 3.65 \\
+sales-incoterms & 30.86 & 1.61 & 0.47 \\
+sales-office & 49.05 & 0.16 & 0.02 \\
+sales-payterms & 60.01 & 1.82 & 1.86 \\
+sales-shipcond & 32.41 & 2.24 & 2.26 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Eight-task Spearman correlations are $-0.2381$ for inclusive inversion and $-0.2619$ for crossing sets (nominal asymptotic $p=0.5702$ and $0.5309$). The existing exact-versus-linear quantile factorial replay yields the same task correlations under either threshold rule. These shared-domain task means are not 24 independent replications; the nonsignificant correlations do not establish equivalence or a population null. They show that this complete follow-up panel fails to reproduce the historical positive association.
+
+A raw join audit also found that truncating entity tables at 1 July 2020, as the historical pipeline's default \texttt{get\_db()} call does, leaves every target entity unmatched on the pinned snapshot: 88,942/88,942 rows per sales task and 402,855/402,855 per item task. Training and validation joins have no missing IDs, and joining the full entity tables matches every target ID. This is a demonstrated input-contract artifact on the recovered snapshot. Missing original models, software/snapshot identities and prediction ledgers prevent attributing the published collapse, or its entire old/new discrepancy, to this artifact alone. An as-of feature contract is required before treating the full-table join as a prospective deployment pipeline.
 
 \section{Conclusion}\label{sec:conclusion}
 
 The archived results suggest an association between concentrated feature importance and coverage degradation in the evaluated settings. The selected 16-task association is $\rho=0.853$, compared with $0.654$ when the excluded three-class task is retained. These are reproducible summary arithmetic, not an independently reproduced common-protocol experiment. Test-aware preprocessing, calibration reuse, differing prediction-set conventions and missing numerical artifacts remain material limitations. The idealized theorem concerns a separate mixture weight under explicit assumptions and does not establish the proposed empirical mechanism.
-Controlled interventions, a leakage-free common pipeline, and independent prospective datasets are needed to assess mechanism, model scope and operational thresholds. The current revision corrects statistical interpretation while preserving historical results as unverified reports.
+Controlled interventions, a leakage-free common pipeline, and independent prospective datasets are needed to assess mechanism, model scope and operational thresholds. The recovered complete follow-up panel fails to reproduce the positive association. The current revision therefore withdraws the operational diagnostic and unsupported hyperparameter-robustness claims while preserving original submitted artifacts for the record.
 
 \begin{contributions}
     C.L. conceived the research question, designed and executed all experiments, performed the statistical analysis, and wrote the paper.
@@ -403,7 +427,7 @@ Controlled interventions, a leakage-free common pipeline, and independent prospe
 
 \section{Reproducibility Details}\label{app:reproducibility}
 
-The released supplement is incomplete. It contains six Python scripts but no original prediction ledger, checkpoints, split manifests or numerical result files. The packaged shift-detector script has a syntax error, the SHAP script depends on an absent generator, and only four of the nine external loaders are supplied. The model-sensitivity, WILDS, retraining, placebo and several ablation analyses cannot currently be reproduced from this package. The audit and synthetic regression checks are included separately; they do not reproduce the historical experiments.
+The released supplement is incomplete. It contains six Python scripts but no original prediction ledger, checkpoints, split manifests or numerical result files. The packaged shift-detector script has a syntax error, the SHAP script depends on an absent generator, and only four of the nine external loaders are supplied. The model-sensitivity, WILDS, retraining, placebo and several ablation analyses cannot currently be reproduced from this package. An account-wide recovery subsequently found most missing source programs, two historical summary files, selected monthly retraining logs, and a separate private follow-up archive. The original 50-seed model/prediction/SHAP ledgers remain unrecovered. Section~\ref{sec:recovered} reports a newly executed replay of the follow-up raw inputs, models and arrays, with an aggregate-only reproducibility record in \texttt{audit/2026-10-08/recovery}. Original submissions and the private raw payload are preserved.
 
 \subsection{LightGBM Hyperparameters}
 
@@ -488,7 +512,7 @@ Tasks marked with $^*$ in Table~\ref{tab:main_results} exhibit extreme model var
 
 \section{Threshold Sensitivity Analysis}\label{app:threshold}
 
-Table~\ref{tab:threshold_sensitivity} shows threshold performance across $n=16$ multiclass tasks. Note that the 40\% threshold is derived from the SALT concentration gap (in-sample); the 8 external datasets are fully out-of-sample. On the external subset alone at 40\%: Precision~$=$~1.00, Recall~$=$~0.50 (1 TP: Covertype; 1 FN: KDDCup99; 6 TN). Low external recall reflects sparse catastrophic cases; the primary claim rests on the $n=16$ correlation ($\rho=0.853$) rather than threshold classification. Ground-truth labels use the at-risk rule (mean coverage drop $>$15~pp, consistent with 50-seed means in Table~\ref{tab:main_results}). For high-variance tasks, the mean and median labels can differ: i-shippoint has mean drop 18.5~pp (At-risk) but median drop 1.2~pp (robust); Table~\ref{tab:main_results} labels it ROB by median for descriptive purposes, while the framework uses the mean-based threshold for threshold evaluation.
+Table~\ref{tab:threshold_sensitivity} shows threshold performance across $n=16$ multiclass tasks. Note that the 40\% threshold is derived from the SALT concentration gap (in-sample); the eight external datasets were not used to fit the displayed cutoff, but their post-outcome scope selection and test-aware pipelines prevent a clean prospective validation interpretation. On the external subset alone at 40\%: Precision~$=$~1.00, Recall~$=$~0.50 (1 TP: Covertype; 1 FN: KDDCup99; 6 TN). Low external recall reflects sparse catastrophic cases; the primary claim rests on the $n=16$ correlation ($\rho=0.853$) rather than threshold classification. Ground-truth labels use the at-risk rule (mean coverage drop $>$15~pp, consistent with 50-seed means in Table~\ref{tab:main_results}). For high-variance tasks, the mean and median labels can differ: i-shippoint has mean drop 18.5~pp (At-risk) but median drop 1.2~pp (robust); Table~\ref{tab:main_results} labels it ROB by median for descriptive purposes, while the framework uses the mean-based threshold for threshold evaluation.
 
 \begin{table}[htbp]
 \centering
@@ -714,7 +738,7 @@ s-office & 25 & $0.04\pm0.03$ & $0.04\pm0.03$ & 0.0 & Identical \\
 
 \raggedright
 \footnotesize
-All values are 10-seed means $\pm$ std. APS drops differ from 50-seed Table~\ref{tab:main_results} due to smaller seed range (10 vs.\ 50) and high variance. The key comparison is APS vs.\ RAPS within the same seed set. Note: RAPS experiments used a random 50/50 calibration split rather than the deterministic first-half/second-half split used in the main APS experiments (Appendix~\ref{app:reproducibility}); this protocol difference does not affect the within-experiment APS vs.\ RAPS comparison but means RAPS coverage values are not directly comparable to Table~\ref{tab:main_results}. RAPS eliminates the catastrophic drop for sales-group by truncating the class accumulation that amplifies score inflation in many-class settings (mean set size: 232/459 classes). Sales-shipcond is unhelped because single-feature dependence places dominant mass on the wrong class \textit{before} the $k_{\text{reg}}=5$ penalty activates---the exchangeability violation occurs at the top of the APS ordering, not through class accumulation. For low-class tasks ($\leq$35 classes), RAPS and APS produce identical or near-identical drops, confirming RAPS regularization has negligible effect when prediction sets are already small. Item-shippoint ($K=69$) is an exception: RAPS worsens coverage by 11.2~pp (paired Wilcoxon $p=0.064$, 10 seeds), reflecting that the regularization penalty can disrupt calibration for intermediate-cardinality tasks with high seed variance.
+All values are 10-seed means $\pm$ std. APS drops differ from 50-seed Table~\ref{tab:main_results} due to smaller seed range (10 vs.\ 50) and high variance. The key comparison is APS vs.\ RAPS within the same seed set. Note: RAPS experiments used a random 50/50 calibration split rather than the deterministic first-half/second-half split used in the main APS experiments (Appendix~\ref{app:reproducibility}); this protocol difference does not affect the within-experiment APS vs.\ RAPS comparison but means RAPS coverage values are not directly comparable to Table~\ref{tab:main_results}. The historical task differences do not identify whether class accumulation, input joins, score conventions or other model effects cause the apparent RAPS benefit. The original per-record comparison is unavailable. Item-shippoint ($K=69$) is an exception: RAPS worsens coverage by 11.2~pp (paired Wilcoxon $p=0.064$, 10 seeds), reflecting that the regularization penalty can disrupt calibration for intermediate-cardinality tasks with high seed variance.
 \end{table}
 
 \section{Model Class Sensitivity}\label{app:rf}
@@ -860,7 +884,7 @@ Model Class & Condition & Prediction & Recommendation \\
 
 \raggedright
 \footnotesize
-The diagnostic is validated for gradient-boosted classifiers ($\rho=0.833$, $p=0.010$ for LightGBM). For MLPs, low concentration does not ensure robustness due to global-sensitivity failures ($\rho=0.43$, $p=0.29$).
+The diagnostic is not validated for gradient-boosted classifiers: the historical positive LightGBM association fails to replicate in the recovered complete follow-up panel. For MLPs, low concentration does not ensure robustness due to global-sensitivity failures ($\rho=0.43$, $p=0.29$).
 \end{table}
 
 \subsection{Alternative Diagnostics for MLPs When $C \leq 40\%$}\label{app:alternative_diagnostics}
@@ -877,7 +901,7 @@ Diagnostic & Description \\
 \midrule
 Gradient sensitivity & $S_j = \mathbb{E}[\|\partial f / \partial x_j\|_2]$: average gradient magnitude per feature \\
 Feature ablation & $\Delta_j = \text{Cov}(D) - \text{Cov}(D|x_j=\mu_j)$: coverage change when ablating feature $j$ \\
-Lipschitz bound & $\text{Cov}_{\text{test}} \geq \text{Cov}_{\text{val}} - L \cdot W_2(D_{\text{val}}, D_{\text{test}})$: coverage lower bound via Lipschitz constant $L$ and Wasserstein-2 distance \\
+Score-margin analysis & A coverage transfer bound requires control of score mass near the threshold and a joint-distribution coupling; predictor Lipschitz continuity alone does not make the discontinuous coverage indicator Lipschitz \\
 \bottomrule
 \end{tabular}
 
@@ -889,61 +913,7 @@ These diagnostics target global-sensitivity failures where coordinated multi-fea
 
 \section{Hyperparameter Sensitivity Analysis}\label{app:hp_sensitivity}
 
-To assess whether the SHAP concentration--coverage drop correlation is robust to hyperparameter choices, we evaluate four LightGBM configurations on the 8 SALT multiclass tasks (Table~\ref{tab:hp_sensitivity}).
-
-\begin{table}[htbp]
-\centering
-\caption{Hyperparameter Sensitivity Analysis (SALT, $n=8$ tasks). All configurations use boosting=gbdt, feature\_fraction=0.8, bagging\_fraction=0.8, bagging\_freq=5.}\label{tab:hp_sensitivity}
-\small
-\begin{tabular}{@{}lccccccc@{}}
-\toprule
-Config & leaves & lr & n\_est & $\rho$ & $p$ & Thresh & F1 \\
-\midrule
-Default & 31 & 0.05 & 100 & 0.833 & 0.010 & 45.0\% & 1.0 \\
-Deeper & 63 & 0.05 & 100 & 0.810 & 0.015 & 47.5\% & 1.0 \\
-Faster & 31 & 0.10 & 100 & 0.810 & 0.015 & 45.0\% & 1.0 \\
-More & 31 & 0.05 & 200 & 0.833 & 0.010 & 45.0\% & 1.0 \\
-\bottomrule
-\end{tabular}
-
-
-\raggedright
-\footnotesize
-leaves = num\_leaves; lr = learning\_rate; n\_est = num\_boost\_round; Thresh = optimal threshold for at-risk classification (drop $>$15~pp); F1 = F1 score at that threshold.
-\end{table}
-
-\textbf{Results.} Across all four hyperparameter configurations, the concentration--drop correlation remains strong and significant: $\rho = 0.821 \pm 0.012$ (mean $\pm$ std), with $p \leq 0.015$ for all configurations. The optimal threshold varies minimally ($45.6\% \pm 1.1\%$), and all configurations achieve perfect F1 = 1.0 for at-risk classification on SALT tasks.
-
-\textbf{Interpretation.} The four reported hyperparameter settings provide a small retrospective sensitivity summary. They do not establish a structural property of gradient boosting or robustness to unrestricted tuning. The generating artifacts are missing, and the ablation default uses 100 boosting rounds versus the main experiment's stated maximum of 500; those protocols require reconciliation.
-
-\subsection{Per-Task Concentration Stability Across HP Configurations}\label{app:pertask_hp_stability}
-
-Table~\ref{tab:pertask_hp_concentration} shows per-task SHAP concentration values across all four hyperparameter configurations.
-
-\begin{table}[htbp]
-\centering
-\caption{Per-Task SHAP Concentration Stability Across HP Configurations. Std = standard deviation across four configurations.}\label{tab:pertask_hp_concentration}
-\small
-\begin{tabular}{@{}lccccc@{}}
-\toprule
-Task & Default & Deeper & Faster & More & Std \\
-\midrule
-sales-payterms & 54.2\% & 57.3\% & 55.9\% & 54.3\% & 1.3\% \\
-sales-shipcond & 50.7\% & 53.7\% & 52.3\% & 48.5\% & 1.9\% \\
-item-shippoint & 48.8\% & 50.0\% & 50.7\% & 46.0\% & 1.8\% \\
-sales-group & 47.3\% & 49.4\% & 48.5\% & 45.2\% & 1.6\% \\
-sales-office & 42.6\% & 45.3\% & 43.0\% & 42.6\% & 1.1\% \\
-item-incoterms & 28.9\% & 30.1\% & 28.9\% & 29.3\% & 0.5\% \\
-item-plant & 23.9\% & 25.2\% & 24.4\% & 23.9\% & 0.5\% \\
-sales-incoterms & 23.7\% & 25.4\% & 25.2\% & 22.5\% & 1.2\% \\
-\bottomrule
-\end{tabular}
-
-
-\raggedright
-\footnotesize
-Tasks sorted by Default concentration. Default = num\_leaves=31, lr=0.05, n\_est=100; Deeper = num\_leaves=63; Faster = lr=0.10; More = n\_est=200. Mean within-task std = 1.2\%, demonstrating high stability of concentration values across HP configurations. The rank order of tasks by concentration is preserved across all four configurations.
-\end{table}
+The original appendix reported four configurations, perfect F1 and a mean correlation $0.821\pm0.012$. The recovered source \texttt{compute\_hp\_sensitivity\_real\_salt.py} instead loads baseline aggregate concentrations, multiplies them by configuration-specific factors and adds Gaussian noise; it does not refit LightGBM. A separate \texttt{compute\_hp\_sensitivity\_full.py} uses synthetic task generators. Neither establishes the claimed four-configuration retraining of real SALT data. No original fitted-model provenance for those tables was recovered. We therefore withdraw their empirical interpretation and remove the unsupported numerical tables from the active revision. They remain in the immutable submitted source. The separately recovered three-seed panel uses one fixed configuration and does not repair this missing hyperparameter experiment.
 
 \section{Shift Characterization}\label{app:shift_characterization}
 

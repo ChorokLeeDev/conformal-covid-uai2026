@@ -1,0 +1,832 @@
+{
+  "retrieval_date": "2026-10-08",
+  "records": [
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "LICENSE",
+      "sha256": "373b7c4e5ab541b3a753e1cff5643f494bbc2f6f6917d8fbd225de8ea7dbf3fc",
+      "bytes": 1080,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/README_50SEEDS.md",
+      "sha256": "29162e58cf3260769141f207350eee3860c58e638fe1b55c7a81f92bb9cc06a5",
+      "bytes": 7465,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/address_review_issues.py",
+      "sha256": "be19e49fada7c123a83f144bb7cde64b4126b6a9b51ead34eabe0a5661c93ca8",
+      "bytes": 22383,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/analyze_continuous_features.py",
+      "sha256": "6330fb40b7ce425e35ca5bd769a78e02ab41237a80f2956d993787f7c6e2ed8f",
+      "bytes": 10821,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/analyze_feature_importance.py",
+      "sha256": "1d6d8852e7cfd2ae68b0ed0e3a00ab608d83703423226792ce37bf2c49293fcc",
+      "bytes": 13739,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/analyze_n12_correlation.py",
+      "sha256": "bfe6fc6b13018a9c018505e60d29981833241bb6ead2cc749ee8281e8cbb3d16",
+      "bytes": 13045,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/analyze_shift_type_empirical.py",
+      "sha256": "b06c9765599954895bcfbc3560db8dea0b8f5746a3f20e851a8b525f0e29a45d",
+      "bytes": 21172,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/bootstrap_correlation_analysis.py",
+      "sha256": "398446e6c19dc1aa0af6793367faa305d397ec1e67b6bc70b4626847eb73b34d",
+      "bytes": 18838,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/build_manuscript_claims_snapshot.py",
+      "sha256": "febe9a289420e069805b3d0af695d984aae6e96df76e6d4b8e93548758c82534",
+      "bytes": 12255,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/check_shap_features.py",
+      "sha256": "f2b7b7df25fd8d2df0af43dafe96c93b5220b7970b8fafa79be12eabaed9a010",
+      "bytes": 8787,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/compute_baseline_diagnostics.py",
+      "sha256": "1df367b30b95caa92b66b33911ad68b45b0b4e76dca125d7366e1de3dc7a9a8f",
+      "bytes": 12845,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/compute_calibration_sizes.py",
+      "sha256": "564d1cba975c31764a746bc519805ecaf6242c211d3bd98aa06f7d339fced500",
+      "bytes": 1148,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/compute_cdf_ks_test.py",
+      "sha256": "a085ef797ebad5829b71e6357ead4547c74996ea0e880ffa9b103b5aef728328",
+      "bytes": 14071,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/compute_ci_stable.py",
+      "sha256": "7496d1d30f13ebe163c8577182fe3731f0ed6b1d6c67a905be2d7eda8ff024ed",
+      "bytes": 9763,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/compute_concentration_ks.py",
+      "sha256": "f13748abb3fbe03210a62ab490c6fdaa3c5c6e49d99b8918674e27f1ee63b935",
+      "bytes": 3360,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/compute_confidence_intervals.py",
+      "sha256": "cc161ef67165dc285eb7ab4e3ae4c9dd02cccf2f3e84f7aa184b9449b6c10990",
+      "bytes": 10009,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/compute_cross_domain_statistics.py",
+      "sha256": "25a5f26e995514bc3981e70921585ba835d5833660957c19f7fe2c1dc8d780c6",
+      "bytes": 15151,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/compute_external_validation_p5.py",
+      "sha256": "8526777f9522e229c6f4ecb8d133c0821c1ba6cf16693ba08934637eb57d4392",
+      "bytes": 12228,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/compute_hp_sensitivity.py",
+      "sha256": "defc833d150effc12e6e4f4c59486223026bb3634ab83f6d4994b4da0472ce53",
+      "bytes": 8379,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/compute_hp_sensitivity_full.py",
+      "sha256": "762b1c42798b26fd5b7cb7e07be2ff9f97e11251b57250c090f8b3b94909176e",
+      "bytes": 12941,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/compute_hp_sensitivity_real_salt.py",
+      "sha256": "54ea38d77ceb18a52c316cb63f07a34a3b19f74b62b1ac6d8cf785024c0a2ae1",
+      "bytes": 13498,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/compute_icc_and_partial.py",
+      "sha256": "472b94d4477210c3426dfba50045219182b079dbda8ac2d7079c6b22e1762dee",
+      "bytes": 20921,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/compute_multiseed_correlation.py",
+      "sha256": "0d97ae0984de286745dffe98748075159ede67ea1d70b40fe960eb7044df2d4b",
+      "bytes": 2783,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/compute_secondary_features_all.py",
+      "sha256": "e8119ec6f1529acad29d2f5d84199c33b8446cbc64de3c270532d5668084e708",
+      "bytes": 10460,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/compute_shap_classification.py",
+      "sha256": "4beee3f0c8d44079189d0cc4744bf62c64b25a121ae3d41ea97016b689140b66",
+      "bytes": 13813,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/compute_shap_concentration_all_tasks.py",
+      "sha256": "414f601f2133688963e0fd054f2ef3aeed7c364889197de240d3c48bae255099",
+      "bytes": 14386,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/compute_shift_type.py",
+      "sha256": "a64c1bcf035680b31baf3e3badb81229615c07f4b785e55b49c7536dbc65d160",
+      "bytes": 10142,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/compute_statistical_rigor.py",
+      "sha256": "e9ba0e26c3927a05f73434abe52d8e8ab437dbfe0bab35cf6523fe4e09ffaaa9",
+      "bytes": 10362,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/compute_theorem_bounds.py",
+      "sha256": "e2ec452d6f90a199479acbb28c289fa45f3c345a09bd127a7d6947fd7417cc0b",
+      "bytes": 17900,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/compute_threshold_loocv.py",
+      "sha256": "f2089ca2464625b79cffcb3337f8ef3cc1d09721f1491fba553c472e7121726a",
+      "bytes": 10490,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/compute_topk_ablation.py",
+      "sha256": "488a64ba5b130aef490126808fb0ea2924a8f99d5c86a720c5aab88b1af538a2",
+      "bytes": 9694,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/compute_wilds_real.py",
+      "sha256": "18a52b5fb592deb5df7c260bc83503611b3cb776377330e9fd78173c0d2cd77a",
+      "bytes": 20775,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/compute_wilds_validation.py",
+      "sha256": "f0c263ec67675c42f8d50fa42e3aac9b54a7a14c024dae5b579207dfefaa0b96",
+      "bytes": 16061,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/cqr_regression.py",
+      "sha256": "44a1b3a8253d6d9ac381df2e754cbb6c00ca618ac010253824081f124a2ae248",
+      "bytes": 15006,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/create_decision_flowchart.py",
+      "sha256": "a1d76bbb47e42dfa719139acbb956973a62eff2cb87bbf8a56c1135c17cdbc08",
+      "bytes": 9702,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/create_figure3_shap.py",
+      "sha256": "59d9825f6c58dd103c8dc9c13ea0f3d1e2ead8de09c1cbaddc47b6c1e49a04b7",
+      "bytes": 9454,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/create_simple_flowchart.py",
+      "sha256": "ff16f9f54a28819aed64aa9aa3d0e53af6a962dafb714efe71e5bb22eae45843",
+      "bytes": 8393,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/debug_month9_anomaly.py",
+      "sha256": "e3aaad6963f06363b96861a5a25364110ef65fd88688b9e666bd968d7f4dfb15",
+      "bytes": 8713,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/expand_validation_tasks.py",
+      "sha256": "6a9026085472a0cb67176ab42d032312857498e5164c58ac59c69d7c2c24ec77",
+      "bytes": 6207,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/generate_4panel_cdf.py",
+      "sha256": "87ac323f226ac2eca6c9cf6e0cab5f738f663e2e2cb3daacda8b31e153019103",
+      "bytes": 12586,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/generate_figures.py",
+      "sha256": "d70501c72ce8a3329d5170f519bc3e20af09577ff69df9042e23bde213ce2b78",
+      "bytes": 17766,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/generate_figures_revised.py",
+      "sha256": "823eaf0a636fa40c6b753d1bd697b2c689f2ad1235e4ad0470476c26ef18081e",
+      "bytes": 12434,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/generate_n16_figure.py",
+      "sha256": "610737a9e8beec019ec83500a78ba74cf667a39bfa3532d9ed03d39f4c0b3042",
+      "bytes": 3775,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/launch_retraining_experiments.sh",
+      "sha256": "c3f0af2e7df470b95ffbd66bc32e7de3c5081bb0b74e67bbe528d462eef04b3d",
+      "bytes": 2019,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/placebo_test.py",
+      "sha256": "0d8c4077ce70242f2c390871b163ec88e4bbaf83baae616c40203c04e9c0b4dd",
+      "bytes": 10879,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/plot_retraining_results.py",
+      "sha256": "41038aedbd5ff5616fc0319361d41b63b69d2c36719dd039e12e94a15a16539d",
+      "bytes": 16235,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/plot_shap_results.py",
+      "sha256": "0de68938a75924ce8dc094b0d4f5267a7db53b0a8e2d59ce4b30feb48b653204",
+      "bytes": 10580,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/quick_feature_type_check.py",
+      "sha256": "f10ce04e0044d1f7d9d5b659d0a03ff98545df0286b8cf5e1487f63017f4794b",
+      "bytes": 6838,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/regression_shap_concentration.py",
+      "sha256": "bf61186e1f7efbf2ed8a83b373d2efa206446cdbf89f41c773899b010d8f26c9",
+      "bytes": 9231,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/retraining_experiment.py",
+      "sha256": "f1f90f63781a73473c94375ef14edf7d82b1e4ad21a43f3ef51bf0a7875b0ebc",
+      "bytes": 16751,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/retraining_statistical_tests.py",
+      "sha256": "be3c6443c21f325646f85de66acea34dabafd6abc839d608e138d207750c2758",
+      "bytes": 15803,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/revised_decision_framework.py",
+      "sha256": "08ece61de45982d17c0947bdc7caf8a06b77123f1f65a11cddb619b0e2e206e2",
+      "bytes": 11052,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/revised_decision_framework.tex",
+      "sha256": "50a438b4d84c491a5e6f5396a648126036988b53eddf3526625fd3a9b2ec4e0a",
+      "bytes": 2122,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/run_50seed_ensemble.py",
+      "sha256": "833b6d43889e27b00469d20745abb8881c2e6724f8cd7a09155d7e8a25782430",
+      "bytes": 19669,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/run_aci_all_tasks.py",
+      "sha256": "71fbed2abff61e260e4e080dfd03eea003a2e047b80dfae146abffea7d745f04",
+      "bytes": 22863,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/run_aci_experiment.py",
+      "sha256": "0919b711077cb7c122c9f2b28c98be7f9729dd98fdd6f3c999f48be83dbf52cf",
+      "bytes": 16349,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/run_catboost_validation.py",
+      "sha256": "a5b02c78ec1b508f658d7e116ebfe4ae9d300b235aae2bb40bb6a8bf8ff6511b",
+      "bytes": 18123,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/run_classification_task.py",
+      "sha256": "6e424632695268d9704e0370e8f9819bad145f3b8e3ba5b2e9f2f36d772cf79b",
+      "bytes": 14424,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/run_covertype_ablation.py",
+      "sha256": "abbc975377b2cbf60ac23b0a228926fd78a098198691366ac5df17bc1880622b",
+      "bytes": 16465,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/run_covertype_validation.py",
+      "sha256": "849e9c1f704111a05460fe6c401a1ab86052256af9be56f0678c9e2bf29f8c5c",
+      "bytes": 9622,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/run_cwru_bearing_validation.py",
+      "sha256": "757a318f128d075d4a9406e936d9ff601511cd317eb3de9541614610dfcc4986",
+      "bytes": 21444,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/run_external_multiseed.py",
+      "sha256": "396c5771c3a99dce49b68dee642103be7abd80abe3a436766b5c669c6567f732",
+      "bytes": 24837,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/run_external_phase2.py",
+      "sha256": "edbe4be413ddd8a001fe6f1ce6741b332424b8e8d7033f32a48956804b265001",
+      "bytes": 24569,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/run_gas_sensor_validation.py",
+      "sha256": "0aaed8964fa15452cad9922092effe828f2a35fd50bd56bab1871bb7eed2ff77",
+      "bytes": 11461,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/run_kddcup99_validation.py",
+      "sha256": "47a70ea8d2a961163789aee1acde300b20366c98544d96dea98f8b8271e26bbd",
+      "bytes": 11175,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/run_mlp_validation.py",
+      "sha256": "e74805f805932a8995fa01ba34468f3a61f01def15ce2ebf4f69adc8dc6433e5",
+      "bytes": 19111,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/run_mmd_c2st_comparison.py",
+      "sha256": "4cedc402672cf5127b5e650a787307a8dc1dc6ebf5c272cd3aea908e4756fb89",
+      "bytes": 22037,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/run_pendigits_validation.py",
+      "sha256": "a7466f03edf988cb4f787438f383020ec2b58f23d0c854b8dca7f9fa8710cbf9",
+      "bytes": 15179,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/run_prospective_holdout.py",
+      "sha256": "ab6187eda9bfbe93b3455260759bb1ef272206fafab600fea03baaacad47e0b7",
+      "bytes": 20323,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/run_raps_experiment.py",
+      "sha256": "a282bf27f3840d34492b917aa4de7c649f142b3c57286bf7130d4282dd1379a9",
+      "bytes": 17605,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/run_raps_multiseed.py",
+      "sha256": "997417869180df52a2f728123a46d4f3eecdea4e96c21545bfd0750c931fd77a",
+      "bytes": 21347,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/run_raps_remaining.py",
+      "sha256": "e65773966d7b73276a259b0fed47e5e404558ce294a0b4aaa5aa245c7c0cf27e",
+      "bytes": 9244,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/run_regression_experiments.py",
+      "sha256": "0d5f8b7fab740265384f4ad801b10f9962216639509c5b9a99656f4a376d9d28",
+      "bytes": 9038,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/run_rf_validation.py",
+      "sha256": "2ff229b1ddb86262b22dbc2a7bb059d331a669cc858062b9c06f11639d6ebd24",
+      "bytes": 18829,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/run_xgboost_validation.py",
+      "sha256": "f8704996ca75f50208c2a90eadb0cb99c82f43361c111a78a635f1a6bdcac6d5",
+      "bytes": 16765,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/shap_threshold_sensitivity.py",
+      "sha256": "9f163cec3ca1faa18753a204ec016fc4a5c0877aa74666ad0a226afb98aabdf2",
+      "bytes": 16254,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/stratified_correlation_analysis.py",
+      "sha256": "5e09817098c17705614c7f9fd13ebbef2744f1438dd1257c32b2b172e24024b3",
+      "bytes": 8415,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/test_ensemble_setup.py",
+      "sha256": "42b73afe036b8a3f325d6935a41b20b762041438e42c3eaff888cb81a1e7a01b",
+      "bytes": 5095,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/test_quickstart_tasks.py",
+      "sha256": "b84436d8b4d3033ba569e38cfdeded99f72252ba9bd9550ff2cc0a6caed86e16",
+      "bytes": 9254,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/test_retrain_simple.py",
+      "sha256": "761b45f1291bdf02a7dfa930359512cb3c302f1d39bbf95e8fa4079cb09fc244",
+      "bytes": 3406,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/code/writer_fill_table.py",
+      "sha256": "8689b5a213bfadb7b96960942806f84ede315fa7186d5ba60fd1757ad84f4c01",
+      "bytes": 5522,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/uai_2026/anonymous_tables/R5_hp_sensitivity.md",
+      "sha256": "dd57c58059bc25a398fddadd92b75247835d0c7d2ec75b1682cc239277f4a024",
+      "bytes": 1823,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/uai_2026/rebuttal_1Lb4.md",
+      "sha256": "da39f4f3bd3685f8c2942cd43783f990e494bfa351bfd867d79bed63f2664653",
+      "bytes": 1692,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "pyproject.toml",
+      "sha256": "6f569f628e59012ae146147cf4f7dd7f8c25bf2c00f0db664c825315c2e0924c",
+      "bytes": 950,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "relbench/base/database.py",
+      "sha256": "8f5ac171e4a3d01ef345e55c30fac764831cf3acb2eb4a47b383d615563e73bd",
+      "bytes": 4030,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "relbench/base/dataset.py",
+      "sha256": "4e4fe5f99fd0787a14a038f8d85fb04cba7acdc39c777b81c5a50a69d4be0533",
+      "bytes": 7426,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "relbench/base/table.py",
+      "sha256": "cc72edc1311f1e3a434da2e8a95d409b67edfa5a2d7ec092e897573bb2703ff3",
+      "bytes": 4646,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "relbench/base/task_autocomplete.py",
+      "sha256": "9acdcb215d63e694e13fff3851c03a337638254018544e9369905189cf3720c2",
+      "bytes": 8372,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "relbench/base/task_base.py",
+      "sha256": "a0b555bd9d3574ca1e5826d700ea519b0ce33bfdb7ca4abf429d6f16b01d7fe7",
+      "bytes": 8009,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "relbench/datasets/hashes.json",
+      "sha256": "0e685be25803a9a2a98dcd7cd46324bc4358da413e534413d5e18b7c2c2216f3",
+      "bytes": 717,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "relbench/datasets/salt.py",
+      "sha256": "cf0d1a63742a96419d0ca2c2b44cf3657e35d6d97484cd1eefb5188a86b30853",
+      "bytes": 5705,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "relbench/tasks/__init__.py",
+      "sha256": "999e22fd5f8083360dcba13ff486ecf9e1e42ce6470f2689aca469c1b5a7ba93",
+      "bytes": 11482,
+      "stored_in": "recovered-upstream-source.zip"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/results/manuscript_claims_snapshot.json",
+      "sha256": "3e6e555abeeaf016b32210b2e6550e7b2eebeca7cc9dca821f3e3fc86b028207",
+      "bytes": 9014,
+      "stored_in": "manuscript_claims_snapshot.json",
+      "evidence_level": "historical aggregated summary, not prediction-level data"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "f283047d2d7d81fb7c726af3763bd452b99cee12",
+      "path": "papers/conformal_covid/results/shift_detection_comparison.json",
+      "sha256": "09defa5ec6aab17a3fed410e90d8ec949147727f3ec2fab904779e49b2079ec9",
+      "bytes": 12511,
+      "stored_in": "shift_detection_comparison.json",
+      "evidence_level": "historical aggregated summary, not prediction-level data"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "1083cecd80476d1c44f6b45c14c7a2271f005310",
+      "path": "papers/conformal_covid/logs/retraining/retrain_none_sales-shipcond.log",
+      "sha256": "78adc5a0a0d533023bbfa90413a349009aa26da5286815c468b425b2a249bc3e",
+      "bytes": 2563,
+      "stored_in": "retraining-logs/retrain_none_sales-shipcond.txt",
+      "evidence_level": "historical rounded monthly printed output; no prediction arrays"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "1083cecd80476d1c44f6b45c14c7a2271f005310",
+      "path": "papers/conformal_covid/logs/retraining/retrain_none_sales-office.log",
+      "sha256": "27cac8763d319e37b045047279ed231804640bb16eec9d93c630f075733fffec",
+      "bytes": 2554,
+      "stored_in": "retraining-logs/retrain_none_sales-office.txt",
+      "evidence_level": "historical rounded monthly printed output; no prediction arrays"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "1083cecd80476d1c44f6b45c14c7a2271f005310",
+      "path": "papers/conformal_covid/logs/retraining/retrain_1M_sales-shipcond.log",
+      "sha256": "ca6951a442ec1ff600b44c4039b4cf8e9c9771af58c39c971c6e2f67f25a54d9",
+      "bytes": 2834,
+      "stored_in": "retraining-logs/retrain_1M_sales-shipcond.txt",
+      "evidence_level": "historical rounded monthly printed output; no prediction arrays"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "1083cecd80476d1c44f6b45c14c7a2271f005310",
+      "path": "papers/conformal_covid/logs/retraining/retrain_1M_sales-office.log",
+      "sha256": "f4733f6662015a25c8b654a29116f04feda0866603af1dcd57c4ce7d2cd5cc57",
+      "bytes": 2827,
+      "stored_in": "retraining-logs/retrain_1M_sales-office.txt",
+      "evidence_level": "historical rounded monthly printed output; no prediction arrays"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "1083cecd80476d1c44f6b45c14c7a2271f005310",
+      "path": "papers/conformal_covid/logs/retraining/retrain_3M_sales-shipcond.log",
+      "sha256": "e77f2a6e054d99650558cc8defd86d76af7f1ff6665b69a651554175c9e15805",
+      "bytes": 2638,
+      "stored_in": "retraining-logs/retrain_3M_sales-shipcond.txt",
+      "evidence_level": "historical rounded monthly printed output; no prediction arrays"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "1083cecd80476d1c44f6b45c14c7a2271f005310",
+      "path": "papers/conformal_covid/logs/retraining/retrain_3M_sales-office.log",
+      "sha256": "46f3508f6c44416c9bdc771852127e759c1f3383367783d9cbfc6082d2326347",
+      "bytes": 2627,
+      "stored_in": "retraining-logs/retrain_3M_sales-office.txt",
+      "evidence_level": "historical rounded monthly printed output; no prediction arrays"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "1083cecd80476d1c44f6b45c14c7a2271f005310",
+      "path": "papers/conformal_covid/logs/retraining/retrain_6M_sales-shipcond.log",
+      "sha256": "8663fdbf3568303ab618503ff724f51dc54578d6b85656e8975eb49a49c70c19",
+      "bytes": 2579,
+      "stored_in": "retraining-logs/retrain_6M_sales-shipcond.txt",
+      "evidence_level": "historical rounded monthly printed output; no prediction arrays"
+    },
+    {
+      "repository": "ChorokLeeDev/ai-in-finance",
+      "commit": "1083cecd80476d1c44f6b45c14c7a2271f005310",
+      "path": "papers/conformal_covid/logs/retraining/retrain_6M_sales-office.log",
+      "sha256": "9b4aba33081a743c62fe747644c95b9bb3e77cdcaaecf4035b02a8e02166db36",
+      "bytes": 2571,
+      "stored_in": "retraining-logs/retrain_6M_sales-office.txt",
+      "evidence_level": "historical rounded monthly printed output; no prediction arrays"
+    }
+  ],
+  "limitations": "Recovered source is evidence of implementation, not proof of which code ran. Aggregated/log outputs do not identify original models or predictions."
+}

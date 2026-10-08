@@ -1,0 +1,25 @@
+sales-group 42 verified
+sales-group 43 verified
+sales-group 44 verified
+sales-office 42 verified
+sales-office 43 verified
+sales-office 44 verified
+sales-payterms 42 verified
+sales-payterms 43 verified
+sales-payterms 44 verified
+sales-shipcond 42 verified
+sales-shipcond 43 verified
+sales-shipcond 44 verified
+item-plant 42 verified
+item-plant 43 verified
+item-plant 44 verified
+item-shippoint 42 verified
+item-shippoint 43 verified
+item-shippoint 44 verified
+sales-incoterms 42 verified
+sales-incoterms 43 verified
+sales-incoterms 44 verified
+item-incoterms 42 verified
+item-incoterms 43 verified
+item-incoterms 44 verified
+[{"rule": "inclusive", "n_tasks": 8, "rho": -0.2380952380952381, "p_asymptotic": 0.5701563208157683}, {"rule": "crossing", "n_tasks": 8, "rho": -0.261904761904762, "p_asymptotic": 0.530922861565801}]

@@ -1,0 +1,50 @@
+[
+  {
+    "url": "https://arxiv.org/abs/2601.00908v2",
+    "path": "audit/2026-10-08/recovery/arxiv/2601.00908v2.html",
+    "sha256": "ffc99ae04ddb35edc156975ccb6c8617c20f52f16bc4644676360a2fda3d11cd",
+    "bytes": 44029,
+    "status": 200
+  },
+  {
+    "url": "https://arxiv.org/src/2601.00908v2",
+    "path": "audit/2026-10-08/recovery/arxiv/2601.00908v2-source.tar",
+    "sha256": "df92d44b0941c01128eaccc9290ef60cb42a2f009be8afe5ac1644b5b36a8464",
+    "bytes": 109970,
+    "status": 200,
+    "members": [
+      {
+        "name": "00README.json",
+        "bytes": 213
+      },
+      {
+        "name": "figures",
+        "bytes": 0
+      },
+      {
+        "name": "figures/conformity_score_cdfs.pdf",
+        "bytes": 44911
+      },
+      {
+        "name": "figures/figure_n16_correlation.pdf",
+        "bytes": 25358
+      },
+      {
+        "name": "figures/figure3_feature_importance.pdf",
+        "bytes": 39074
+      },
+      {
+        "name": "main.tex",
+        "bytes": 95140
+      },
+      {
+        "name": "references.bib",
+        "bytes": 11662
+      },
+      {
+        "name": "uai2026.cls",
+        "bytes": 9618
+      }
+    ]
+  }
+]

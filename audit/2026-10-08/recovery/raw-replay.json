@@ -1,0 +1,2105 @@
+{
+  "scope": "Recovered follow-up models, not original historical 50-seed reconstruction; no models refitted",
+  "assumptions": "Chronological splits do not establish exchangeability; shared-domain tasks and seeds are not independent replication; nominal p-values descriptive",
+  "source_revision": "e2eb3e38f072745f0f60bd67425cffbd68f7ab9e",
+  "archive_sha256": "d31e4522bf8050d1447547c1ae58eb4da582600f764a24f40f6a95da2d963559",
+  "script_sha256": "9e61626fa7d4f43c09b6cce2882271bb0c452783a51f5d374969a1019d17b54d",
+  "lightgbm": "4.6.0",
+  "numpy": "2.3.5",
+  "input_hashes": [
+    {
+      "path": "external_inputs/rel-salt/db/salesdocument.parquet",
+      "sha256": "9e6beeb819c84347c72b4042892915f273295ceaf55978f100d2b78fefc58af7"
+    },
+    {
+      "path": "external_inputs/rel-salt/db/salesdocumentitem.parquet",
+      "sha256": "691f1ace40cfebf71c5534f70f4f20d3b206ad7961db1cd49f5bf11275a73087"
+    },
+    {
+      "path": "external_inputs/rel-salt/tasks/item-incoterms/test.parquet",
+      "sha256": "4c6180d4450e581e2b62da372a0efb253a6b140e512f0db25e49e32c2add2ffd"
+    },
+    {
+      "path": "external_inputs/rel-salt/tasks/item-incoterms/train.parquet",
+      "sha256": "2b92e0d4eb9aa65af1e79eb739bb14879e8d4aeb797cb64c436f5fad2f215bbb"
+    },
+    {
+      "path": "external_inputs/rel-salt/tasks/item-incoterms/val.parquet",
+      "sha256": "b894d85eccb628e3ac25b6e3a5aadd152118fcc05c884eb19d5bd0a2a69e1c3b"
+    },
+    {
+      "path": "external_inputs/rel-salt/tasks/item-plant/test.parquet",
+      "sha256": "65adbc2d8655345b06418372fa7e64b498050e1568e3c96314c2cc648e41ba35"
+    },
+    {
+      "path": "external_inputs/rel-salt/tasks/item-plant/train.parquet",
+      "sha256": "665544adb1051f047aed1de875c5e54b6d81b8f9cf595255129a8966eca14fde"
+    },
+    {
+      "path": "external_inputs/rel-salt/tasks/item-plant/val.parquet",
+      "sha256": "299c9630d973306d84fa576713dd49854ba2ab3bcaa4f9f55aec607ac886b775"
+    },
+    {
+      "path": "external_inputs/rel-salt/tasks/item-shippoint/test.parquet",
+      "sha256": "bedc092b835a3f2d829028aebcd7cfab0d2ffbcd5b4873bcbab98f0cc1110bdc"
+    },
+    {
+      "path": "external_inputs/rel-salt/tasks/item-shippoint/train.parquet",
+      "sha256": "4ac0bc3e363cb1cc4477aa11f7181dd839dd6697b787d18bbcbcd6400c979f65"
+    },
+    {
+      "path": "external_inputs/rel-salt/tasks/item-shippoint/val.parquet",
+      "sha256": "692411a161c04eb3018d1de429a911d37738a87a80a98231c7e95569496a1b15"
+    },
+    {
+      "path": "external_inputs/rel-salt/tasks/sales-group/test.parquet",
+      "sha256": "f9034787ed6a1a8c84635905fdc8aa0a4c02d5d0d26886978f2d9f756fd93d4e"
+    },
+    {
+      "path": "external_inputs/rel-salt/tasks/sales-group/train.parquet",
+      "sha256": "36ef8f74b3a349d93ece9908ef885feb141c72a592e8da91a3b5aae2e2ed45df"
+    },
+    {
+      "path": "external_inputs/rel-salt/tasks/sales-group/val.parquet",
+      "sha256": "da5f5b02bbff44e210eaaf14ac05140b99004d554d52c9bda75fe8e9c96172f6"
+    },
+    {
+      "path": "external_inputs/rel-salt/tasks/sales-incoterms/test.parquet",
+      "sha256": "65f40e38c2c9bac7714b1e80ccb0dedcd441cc229c086e0d14a5fe82155ade61"
+    },
+    {
+      "path": "external_inputs/rel-salt/tasks/sales-incoterms/train.parquet",
+      "sha256": "7beff805a79f90338f3f0da02bfc18fcc27aeb2d15afa3c79975c806663ea262"
+    },
+    {
+      "path": "external_inputs/rel-salt/tasks/sales-incoterms/val.parquet",
+      "sha256": "a22c28730e446580959779a7bd451ad59472013c6cc560cb08fe80b67397b882"
+    },
+    {
+      "path": "external_inputs/rel-salt/tasks/sales-office/test.parquet",
+      "sha256": "133b79e7fb415b84389980fc020fdbb884368d0b90ac1c3990482bacfadb843c"
+    },
+    {
+      "path": "external_inputs/rel-salt/tasks/sales-office/train.parquet",
+      "sha256": "1419dc6a93fe533695acdd45da041b04e340c53382822b59002dfe02125d3315"
+    },
+    {
+      "path": "external_inputs/rel-salt/tasks/sales-office/val.parquet",
+      "sha256": "8f41cc388e48de87767fbb2157f545eec757b5b282a850a8c21a309d47db6c29"
+    },
+    {
+      "path": "external_inputs/rel-salt/tasks/sales-payterms/test.parquet",
+      "sha256": "257a251053e4fdb47c51e57d0c50b5bbda56bb840a5fc9fdab740b487afbaaf4"
+    },
+    {
+      "path": "external_inputs/rel-salt/tasks/sales-payterms/train.parquet",
+      "sha256": "3e6b1d2b49741465bd3d5edcaddc972f91d07132811994b82e8f27fab4c68985"
+    },
+    {
+      "path": "external_inputs/rel-salt/tasks/sales-payterms/val.parquet",
+      "sha256": "3a158c66289f4c8f4ab275fc88ee8bc75c34dec510658f1a5ed3230fae6595c3"
+    },
+    {
+      "path": "external_inputs/rel-salt/tasks/sales-shipcond/test.parquet",
+      "sha256": "70609db8809c2d0d205f6a8b825810b80e2141ab64899aeb00994c311a22c128"
+    },
+    {
+      "path": "external_inputs/rel-salt/tasks/sales-shipcond/train.parquet",
+      "sha256": "9ec2262114eca0fd6b91952ec43fe7fdb3086af4f6eefbb4c98969e82bb93ebc"
+    },
+    {
+      "path": "external_inputs/rel-salt/tasks/sales-shipcond/val.parquet",
+      "sha256": "b397ef2474a460e2d097a627c267e0c779b36d9f82f7d4cb4b2d3f502e0dc869"
+    },
+    {
+      "path": "deepening/breadth/sales/sales-group_seed42.json",
+      "sha256": "63962b9cea9dac615a3cd64b61669e15ac18d5a352066be857f540840e46c5fe"
+    },
+    {
+      "path": "deepening/breadth/sales/cache/sales-group_seed42.npz",
+      "sha256": "643307dfbfba1e22297ac22541fe791afa425923d921a73247469910331323bd"
+    },
+    {
+      "path": "deepening/breadth/sales/cache/sales-group_seed42.model.txt",
+      "sha256": "b17d2afa200f9753e4f3e6c9b722981aa7749aeb2f404fd9ac4f80f8b5dfdcd0"
+    },
+    {
+      "path": "deepening/breadth/sales/sales-group_seed43.json",
+      "sha256": "19b084bb6045984fd04573d4d7da439b4717e14c0b09b2cb1738fb6124db4d06"
+    },
+    {
+      "path": "deepening/breadth/sales/cache/sales-group_seed43.npz",
+      "sha256": "7c626a8542e70122661d913de996551bcc28e6234865f4190b80ddb7a5cd8636"
+    },
+    {
+      "path": "deepening/breadth/sales/cache/sales-group_seed43.model.txt",
+      "sha256": "cbd34cb0fb04cbdaf5afaa17e344a5d4c3a53358324f96d7c4e110a7328d2197"
+    },
+    {
+      "path": "deepening/breadth/sales/sales-group_seed44.json",
+      "sha256": "553056dd038e12d8580d969577b3999fe196ceff86f2b5336dca9fc66bde1217"
+    },
+    {
+      "path": "deepening/breadth/sales/cache/sales-group_seed44.npz",
+      "sha256": "0f1e2819359a811e33c0b07b331f549cfd361fd8d53eaa5b2dec135861e390d6"
+    },
+    {
+      "path": "deepening/breadth/sales/cache/sales-group_seed44.model.txt",
+      "sha256": "b77d7a96b2a9c668ba2acb726307fe1e3b03275fd8771ea18bf70a3d8cc23d37"
+    },
+    {
+      "path": "deepening/breadth/sales/sales-office_seed42.json",
+      "sha256": "db021a1680ec0bb4621122960de7bd0f0a65b3d706b7cf131783908cdb71993b"
+    },
+    {
+      "path": "deepening/breadth/sales/cache/sales-office_seed42.npz",
+      "sha256": "6fda6ef0fee6a26248d35d66cd797cfab0f27d93b3a77978ab413fcedb338bfe"
+    },
+    {
+      "path": "deepening/breadth/sales/cache/sales-office_seed42.model.txt",
+      "sha256": "b5cfdd2a9a7576298797385ad680a3f16376a18741397035a73197e00e7643b3"
+    },
+    {
+      "path": "deepening/breadth/sales/sales-office_seed43.json",
+      "sha256": "cec9ed1e48722592afd7af4019c1702d8b2efd4eb519ea09e215e25dd3b84ff2"
+    },
+    {
+      "path": "deepening/breadth/sales/cache/sales-office_seed43.npz",
+      "sha256": "3f6756f21c7dd10155e7f543ca5e71c7823407104137fc45a674120586bb8e17"
+    },
+    {
+      "path": "deepening/breadth/sales/cache/sales-office_seed43.model.txt",
+      "sha256": "efd8e3b2061b82e3e35441a79d4ef315edcc086015b41af7bee6381c0376bfa3"
+    },
+    {
+      "path": "deepening/breadth/sales/sales-office_seed44.json",
+      "sha256": "edd33ad7a8a40e2eae84ab45810ba3d38d68324baf4eeaeae065faf8e37d3920"
+    },
+    {
+      "path": "deepening/breadth/sales/cache/sales-office_seed44.npz",
+      "sha256": "8f170ed87d514e21114b602b6566aa5a14c68fb8db142bdefd91bb01edf47f4c"
+    },
+    {
+      "path": "deepening/breadth/sales/cache/sales-office_seed44.model.txt",
+      "sha256": "d8bbb4ae796ba4acdb3dbc096dda3c489a09b6de2b5bf594d557d25cc4e1b504"
+    },
+    {
+      "path": "deepening/breadth/sales/sales-payterms_seed42.json",
+      "sha256": "af2bcb8cbf83ec29c41c855fa8dcba2e3a0d5d9594ae23266e635c5a4f7e208f"
+    },
+    {
+      "path": "deepening/breadth/sales/cache/sales-payterms_seed42.npz",
+      "sha256": "af835313da28056858d0891525461a6117d0edefd0f378440aa904d2b56cc84d"
+    },
+    {
+      "path": "deepening/breadth/sales/cache/sales-payterms_seed42.model.txt",
+      "sha256": "f23a5da574f70f59801b976e35e036637ece8a883fe4bab728cc90fa3f448748"
+    },
+    {
+      "path": "deepening/breadth/sales/sales-payterms_seed43.json",
+      "sha256": "f9f1d6226584f8e753d5a111f1ee1cdb90959b90299ee09321f3d40853ab86ae"
+    },
+    {
+      "path": "deepening/breadth/sales/cache/sales-payterms_seed43.npz",
+      "sha256": "a5ac33d87993e3bd6ccb52c20b00a285d079c7c4f4257622c6f58db8f7a71df6"
+    },
+    {
+      "path": "deepening/breadth/sales/cache/sales-payterms_seed43.model.txt",
+      "sha256": "349fdcfdedaf2aa3f2805b25ca54ce61dbbc74992b7be97ffe944a1d9b7638c1"
+    },
+    {
+      "path": "deepening/breadth/sales/sales-payterms_seed44.json",
+      "sha256": "0ad7329068e6ef5b7a20e86f460d86f8bd7acf6011e3338ca7741b7096516ddd"
+    },
+    {
+      "path": "deepening/breadth/sales/cache/sales-payterms_seed44.npz",
+      "sha256": "479cd109496a1c13a88ef1152c3499921ee57e478986b5a5d0c6de3345aaacd0"
+    },
+    {
+      "path": "deepening/breadth/sales/cache/sales-payterms_seed44.model.txt",
+      "sha256": "b94d130905cfc554b9776d6bfe06ca64187b9aa2bf4efd9953ad6d37d36de7a3"
+    },
+    {
+      "path": "deepening/breadth/sales/sales-shipcond_seed42.json",
+      "sha256": "f74829a32e7321195ca16e3237e27aca3472cf1626a8aff387bdb6c0c599a373"
+    },
+    {
+      "path": "deepening/breadth/sales/cache/sales-shipcond_seed42.npz",
+      "sha256": "a4431e416b158cd4938b3a05b452765e9aab06a5c0171cbf0b2835effb876575"
+    },
+    {
+      "path": "deepening/breadth/sales/cache/sales-shipcond_seed42.model.txt",
+      "sha256": "fa7f3c5259e26ab582d7559986895957e2392486a75f765fb88d7aa3d8075fa8"
+    },
+    {
+      "path": "deepening/breadth/sales/sales-shipcond_seed43.json",
+      "sha256": "38cf95fd9c6925a9823ac54c5f162a40da0d00d8f303c70e2f3fe203a70cb840"
+    },
+    {
+      "path": "deepening/breadth/sales/cache/sales-shipcond_seed43.npz",
+      "sha256": "bacfb6ecaf634959654aa6bf297ab1c61457cf766e58e3c035ee4a2d03ce929d"
+    },
+    {
+      "path": "deepening/breadth/sales/cache/sales-shipcond_seed43.model.txt",
+      "sha256": "09bce8d7596fdf7326dc37e789e4bea6ed1d392ce1dae7a072d19f47f5839355"
+    },
+    {
+      "path": "deepening/breadth/sales/sales-shipcond_seed44.json",
+      "sha256": "b47d65add9943420f162858b1e09f788ae9d8e4ca0e74b9ba24728fc0d6f0ee3"
+    },
+    {
+      "path": "deepening/breadth/sales/cache/sales-shipcond_seed44.npz",
+      "sha256": "d6cec319baf685803d1cb37fbdfb81333cba9f52a3e6b888ad4a3795f56b885a"
+    },
+    {
+      "path": "deepening/breadth/sales/cache/sales-shipcond_seed44.model.txt",
+      "sha256": "c4560d89455092c247717922a6a845dd8d3dc19ae508f3b94f8b16c7609a7fca"
+    },
+    {
+      "path": "deepening/breadth/remaining/item-plant_seed42.json",
+      "sha256": "66c8601d85b2400d3900d1af3f2522d97b370427ca2a5bc8eb18cc06b9ca4a71"
+    },
+    {
+      "path": "deepening/breadth/remaining/cache/item-plant_seed42.npz",
+      "sha256": "7f7fe516f2534d70b37be7ff185a822f226103e8a681e4e0a3198bf866979b65"
+    },
+    {
+      "path": "deepening/breadth/remaining/cache/item-plant_seed42.model.txt",
+      "sha256": "7a384541bd64bcca8570edae92ce573053856104fb69d1f7ecf38d3ac4c46430"
+    },
+    {
+      "path": "deepening/breadth/remaining/item-plant_seed43.json",
+      "sha256": "4f828c3250ca44812f667e39205093f032ba853a6ec8fc760da6773d26ae541d"
+    },
+    {
+      "path": "deepening/breadth/remaining/cache/item-plant_seed43.npz",
+      "sha256": "891cc7a880d568c605cb905e144bcf2b62eb153ac3929f8d44b3a7c5c4aeaf5d"
+    },
+    {
+      "path": "deepening/breadth/remaining/cache/item-plant_seed43.model.txt",
+      "sha256": "17324c80a7ba3ad1ad4240e231e208fec7ddd5ef12e64d12152f4abf6095fc49"
+    },
+    {
+      "path": "deepening/breadth/remaining/item-plant_seed44.json",
+      "sha256": "3f2bd639fc184c138a8033fbc90a077d458ee796a7decb1ef1cbd808e04f5981"
+    },
+    {
+      "path": "deepening/breadth/remaining/cache/item-plant_seed44.npz",
+      "sha256": "cff659b87ea2d0123b9407d64e4c99d324ebb1b82ddc2f62e85c674f28fd5454"
+    },
+    {
+      "path": "deepening/breadth/remaining/cache/item-plant_seed44.model.txt",
+      "sha256": "afa4ca1841c5610bd3b677dfccb94d4fa86da82a41f97686c2258b737bbae981"
+    },
+    {
+      "path": "deepening/breadth/remaining/item-shippoint_seed42.json",
+      "sha256": "145e667fd2cb23be637955e4f664044330e8e90d21dea0b823e39c96f528b595"
+    },
+    {
+      "path": "deepening/breadth/remaining/cache/item-shippoint_seed42.npz",
+      "sha256": "b8458b981fb1f4e3dcac7913854fc323b679d8aed98d2c50fc16dda2eb7ef348"
+    },
+    {
+      "path": "deepening/breadth/remaining/cache/item-shippoint_seed42.model.txt",
+      "sha256": "ed9d1e6b1bf276fcb449a9bbcd3c3f25df34e88e88d4e8bacdb2345f4facc43b"
+    },
+    {
+      "path": "deepening/breadth/remaining/item-shippoint_seed43.json",
+      "sha256": "00813d15f5049072c4581983e259f53223fc23b041d168caf96f5f871a966891"
+    },
+    {
+      "path": "deepening/breadth/remaining/cache/item-shippoint_seed43.npz",
+      "sha256": "445ba3fe45b6ba5efc94cc8cd1f40ffaaa473193b84fe4e90b96cbd9165e7a38"
+    },
+    {
+      "path": "deepening/breadth/remaining/cache/item-shippoint_seed43.model.txt",
+      "sha256": "d115fe90465a75350426988552579e118779341fb249d6dfe281ba29f3c83de8"
+    },
+    {
+      "path": "deepening/breadth/remaining/item-shippoint_seed44.json",
+      "sha256": "da26e5b63198e7a83557ba6449b12c63aa3222f0d1c47e6f87deaa4ade6e6832"
+    },
+    {
+      "path": "deepening/breadth/remaining/cache/item-shippoint_seed44.npz",
+      "sha256": "767994b6203d569f866eef45b59c37a8186417660a8dcbe9ba6bc40f35a88a32"
+    },
+    {
+      "path": "deepening/breadth/remaining/cache/item-shippoint_seed44.model.txt",
+      "sha256": "156190562f2612a74da4d4e2d1439ed22d0e30c83db6d45ef59214c846c7c18c"
+    },
+    {
+      "path": "deepening/breadth/remaining/sales-incoterms_seed42.json",
+      "sha256": "59cd02e5757d05bf04e6a338bf9b6aadf40935f7de45acfacea9018c97c83458"
+    },
+    {
+      "path": "deepening/breadth/remaining/cache/sales-incoterms_seed42.npz",
+      "sha256": "2b7dd02f89023e3d52883a520a484c5a77d5880a070ff594bf77895341e7c84b"
+    },
+    {
+      "path": "deepening/breadth/remaining/cache/sales-incoterms_seed42.model.txt",
+      "sha256": "ebb51b88a2c3cfc8559c545118588080ae7c68d5de683bd0aef1a891e6756c2c"
+    },
+    {
+      "path": "deepening/breadth/remaining/sales-incoterms_seed43.json",
+      "sha256": "31c7fe501ae386c8f34d66ed6d0e9574bb1b5087d1efd22b24a852a288d6d97f"
+    },
+    {
+      "path": "deepening/breadth/remaining/cache/sales-incoterms_seed43.npz",
+      "sha256": "b298358fd28f83840cbbaefc4aa258bc65c1c9d03ef05d6eb6df7efc0a78bbe9"
+    },
+    {
+      "path": "deepening/breadth/remaining/cache/sales-incoterms_seed43.model.txt",
+      "sha256": "dee155a1805ae6ff5ebcd954b7d925e4b6c956e0509a6bcc9baebb67774f7cbe"
+    },
+    {
+      "path": "deepening/breadth/remaining/sales-incoterms_seed44.json",
+      "sha256": "ea06fd762bbe05d08f5541c291b1d34f67274fb0039d02d47b6cbfaf3719019c"
+    },
+    {
+      "path": "deepening/breadth/remaining/cache/sales-incoterms_seed44.npz",
+      "sha256": "8907edcd17fdd00a3ccce6c0a95717256555cb294a1899c9eb1235c2670ea071"
+    },
+    {
+      "path": "deepening/breadth/remaining/cache/sales-incoterms_seed44.model.txt",
+      "sha256": "fd74def29195b99a956f105f0db1e6b2aa799e422cd621be07d6c870c8699454"
+    },
+    {
+      "path": "deepening/breadth/final_item/item-incoterms_seed42.json",
+      "sha256": "c7e85a9d2c623709a1343c54a098b3be20b5f1ab8d1ca1ca0a5ac0007eb6190b"
+    },
+    {
+      "path": "deepening/breadth/final_item/cache/item-incoterms_seed42.npz",
+      "sha256": "8922d875a20340a28092fab92f619dfec59d7fed557f24dffdfa7168be98c1ab"
+    },
+    {
+      "path": "deepening/breadth/final_item/cache/item-incoterms_seed42.model.txt",
+      "sha256": "dc2d4dda49e0f9c13c1d27734944e03950b9eb8c8c804b18be4b28750cd22e42"
+    },
+    {
+      "path": "deepening/breadth/final_item/item-incoterms_seed43.json",
+      "sha256": "c0da310d32fb4f32f7dae8f0154c2b0c979953b744a125da55bdf2cae1471b3f"
+    },
+    {
+      "path": "deepening/breadth/final_item/cache/item-incoterms_seed43.npz",
+      "sha256": "7bc49949f82b45dff011178fb2f25f683ab0618940b4e91b4c37704259d9418b"
+    },
+    {
+      "path": "deepening/breadth/final_item/cache/item-incoterms_seed43.model.txt",
+      "sha256": "bb8ccfdd4902970020cc8e5ecdab1d7ec65d499ff40897c00371a63b030f6089"
+    },
+    {
+      "path": "deepening/breadth/final_item/item-incoterms_seed44.json",
+      "sha256": "8e76b8cbe988748364426a8bfff24e781d5a6982cfd86c25003255cfb443371e"
+    },
+    {
+      "path": "deepening/breadth/final_item/cache/item-incoterms_seed44.npz",
+      "sha256": "23fd8505a8cd49a07553542e66ae65e72a07f495345d9f6cf31f28d7e9be3e18"
+    },
+    {
+      "path": "deepening/breadth/final_item/cache/item-incoterms_seed44.model.txt",
+      "sha256": "e903eb518bde4e0ebc0ada1b077cb896d3b6c95ef0ffeecd005f9595bb3de4a4"
+    }
+  ],
+  "join_audit": [
+    {
+      "task": "sales-group",
+      "split": "train",
+      "n": 340492,
+      "truncated_missing": 0,
+      "full_missing": 0
+    },
+    {
+      "task": "sales-group",
+      "split": "val",
+      "n": 71474,
+      "truncated_missing": 0,
+      "full_missing": 0
+    },
+    {
+      "task": "sales-group",
+      "split": "test",
+      "n": 88942,
+      "truncated_missing": 88942,
+      "full_missing": 0
+    },
+    {
+      "task": "sales-office",
+      "split": "train",
+      "n": 340492,
+      "truncated_missing": 0,
+      "full_missing": 0
+    },
+    {
+      "task": "sales-office",
+      "split": "val",
+      "n": 71474,
+      "truncated_missing": 0,
+      "full_missing": 0
+    },
+    {
+      "task": "sales-office",
+      "split": "test",
+      "n": 88942,
+      "truncated_missing": 88942,
+      "full_missing": 0
+    },
+    {
+      "task": "sales-payterms",
+      "split": "train",
+      "n": 340492,
+      "truncated_missing": 0,
+      "full_missing": 0
+    },
+    {
+      "task": "sales-payterms",
+      "split": "val",
+      "n": 71474,
+      "truncated_missing": 0,
+      "full_missing": 0
+    },
+    {
+      "task": "sales-payterms",
+      "split": "test",
+      "n": 88942,
+      "truncated_missing": 88942,
+      "full_missing": 0
+    },
+    {
+      "task": "sales-shipcond",
+      "split": "train",
+      "n": 340492,
+      "truncated_missing": 0,
+      "full_missing": 0
+    },
+    {
+      "task": "sales-shipcond",
+      "split": "val",
+      "n": 71474,
+      "truncated_missing": 0,
+      "full_missing": 0
+    },
+    {
+      "task": "sales-shipcond",
+      "split": "test",
+      "n": 88942,
+      "truncated_missing": 88942,
+      "full_missing": 0
+    },
+    {
+      "task": "item-plant",
+      "split": "train",
+      "n": 1622789,
+      "truncated_missing": 0,
+      "full_missing": 0
+    },
+    {
+      "task": "item-plant",
+      "split": "val",
+      "n": 293896,
+      "truncated_missing": 0,
+      "full_missing": 0
+    },
+    {
+      "task": "item-plant",
+      "split": "test",
+      "n": 402855,
+      "truncated_missing": 402855,
+      "full_missing": 0
+    },
+    {
+      "task": "item-shippoint",
+      "split": "train",
+      "n": 1622789,
+      "truncated_missing": 0,
+      "full_missing": 0
+    },
+    {
+      "task": "item-shippoint",
+      "split": "val",
+      "n": 293896,
+      "truncated_missing": 0,
+      "full_missing": 0
+    },
+    {
+      "task": "item-shippoint",
+      "split": "test",
+      "n": 402855,
+      "truncated_missing": 402855,
+      "full_missing": 0
+    },
+    {
+      "task": "sales-incoterms",
+      "split": "train",
+      "n": 340492,
+      "truncated_missing": 0,
+      "full_missing": 0
+    },
+    {
+      "task": "sales-incoterms",
+      "split": "val",
+      "n": 71474,
+      "truncated_missing": 0,
+      "full_missing": 0
+    },
+    {
+      "task": "sales-incoterms",
+      "split": "test",
+      "n": 88942,
+      "truncated_missing": 88942,
+      "full_missing": 0
+    },
+    {
+      "task": "item-incoterms",
+      "split": "train",
+      "n": 1622789,
+      "truncated_missing": 0,
+      "full_missing": 0
+    },
+    {
+      "task": "item-incoterms",
+      "split": "val",
+      "n": 293896,
+      "truncated_missing": 0,
+      "full_missing": 0
+    },
+    {
+      "task": "item-incoterms",
+      "split": "test",
+      "n": 402855,
+      "truncated_missing": 402855,
+      "full_missing": 0
+    }
+  ],
+  "frozen_model_inference": [
+    {
+      "task": "sales-group",
+      "seed": 42,
+      "prediction_max_absolute_error": {
+        "cal": 0.0,
+        "audit": 0.0,
+        "test": 0.0
+      },
+      "concentration_recomputed": 0.5906962480076264,
+      "concentration_absolute_error": 0.0
+    },
+    {
+      "task": "sales-group",
+      "seed": 43,
+      "prediction_max_absolute_error": {
+        "cal": 0.0,
+        "audit": 0.0,
+        "test": 0.0
+      },
+      "concentration_recomputed": 0.4660192630496878,
+      "concentration_absolute_error": 0.0
+    },
+    {
+      "task": "sales-group",
+      "seed": 44,
+      "prediction_max_absolute_error": {
+        "cal": 0.0,
+        "audit": 0.0,
+        "test": 0.0
+      },
+      "concentration_recomputed": 0.5063860668956237,
+      "concentration_absolute_error": 0.0
+    },
+    {
+      "task": "sales-office",
+      "seed": 42,
+      "prediction_max_absolute_error": {
+        "cal": 0.0,
+        "audit": 0.0,
+        "test": 0.0
+      },
+      "concentration_recomputed": 0.6277062370564586,
+      "concentration_absolute_error": 0.0
+    },
+    {
+      "task": "sales-office",
+      "seed": 43,
+      "prediction_max_absolute_error": {
+        "cal": 0.0,
+        "audit": 0.0,
+        "test": 0.0
+      },
+      "concentration_recomputed": 0.3926275872239397,
+      "concentration_absolute_error": 0.0
+    },
+    {
+      "task": "sales-office",
+      "seed": 44,
+      "prediction_max_absolute_error": {
+        "cal": 0.0,
+        "audit": 0.0,
+        "test": 0.0
+      },
+      "concentration_recomputed": 0.45124471098871854,
+      "concentration_absolute_error": 0.0
+    },
+    {
+      "task": "sales-payterms",
+      "seed": 42,
+      "prediction_max_absolute_error": {
+        "cal": 0.0,
+        "audit": 0.0,
+        "test": 0.0
+      },
+      "concentration_recomputed": 0.7579152430130808,
+      "concentration_absolute_error": 0.0
+    },
+    {
+      "task": "sales-payterms",
+      "seed": 43,
+      "prediction_max_absolute_error": {
+        "cal": 0.0,
+        "audit": 0.0,
+        "test": 0.0
+      },
+      "concentration_recomputed": 0.4515634102108887,
+      "concentration_absolute_error": 0.0
+    },
+    {
+      "task": "sales-payterms",
+      "seed": 44,
+      "prediction_max_absolute_error": {
+        "cal": 0.0,
+        "audit": 0.0,
+        "test": 0.0
+      },
+      "concentration_recomputed": 0.5908779008683747,
+      "concentration_absolute_error": 0.0
+    },
+    {
+      "task": "sales-shipcond",
+      "seed": 42,
+      "prediction_max_absolute_error": {
+        "cal": 0.0,
+        "audit": 0.0,
+        "test": 0.0
+      },
+      "concentration_recomputed": 0.399352185929046,
+      "concentration_absolute_error": 0.0
+    },
+    {
+      "task": "sales-shipcond",
+      "seed": 43,
+      "prediction_max_absolute_error": {
+        "cal": 0.0,
+        "audit": 0.0,
+        "test": 0.0
+      },
+      "concentration_recomputed": 0.26378621967550536,
+      "concentration_absolute_error": 0.0
+    },
+    {
+      "task": "sales-shipcond",
+      "seed": 44,
+      "prediction_max_absolute_error": {
+        "cal": 0.0,
+        "audit": 0.0,
+        "test": 0.0
+      },
+      "concentration_recomputed": 0.3091037731001226,
+      "concentration_absolute_error": 0.0
+    },
+    {
+      "task": "item-plant",
+      "seed": 42,
+      "prediction_max_absolute_error": {
+        "cal": 0.0,
+        "audit": 0.0,
+        "test": 0.0
+      },
+      "concentration_recomputed": 0.24517175530668142,
+      "concentration_absolute_error": 0.0
+    },
+    {
+      "task": "item-plant",
+      "seed": 43,
+      "prediction_max_absolute_error": {
+        "cal": 0.0,
+        "audit": 0.0,
+        "test": 0.0
+      },
+      "concentration_recomputed": 0.24461478569620376,
+      "concentration_absolute_error": 0.0
+    },
+    {
+      "task": "item-plant",
+      "seed": 44,
+      "prediction_max_absolute_error": {
+        "cal": 0.0,
+        "audit": 0.0,
+        "test": 0.0
+      },
+      "concentration_recomputed": 0.18694085195378612,
+      "concentration_absolute_error": 0.0
+    },
+    {
+      "task": "item-shippoint",
+      "seed": 42,
+      "prediction_max_absolute_error": {
+        "cal": 0.0,
+        "audit": 0.0,
+        "test": 0.0
+      },
+      "concentration_recomputed": 0.22121883040572712,
+      "concentration_absolute_error": 0.0
+    },
+    {
+      "task": "item-shippoint",
+      "seed": 43,
+      "prediction_max_absolute_error": {
+        "cal": 0.0,
+        "audit": 0.0,
+        "test": 0.0
+      },
+      "concentration_recomputed": 0.2728956489225381,
+      "concentration_absolute_error": 0.0
+    },
+    {
+      "task": "item-shippoint",
+      "seed": 44,
+      "prediction_max_absolute_error": {
+        "cal": 0.0,
+        "audit": 0.0,
+        "test": 0.0
+      },
+      "concentration_recomputed": 0.369858318619558,
+      "concentration_absolute_error": 0.0
+    },
+    {
+      "task": "sales-incoterms",
+      "seed": 42,
+      "prediction_max_absolute_error": {
+        "cal": 0.0,
+        "audit": 0.0,
+        "test": 0.0
+      },
+      "concentration_recomputed": 0.2535154674828185,
+      "concentration_absolute_error": 0.0
+    },
+    {
+      "task": "sales-incoterms",
+      "seed": 43,
+      "prediction_max_absolute_error": {
+        "cal": 0.0,
+        "audit": 0.0,
+        "test": 0.0
+      },
+      "concentration_recomputed": 0.23141088592685827,
+      "concentration_absolute_error": 0.0
+    },
+    {
+      "task": "sales-incoterms",
+      "seed": 44,
+      "prediction_max_absolute_error": {
+        "cal": 0.0,
+        "audit": 0.0,
+        "test": 0.0
+      },
+      "concentration_recomputed": 0.440733057994927,
+      "concentration_absolute_error": 0.0
+    },
+    {
+      "task": "item-incoterms",
+      "seed": 42,
+      "prediction_max_absolute_error": {
+        "cal": 0.0,
+        "audit": 0.0,
+        "test": 0.0
+      },
+      "concentration_recomputed": 0.1810709231642013,
+      "concentration_absolute_error": 0.0
+    },
+    {
+      "task": "item-incoterms",
+      "seed": 43,
+      "prediction_max_absolute_error": {
+        "cal": 0.0,
+        "audit": 0.0,
+        "test": 0.0
+      },
+      "concentration_recomputed": 0.3232351542943788,
+      "concentration_absolute_error": 0.0
+    },
+    {
+      "task": "item-incoterms",
+      "seed": 44,
+      "prediction_max_absolute_error": {
+        "cal": 0.0,
+        "audit": 0.0,
+        "test": 0.0
+      },
+      "concentration_recomputed": 0.2775337410080083,
+      "concentration_absolute_error": 0.0
+    }
+  ],
+  "model_metrics": [
+    {
+      "task": "sales-group",
+      "seed": 42,
+      "rule": "inclusive",
+      "C": 0.5906962480076264,
+      "q": 0.9999997354674163,
+      "metrics": {
+        "audit": {
+          "n": 3000,
+          "covered": 2598,
+          "coverage": 0.866,
+          "mean_size": 312.24333333333334,
+          "unknown": 101
+        },
+        "test": {
+          "n": 6000,
+          "covered": 4972,
+          "coverage": 0.8286666666666667,
+          "mean_size": 302.9386666666667,
+          "unknown": 373
+        }
+      },
+      "drop_pp": 3.733333333333333
+    },
+    {
+      "task": "sales-group",
+      "seed": 42,
+      "rule": "crossing",
+      "C": 0.5906962480076264,
+      "q": 0.9999997354674163,
+      "metrics": {
+        "audit": {
+          "n": 3000,
+          "covered": 2602,
+          "coverage": 0.8673333333333333,
+          "mean_size": 313.19733333333335,
+          "unknown": 101
+        },
+        "test": {
+          "n": 6000,
+          "covered": 4983,
+          "coverage": 0.8305,
+          "mean_size": 303.892,
+          "unknown": 373
+        }
+      },
+      "drop_pp": 3.6833333333333274
+    },
+    {
+      "task": "sales-group",
+      "seed": 43,
+      "rule": "inclusive",
+      "C": 0.4660192630496878,
+      "q": 0.999999914406076,
+      "metrics": {
+        "audit": {
+          "n": 3000,
+          "covered": 2672,
+          "coverage": 0.8906666666666667,
+          "mean_size": 303.992,
+          "unknown": 94
+        },
+        "test": {
+          "n": 6000,
+          "covered": 5094,
+          "coverage": 0.849,
+          "mean_size": 302.818,
+          "unknown": 383
+        }
+      },
+      "drop_pp": 4.166666666666674
+    },
+    {
+      "task": "sales-group",
+      "seed": 43,
+      "rule": "crossing",
+      "C": 0.4660192630496878,
+      "q": 0.999999914406076,
+      "metrics": {
+        "audit": {
+          "n": 3000,
+          "covered": 2676,
+          "coverage": 0.892,
+          "mean_size": 304.99133333333333,
+          "unknown": 94
+        },
+        "test": {
+          "n": 6000,
+          "covered": 5101,
+          "coverage": 0.8501666666666666,
+          "mean_size": 303.81466666666665,
+          "unknown": 383
+        }
+      },
+      "drop_pp": 4.183333333333339
+    },
+    {
+      "task": "sales-group",
+      "seed": 44,
+      "rule": "inclusive",
+      "C": 0.5063860668956237,
+      "q": 0.999999834847128,
+      "metrics": {
+        "audit": {
+          "n": 3000,
+          "covered": 2688,
+          "coverage": 0.896,
+          "mean_size": 332.391,
+          "unknown": 106
+        },
+        "test": {
+          "n": 6000,
+          "covered": 5184,
+          "coverage": 0.864,
+          "mean_size": 329.147,
+          "unknown": 397
+        }
+      },
+      "drop_pp": 3.200000000000003
+    },
+    {
+      "task": "sales-group",
+      "seed": 44,
+      "rule": "crossing",
+      "C": 0.5063860668956237,
+      "q": 0.999999834847128,
+      "metrics": {
+        "audit": {
+          "n": 3000,
+          "covered": 2689,
+          "coverage": 0.8963333333333333,
+          "mean_size": 333.3786666666667,
+          "unknown": 106
+        },
+        "test": {
+          "n": 6000,
+          "covered": 5193,
+          "coverage": 0.8655,
+          "mean_size": 330.1383333333333,
+          "unknown": 397
+        }
+      },
+      "drop_pp": 3.083333333333327
+    },
+    {
+      "task": "sales-office",
+      "seed": 42,
+      "rule": "inclusive",
+      "C": 0.6277062370564586,
+      "q": 1.0,
+      "metrics": {
+        "audit": {
+          "n": 3000,
+          "covered": 3000,
+          "coverage": 1.0,
+          "mean_size": 30.0,
+          "unknown": 0
+        },
+        "test": {
+          "n": 6000,
+          "covered": 6000,
+          "coverage": 1.0,
+          "mean_size": 30.0,
+          "unknown": 0
+        }
+      },
+      "drop_pp": 0.0
+    },
+    {
+      "task": "sales-office",
+      "seed": 42,
+      "rule": "crossing",
+      "C": 0.6277062370564586,
+      "q": 1.0,
+      "metrics": {
+        "audit": {
+          "n": 3000,
+          "covered": 3000,
+          "coverage": 1.0,
+          "mean_size": 9.877333333333333,
+          "unknown": 0
+        },
+        "test": {
+          "n": 6000,
+          "covered": 5998,
+          "coverage": 0.9996666666666667,
+          "mean_size": 10.373333333333333,
+          "unknown": 0
+        }
+      },
+      "drop_pp": 0.03333333333332966
+    },
+    {
+      "task": "sales-office",
+      "seed": 43,
+      "rule": "inclusive",
+      "C": 0.3926275872239397,
+      "q": 1.0,
+      "metrics": {
+        "audit": {
+          "n": 3000,
+          "covered": 3000,
+          "coverage": 1.0,
+          "mean_size": 30.0,
+          "unknown": 0
+        },
+        "test": {
+          "n": 6000,
+          "covered": 6000,
+          "coverage": 1.0,
+          "mean_size": 30.0,
+          "unknown": 0
+        }
+      },
+      "drop_pp": 0.0
+    },
+    {
+      "task": "sales-office",
+      "seed": 43,
+      "rule": "crossing",
+      "C": 0.3926275872239397,
+      "q": 1.0,
+      "metrics": {
+        "audit": {
+          "n": 3000,
+          "covered": 3000,
+          "coverage": 1.0,
+          "mean_size": 14.056333333333333,
+          "unknown": 0
+        },
+        "test": {
+          "n": 6000,
+          "covered": 5999,
+          "coverage": 0.9998333333333334,
+          "mean_size": 13.7665,
+          "unknown": 0
+        }
+      },
+      "drop_pp": 0.01666666666666483
+    },
+    {
+      "task": "sales-office",
+      "seed": 44,
+      "rule": "inclusive",
+      "C": 0.45124471098871854,
+      "q": 0.9999999999989535,
+      "metrics": {
+        "audit": {
+          "n": 3000,
+          "covered": 2755,
+          "coverage": 0.9183333333333333,
+          "mean_size": 10.769,
+          "unknown": 0
+        },
+        "test": {
+          "n": 6000,
+          "covered": 5481,
+          "coverage": 0.9135,
+          "mean_size": 10.710166666666666,
+          "unknown": 0
+        }
+      },
+      "drop_pp": 0.4833333333333356
+    },
+    {
+      "task": "sales-office",
+      "seed": 44,
+      "rule": "crossing",
+      "C": 0.45124471098871854,
+      "q": 0.9999999999989535,
+      "metrics": {
+        "audit": {
+          "n": 3000,
+          "covered": 3000,
+          "coverage": 1.0,
+          "mean_size": 11.768333333333333,
+          "unknown": 0
+        },
+        "test": {
+          "n": 6000,
+          "covered": 5999,
+          "coverage": 0.9998333333333334,
+          "mean_size": 11.709333333333333,
+          "unknown": 0
+        }
+      },
+      "drop_pp": 0.01666666666666483
+    },
+    {
+      "task": "sales-payterms",
+      "seed": 42,
+      "rule": "inclusive",
+      "C": 0.7579152430130808,
+      "q": 0.8991608490097277,
+      "metrics": {
+        "audit": {
+          "n": 3000,
+          "covered": 2689,
+          "coverage": 0.8963333333333333,
+          "mean_size": 14.952333333333334,
+          "unknown": 1
+        },
+        "test": {
+          "n": 6000,
+          "covered": 5304,
+          "coverage": 0.884,
+          "mean_size": 14.667666666666667,
+          "unknown": 5
+        }
+      },
+      "drop_pp": 1.2333333333333307
+    },
+    {
+      "task": "sales-payterms",
+      "seed": 42,
+      "rule": "crossing",
+      "C": 0.7579152430130808,
+      "q": 0.8991608490097277,
+      "metrics": {
+        "audit": {
+          "n": 3000,
+          "covered": 2711,
+          "coverage": 0.9036666666666666,
+          "mean_size": 15.948666666666666,
+          "unknown": 1
+        },
+        "test": {
+          "n": 6000,
+          "covered": 5340,
+          "coverage": 0.89,
+          "mean_size": 15.665666666666667,
+          "unknown": 5
+        }
+      },
+      "drop_pp": 1.3666666666666605
+    },
+    {
+      "task": "sales-payterms",
+      "seed": 43,
+      "rule": "inclusive",
+      "C": 0.4515634102108887,
+      "q": 0.9320792345796871,
+      "metrics": {
+        "audit": {
+          "n": 3000,
+          "covered": 2734,
+          "coverage": 0.9113333333333333,
+          "mean_size": 25.693,
+          "unknown": 0
+        },
+        "test": {
+          "n": 6000,
+          "covered": 5386,
+          "coverage": 0.8976666666666666,
+          "mean_size": 25.367,
+          "unknown": 8
+        }
+      },
+      "drop_pp": 1.3666666666666716
+    },
+    {
+      "task": "sales-payterms",
+      "seed": 43,
+      "rule": "crossing",
+      "C": 0.4515634102108887,
+      "q": 0.9320792345796871,
+      "metrics": {
+        "audit": {
+          "n": 3000,
+          "covered": 2748,
+          "coverage": 0.916,
+          "mean_size": 26.684333333333335,
+          "unknown": 0
+        },
+        "test": {
+          "n": 6000,
+          "covered": 5425,
+          "coverage": 0.9041666666666667,
+          "mean_size": 26.355833333333333,
+          "unknown": 8
+        }
+      },
+      "drop_pp": 1.1833333333333362
+    },
+    {
+      "task": "sales-payterms",
+      "seed": 44,
+      "rule": "inclusive",
+      "C": 0.5908779008683747,
+      "q": 0.9302482618827606,
+      "metrics": {
+        "audit": {
+          "n": 3000,
+          "covered": 2732,
+          "coverage": 0.9106666666666666,
+          "mean_size": 16.831,
+          "unknown": 0
+        },
+        "test": {
+          "n": 6000,
+          "covered": 5292,
+          "coverage": 0.882,
+          "mean_size": 16.401166666666665,
+          "unknown": 7
+        }
+      },
+      "drop_pp": 2.866666666666662
+    },
+    {
+      "task": "sales-payterms",
+      "seed": 44,
+      "rule": "crossing",
+      "C": 0.5908779008683747,
+      "q": 0.9302482618827606,
+      "metrics": {
+        "audit": {
+          "n": 3000,
+          "covered": 2751,
+          "coverage": 0.917,
+          "mean_size": 17.804666666666666,
+          "unknown": 0
+        },
+        "test": {
+          "n": 6000,
+          "covered": 5320,
+          "coverage": 0.8866666666666667,
+          "mean_size": 17.3785,
+          "unknown": 7
+        }
+      },
+      "drop_pp": 3.0333333333333323
+    },
+    {
+      "task": "sales-shipcond",
+      "seed": 42,
+      "rule": "inclusive",
+      "C": 0.399352185929046,
+      "q": 0.9109113481308773,
+      "metrics": {
+        "audit": {
+          "n": 3000,
+          "covered": 2686,
+          "coverage": 0.8953333333333333,
+          "mean_size": 3.8073333333333332,
+          "unknown": 13
+        },
+        "test": {
+          "n": 6000,
+          "covered": 5239,
+          "coverage": 0.8731666666666666,
+          "mean_size": 3.8775,
+          "unknown": 41
+        }
+      },
+      "drop_pp": 2.216666666666667
+    },
+    {
+      "task": "sales-shipcond",
+      "seed": 42,
+      "rule": "crossing",
+      "C": 0.399352185929046,
+      "q": 0.9109113481308773,
+      "metrics": {
+        "audit": {
+          "n": 3000,
+          "covered": 2729,
+          "coverage": 0.9096666666666666,
+          "mean_size": 4.782666666666667,
+          "unknown": 13
+        },
+        "test": {
+          "n": 6000,
+          "covered": 5331,
+          "coverage": 0.8885,
+          "mean_size": 4.854833333333334,
+          "unknown": 41
+        }
+      },
+      "drop_pp": 2.1166666666666667
+    },
+    {
+      "task": "sales-shipcond",
+      "seed": 43,
+      "rule": "inclusive",
+      "C": 0.26378621967550536,
+      "q": 0.9078081427305468,
+      "metrics": {
+        "audit": {
+          "n": 3000,
+          "covered": 2735,
+          "coverage": 0.9116666666666666,
+          "mean_size": 3.345666666666667,
+          "unknown": 9
+        },
+        "test": {
+          "n": 6000,
+          "covered": 5360,
+          "coverage": 0.8933333333333333,
+          "mean_size": 3.3996666666666666,
+          "unknown": 34
+        }
+      },
+      "drop_pp": 1.8333333333333313
+    },
+    {
+      "task": "sales-shipcond",
+      "seed": 43,
+      "rule": "crossing",
+      "C": 0.26378621967550536,
+      "q": 0.9078081427305468,
+      "metrics": {
+        "audit": {
+          "n": 3000,
+          "covered": 2828,
+          "coverage": 0.9426666666666667,
+          "mean_size": 4.319,
+          "unknown": 9
+        },
+        "test": {
+          "n": 6000,
+          "covered": 5570,
+          "coverage": 0.9283333333333333,
+          "mean_size": 4.377166666666667,
+          "unknown": 34
+        }
+      },
+      "drop_pp": 1.433333333333331
+    },
+    {
+      "task": "sales-shipcond",
+      "seed": 44,
+      "rule": "inclusive",
+      "C": 0.3091037731001226,
+      "q": 0.9214008580608404,
+      "metrics": {
+        "audit": {
+          "n": 3000,
+          "covered": 2689,
+          "coverage": 0.8963333333333333,
+          "mean_size": 3.0556666666666668,
+          "unknown": 5
+        },
+        "test": {
+          "n": 6000,
+          "covered": 5217,
+          "coverage": 0.8695,
+          "mean_size": 3.1521666666666666,
+          "unknown": 36
+        }
+      },
+      "drop_pp": 2.6833333333333265
+    },
+    {
+      "task": "sales-shipcond",
+      "seed": 44,
+      "rule": "crossing",
+      "C": 0.3091037731001226,
+      "q": 0.9214008580608404,
+      "metrics": {
+        "audit": {
+          "n": 3000,
+          "covered": 2823,
+          "coverage": 0.941,
+          "mean_size": 4.0136666666666665,
+          "unknown": 5
+        },
+        "test": {
+          "n": 6000,
+          "covered": 5452,
+          "coverage": 0.9086666666666666,
+          "mean_size": 4.105166666666666,
+          "unknown": 36
+        }
+      },
+      "drop_pp": 3.2333333333333325
+    },
+    {
+      "task": "item-plant",
+      "seed": 42,
+      "rule": "inclusive",
+      "C": 0.24517175530668142,
+      "q": 0.9620958189558795,
+      "metrics": {
+        "audit": {
+          "n": 3000,
+          "covered": 2737,
+          "coverage": 0.9123333333333333,
+          "mean_size": 8.696333333333333,
+          "unknown": 3
+        },
+        "test": {
+          "n": 6000,
+          "covered": 5328,
+          "coverage": 0.888,
+          "mean_size": 8.580166666666667,
+          "unknown": 40
+        }
+      },
+      "drop_pp": 2.433333333333332
+    },
+    {
+      "task": "item-plant",
+      "seed": 42,
+      "rule": "crossing",
+      "C": 0.24517175530668142,
+      "q": 0.9620958189558795,
+      "metrics": {
+        "audit": {
+          "n": 3000,
+          "covered": 2777,
+          "coverage": 0.9256666666666666,
+          "mean_size": 9.696333333333333,
+          "unknown": 3
+        },
+        "test": {
+          "n": 6000,
+          "covered": 5422,
+          "coverage": 0.9036666666666666,
+          "mean_size": 9.58,
+          "unknown": 40
+        }
+      },
+      "drop_pp": 2.200000000000002
+    },
+    {
+      "task": "item-plant",
+      "seed": 43,
+      "rule": "inclusive",
+      "C": 0.24461478569620376,
+      "q": 0.9496871364151586,
+      "metrics": {
+        "audit": {
+          "n": 3000,
+          "covered": 2693,
+          "coverage": 0.8976666666666666,
+          "mean_size": 6.9656666666666665,
+          "unknown": 6
+        },
+        "test": {
+          "n": 6000,
+          "covered": 5184,
+          "coverage": 0.864,
+          "mean_size": 6.816666666666666,
+          "unknown": 43
+        }
+      },
+      "drop_pp": 3.3666666666666623
+    },
+    {
+      "task": "item-plant",
+      "seed": 43,
+      "rule": "crossing",
+      "C": 0.24461478569620376,
+      "q": 0.9496871364151586,
+      "metrics": {
+        "audit": {
+          "n": 3000,
+          "covered": 2743,
+          "coverage": 0.9143333333333333,
+          "mean_size": 7.9656666666666665,
+          "unknown": 6
+        },
+        "test": {
+          "n": 6000,
+          "covered": 5331,
+          "coverage": 0.8885,
+          "mean_size": 7.816666666666666,
+          "unknown": 43
+        }
+      },
+      "drop_pp": 2.5833333333333375
+    },
+    {
+      "task": "item-plant",
+      "seed": 44,
+      "rule": "inclusive",
+      "C": 0.18694085195378612,
+      "q": 0.9627712615573046,
+      "metrics": {
+        "audit": {
+          "n": 3000,
+          "covered": 2696,
+          "coverage": 0.8986666666666666,
+          "mean_size": 7.160333333333333,
+          "unknown": 4
+        },
+        "test": {
+          "n": 6000,
+          "covered": 5267,
+          "coverage": 0.8778333333333334,
+          "mean_size": 7.0035,
+          "unknown": 42
+        }
+      },
+      "drop_pp": 2.083333333333326
+    },
+    {
+      "task": "item-plant",
+      "seed": 44,
+      "rule": "crossing",
+      "C": 0.18694085195378612,
+      "q": 0.9627712615573046,
+      "metrics": {
+        "audit": {
+          "n": 3000,
+          "covered": 2753,
+          "coverage": 0.9176666666666666,
+          "mean_size": 8.160333333333334,
+          "unknown": 4
+        },
+        "test": {
+          "n": 6000,
+          "covered": 5383,
+          "coverage": 0.8971666666666667,
+          "mean_size": 8.0035,
+          "unknown": 42
+        }
+      },
+      "drop_pp": 2.0499999999999963
+    },
+    {
+      "task": "item-shippoint",
+      "seed": 42,
+      "rule": "inclusive",
+      "C": 0.22121883040572712,
+      "q": 0.9485115475949799,
+      "metrics": {
+        "audit": {
+          "n": 3000,
+          "covered": 2720,
+          "coverage": 0.9066666666666666,
+          "mean_size": 16.145666666666667,
+          "unknown": 4
+        },
+        "test": {
+          "n": 6000,
+          "covered": 5354,
+          "coverage": 0.8923333333333333,
+          "mean_size": 15.929166666666667,
+          "unknown": 75
+        }
+      },
+      "drop_pp": 1.433333333333331
+    },
+    {
+      "task": "item-shippoint",
+      "seed": 42,
+      "rule": "crossing",
+      "C": 0.22121883040572712,
+      "q": 0.9485115475949799,
+      "metrics": {
+        "audit": {
+          "n": 3000,
+          "covered": 2727,
+          "coverage": 0.909,
+          "mean_size": 17.145666666666667,
+          "unknown": 4
+        },
+        "test": {
+          "n": 6000,
+          "covered": 5382,
+          "coverage": 0.897,
+          "mean_size": 16.929166666666667,
+          "unknown": 75
+        }
+      },
+      "drop_pp": 1.200000000000001
+    },
+    {
+      "task": "item-shippoint",
+      "seed": 43,
+      "rule": "inclusive",
+      "C": 0.2728956489225381,
+      "q": 0.9877400845548179,
+      "metrics": {
+        "audit": {
+          "n": 3000,
+          "covered": 2711,
+          "coverage": 0.9036666666666666,
+          "mean_size": 24.376666666666665,
+          "unknown": 6
+        },
+        "test": {
+          "n": 6000,
+          "covered": 5300,
+          "coverage": 0.8833333333333333,
+          "mean_size": 24.841166666666666,
+          "unknown": 80
+        }
+      },
+      "drop_pp": 2.0333333333333314
+    },
+    {
+      "task": "item-shippoint",
+      "seed": 43,
+      "rule": "crossing",
+      "C": 0.2728956489225381,
+      "q": 0.9877400845548179,
+      "metrics": {
+        "audit": {
+          "n": 3000,
+          "covered": 2762,
+          "coverage": 0.9206666666666666,
+          "mean_size": 25.373,
+          "unknown": 6
+        },
+        "test": {
+          "n": 6000,
+          "covered": 5391,
+          "coverage": 0.8985,
+          "mean_size": 25.838333333333335,
+          "unknown": 80
+        }
+      },
+      "drop_pp": 2.216666666666667
+    },
+    {
+      "task": "item-shippoint",
+      "seed": 44,
+      "rule": "inclusive",
+      "C": 0.369858318619558,
+      "q": 0.996877922801391,
+      "metrics": {
+        "audit": {
+          "n": 3000,
+          "covered": 2686,
+          "coverage": 0.8953333333333333,
+          "mean_size": 19.480333333333334,
+          "unknown": 5
+        },
+        "test": {
+          "n": 6000,
+          "covered": 5335,
+          "coverage": 0.8891666666666667,
+          "mean_size": 19.5315,
+          "unknown": 71
+        }
+      },
+      "drop_pp": 0.6166666666666654
+    },
+    {
+      "task": "item-shippoint",
+      "seed": 44,
+      "rule": "crossing",
+      "C": 0.369858318619558,
+      "q": 0.996877922801391,
+      "metrics": {
+        "audit": {
+          "n": 3000,
+          "covered": 2758,
+          "coverage": 0.9193333333333333,
+          "mean_size": 20.480333333333334,
+          "unknown": 5
+        },
+        "test": {
+          "n": 6000,
+          "covered": 5438,
+          "coverage": 0.9063333333333333,
+          "mean_size": 20.5315,
+          "unknown": 71
+        }
+      },
+      "drop_pp": 1.3000000000000012
+    },
+    {
+      "task": "sales-incoterms",
+      "seed": 42,
+      "rule": "inclusive",
+      "C": 0.2535154674828185,
+      "q": 0.9187476756210182,
+      "metrics": {
+        "audit": {
+          "n": 3000,
+          "covered": 2663,
+          "coverage": 0.8876666666666667,
+          "mean_size": 3.0193333333333334,
+          "unknown": 1
+        },
+        "test": {
+          "n": 6000,
+          "covered": 5170,
+          "coverage": 0.8616666666666667,
+          "mean_size": 3.057166666666667,
+          "unknown": 0
+        }
+      },
+      "drop_pp": 2.6000000000000023
+    },
+    {
+      "task": "sales-incoterms",
+      "seed": 42,
+      "rule": "crossing",
+      "C": 0.2535154674828185,
+      "q": 0.9187476756210182,
+      "metrics": {
+        "audit": {
+          "n": 3000,
+          "covered": 2819,
+          "coverage": 0.9396666666666667,
+          "mean_size": 3.8366666666666664,
+          "unknown": 1
+        },
+        "test": {
+          "n": 6000,
+          "covered": 5602,
+          "coverage": 0.9336666666666666,
+          "mean_size": 3.8741666666666665,
+          "unknown": 0
+        }
+      },
+      "drop_pp": 0.6000000000000005
+    },
+    {
+      "task": "sales-incoterms",
+      "seed": 43,
+      "rule": "inclusive",
+      "C": 0.23141088592685827,
+      "q": 0.9315446885329065,
+      "metrics": {
+        "audit": {
+          "n": 3000,
+          "covered": 2660,
+          "coverage": 0.8866666666666667,
+          "mean_size": 2.9486666666666665,
+          "unknown": 2
+        },
+        "test": {
+          "n": 6000,
+          "covered": 5263,
+          "coverage": 0.8771666666666667,
+          "mean_size": 3.0328333333333335,
+          "unknown": 1
+        }
+      },
+      "drop_pp": 0.9500000000000064
+    },
+    {
+      "task": "sales-incoterms",
+      "seed": 43,
+      "rule": "crossing",
+      "C": 0.23141088592685827,
+      "q": 0.9315446885329065,
+      "metrics": {
+        "audit": {
+          "n": 3000,
+          "covered": 2796,
+          "coverage": 0.932,
+          "mean_size": 3.7416666666666667,
+          "unknown": 2
+        },
+        "test": {
+          "n": 6000,
+          "covered": 5587,
+          "coverage": 0.9311666666666667,
+          "mean_size": 3.8573333333333335,
+          "unknown": 1
+        }
+      },
+      "drop_pp": 0.08333333333333526
+    },
+    {
+      "task": "sales-incoterms",
+      "seed": 44,
+      "rule": "inclusive",
+      "C": 0.440733057994927,
+      "q": 0.9288344391778406,
+      "metrics": {
+        "audit": {
+          "n": 3000,
+          "covered": 2725,
+          "coverage": 0.9083333333333333,
+          "mean_size": 3.0183333333333335,
+          "unknown": 0
+        },
+        "test": {
+          "n": 6000,
+          "covered": 5373,
+          "coverage": 0.8955,
+          "mean_size": 3.0941666666666667,
+          "unknown": 3
+        }
+      },
+      "drop_pp": 1.2833333333333363
+    },
+    {
+      "task": "sales-incoterms",
+      "seed": 44,
+      "rule": "crossing",
+      "C": 0.440733057994927,
+      "q": 0.9288344391778406,
+      "metrics": {
+        "audit": {
+          "n": 3000,
+          "covered": 2823,
+          "coverage": 0.941,
+          "mean_size": 3.8466666666666667,
+          "unknown": 0
+        },
+        "test": {
+          "n": 6000,
+          "covered": 5602,
+          "coverage": 0.9336666666666666,
+          "mean_size": 3.9048333333333334,
+          "unknown": 3
+        }
+      },
+      "drop_pp": 0.7333333333333303
+    },
+    {
+      "task": "item-incoterms",
+      "seed": 42,
+      "rule": "inclusive",
+      "C": 0.1810709231642013,
+      "q": 0.9358075104848547,
+      "metrics": {
+        "audit": {
+          "n": 3000,
+          "covered": 2665,
+          "coverage": 0.8883333333333333,
+          "mean_size": 2.8396666666666666,
+          "unknown": 0
+        },
+        "test": {
+          "n": 6000,
+          "covered": 4952,
+          "coverage": 0.8253333333333334,
+          "mean_size": 2.833833333333333,
+          "unknown": 0
+        }
+      },
+      "drop_pp": 6.2999999999999945
+    },
+    {
+      "task": "item-incoterms",
+      "seed": 42,
+      "rule": "crossing",
+      "C": 0.1810709231642013,
+      "q": 0.9358075104848547,
+      "metrics": {
+        "audit": {
+          "n": 3000,
+          "covered": 2846,
+          "coverage": 0.9486666666666667,
+          "mean_size": 3.8396666666666666,
+          "unknown": 0
+        },
+        "test": {
+          "n": 6000,
+          "covered": 5522,
+          "coverage": 0.9203333333333333,
+          "mean_size": 3.833833333333333,
+          "unknown": 0
+        }
+      },
+      "drop_pp": 2.833333333333332
+    },
+    {
+      "task": "item-incoterms",
+      "seed": 43,
+      "rule": "inclusive",
+      "C": 0.3232351542943788,
+      "q": 0.9478204908470336,
+      "metrics": {
+        "audit": {
+          "n": 3000,
+          "covered": 2700,
+          "coverage": 0.9,
+          "mean_size": 2.791333333333333,
+          "unknown": 0
+        },
+        "test": {
+          "n": 6000,
+          "covered": 4843,
+          "coverage": 0.8071666666666667,
+          "mean_size": 2.723333333333333,
+          "unknown": 0
+        }
+      },
+      "drop_pp": 9.283333333333331
+    },
+    {
+      "task": "item-incoterms",
+      "seed": 43,
+      "rule": "crossing",
+      "C": 0.3232351542943788,
+      "q": 0.9478204908470336,
+      "metrics": {
+        "audit": {
+          "n": 3000,
+          "covered": 2863,
+          "coverage": 0.9543333333333334,
+          "mean_size": 3.791333333333333,
+          "unknown": 0
+        },
+        "test": {
+          "n": 6000,
+          "covered": 5422,
+          "coverage": 0.9036666666666666,
+          "mean_size": 3.723333333333333,
+          "unknown": 0
+        }
+      },
+      "drop_pp": 5.066666666666675
+    },
+    {
+      "task": "item-incoterms",
+      "seed": 44,
+      "rule": "inclusive",
+      "C": 0.2775337410080083,
+      "q": 0.9383260304988723,
+      "metrics": {
+        "audit": {
+          "n": 3000,
+          "covered": 2654,
+          "coverage": 0.8846666666666667,
+          "mean_size": 2.998666666666667,
+          "unknown": 0
+        },
+        "test": {
+          "n": 6000,
+          "covered": 4890,
+          "coverage": 0.815,
+          "mean_size": 2.9596666666666667,
+          "unknown": 1
+        }
+      },
+      "drop_pp": 6.9666666666666766
+    },
+    {
+      "task": "item-incoterms",
+      "seed": 44,
+      "rule": "crossing",
+      "C": 0.2775337410080083,
+      "q": 0.9383260304988723,
+      "metrics": {
+        "audit": {
+          "n": 3000,
+          "covered": 2836,
+          "coverage": 0.9453333333333334,
+          "mean_size": 3.998,
+          "unknown": 0
+        },
+        "test": {
+          "n": 6000,
+          "covered": 5465,
+          "coverage": 0.9108333333333334,
+          "mean_size": 3.9591666666666665,
+          "unknown": 1
+        }
+      },
+      "drop_pp": 3.4499999999999975
+    }
+  ],
+  "task_means": [
+    {
+      "task": "item-incoterms",
+      "rule": "inclusive",
+      "C": 0.26061327282219615,
+      "drop_pp": 7.516666666666667
+    },
+    {
+      "task": "item-incoterms",
+      "rule": "crossing",
+      "C": 0.26061327282219615,
+      "drop_pp": 3.783333333333335
+    },
+    {
+      "task": "item-plant",
+      "rule": "inclusive",
+      "C": 0.22557579765222377,
+      "drop_pp": 2.6277777777777733
+    },
+    {
+      "task": "item-plant",
+      "rule": "crossing",
+      "C": 0.22557579765222377,
+      "drop_pp": 2.2777777777777786
+    },
+    {
+      "task": "item-shippoint",
+      "rule": "inclusive",
+      "C": 0.2879909326492744,
+      "drop_pp": 1.3611111111111092
+    },
+    {
+      "task": "item-shippoint",
+      "rule": "crossing",
+      "C": 0.2879909326492744,
+      "drop_pp": 1.5722222222222229
+    },
+    {
+      "task": "sales-group",
+      "rule": "inclusive",
+      "C": 0.521033859317646,
+      "drop_pp": 3.7000000000000033
+    },
+    {
+      "task": "sales-group",
+      "rule": "crossing",
+      "C": 0.521033859317646,
+      "drop_pp": 3.6499999999999972
+    },
+    {
+      "task": "sales-incoterms",
+      "rule": "inclusive",
+      "C": 0.3085531371348679,
+      "drop_pp": 1.611111111111115
+    },
+    {
+      "task": "sales-incoterms",
+      "rule": "crossing",
+      "C": 0.3085531371348679,
+      "drop_pp": 0.47222222222222204
+    },
+    {
+      "task": "sales-office",
+      "rule": "inclusive",
+      "C": 0.49052617842303897,
+      "drop_pp": 0.16111111111111187
+    },
+    {
+      "task": "sales-office",
+      "rule": "crossing",
+      "C": 0.49052617842303897,
+      "drop_pp": 0.022222222222219774
+    },
+    {
+      "task": "sales-payterms",
+      "rule": "inclusive",
+      "C": 0.6001188513641147,
+      "drop_pp": 1.8222222222222213
+    },
+    {
+      "task": "sales-payterms",
+      "rule": "crossing",
+      "C": 0.6001188513641147,
+      "drop_pp": 1.8611111111111096
+    },
+    {
+      "task": "sales-shipcond",
+      "rule": "inclusive",
+      "C": 0.3240807262348913,
+      "drop_pp": 2.2444444444444414
+    },
+    {
+      "task": "sales-shipcond",
+      "rule": "crossing",
+      "C": 0.3240807262348913,
+      "drop_pp": 2.2611111111111097
+    }
+  ],
+  "associations": [
+    {
+      "rule": "inclusive",
+      "n_tasks": 8,
+      "rho": -0.2380952380952381,
+      "p_asymptotic": 0.5701563208157683
+    },
+    {
+      "rule": "crossing",
+      "n_tasks": 8,
+      "rho": -0.261904761904762,
+      "p_asymptotic": 0.530922861565801
+    }
+  ]
+}

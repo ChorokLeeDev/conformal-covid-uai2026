@@ -1,0 +1,17 @@
+test_crossing_adds_boundary_label_between_scores (test_protocol_factorial.ProtocolFactorialTests.test_crossing_adds_boundary_label_between_scores) ... ok
+test_empty_strict_and_full_crossing_extremes (test_protocol_factorial.ProtocolFactorialTests.test_empty_strict_and_full_crossing_extremes) ... ok
+test_existing_output_is_refused_before_any_input_read_or_write (test_protocol_factorial.ProtocolFactorialTests.test_existing_output_is_refused_before_any_input_read_or_write) ... ok
+test_finite_sample_order_statistic_is_one_based (test_protocol_factorial.ProtocolFactorialTests.test_finite_sample_order_statistic_is_one_based) ... ok
+test_finite_sample_rank_beyond_n_gives_infinity (test_protocol_factorial.ProtocolFactorialTests.test_finite_sample_rank_beyond_n_gives_infinity) ... ok
+test_floating_cumulative_excess_is_clipped_at_one (test_protocol_factorial.ProtocolFactorialTests.test_floating_cumulative_excess_is_clipped_at_one) ... ok
+test_invalid_probability_or_label_input_rejected (test_protocol_factorial.ProtocolFactorialTests.test_invalid_probability_or_label_input_rejected) ... ok
+test_near_one_threshold_is_not_rounded (test_protocol_factorial.ProtocolFactorialTests.test_near_one_threshold_is_not_rounded) ... ok
+test_plateau_at_threshold_breaks_superset_claim (test_protocol_factorial.ProtocolFactorialTests.test_plateau_at_threshold_breaks_superset_claim) ... ok
+test_stable_probability_tie_respects_class_column (test_protocol_factorial.ProtocolFactorialTests.test_stable_probability_tie_respects_class_column) ... ok
+test_unknown_calibration_truth_has_infinite_score (test_protocol_factorial.ProtocolFactorialTests.test_unknown_calibration_truth_has_infinite_score) ... ok
+test_unknown_labels_never_covered_by_full_alphabet (test_protocol_factorial.ProtocolFactorialTests.test_unknown_labels_never_covered_by_full_alphabet) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 0.003s
+
+OK

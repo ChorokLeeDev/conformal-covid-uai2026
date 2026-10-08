@@ -1,0 +1,166 @@
+{
+  "source_sha256": "4cedc402672cf5127b5e650a787307a8dc1dc6ebf5c272cd3aea908e4756fb89",
+  "psi_counterexamples": {
+    "nonoverlapping_uniform_support": 0.0,
+    "constant_binary_change": 0.0
+  },
+  "lipschitz_counterexample": {
+    "score": "s(x)=0.5+x, threshold=0.5, fixed true label",
+    "source_x": -0.001,
+    "target_x": 0.001,
+    "score_L": 1,
+    "joint_W2": 0.002,
+    "source_coverage": 1,
+    "target_coverage": 0,
+    "claimed_lower_bound": 0.998,
+    "violation": true
+  },
+  "retraining": {
+    "source": "rounded seed42 monthly logs, no original per-row predictions",
+    "monthly_rows": {
+      "none": [
+        {
+          "month": "2020-02",
+          "n": 14701,
+          "coverage_pct": 35.8
+        },
+        {
+          "month": "2020-03",
+          "n": 16132,
+          "coverage_pct": 35.5
+        },
+        {
+          "month": "2020-04",
+          "n": 12380,
+          "coverage_pct": 34.9
+        },
+        {
+          "month": "2020-05",
+          "n": 12908,
+          "coverage_pct": 34.3
+        },
+        {
+          "month": "2020-06",
+          "n": 15353,
+          "coverage_pct": 34.0
+        },
+        {
+          "month": "2020-07",
+          "n": 15907,
+          "coverage_pct": 11.4
+        },
+        {
+          "month": "2020-08",
+          "n": 13921,
+          "coverage_pct": 10.8
+        },
+        {
+          "month": "2020-09",
+          "n": 15497,
+          "coverage_pct": 11.8
+        },
+        {
+          "month": "2020-10",
+          "n": 15416,
+          "coverage_pct": 11.9
+        },
+        {
+          "month": "2020-11",
+          "n": 15466,
+          "coverage_pct": 12.1
+        },
+        {
+          "month": "2020-12",
+          "n": 12735,
+          "coverage_pct": 11.8
+        }
+      ],
+      "3M": [
+        {
+          "month": "2020-02",
+          "n": 14701,
+          "coverage_pct": 35.8
+        },
+        {
+          "month": "2020-03",
+          "n": 16132,
+          "coverage_pct": 35.5
+        },
+        {
+          "month": "2020-04",
+          "n": 12380,
+          "coverage_pct": 34.9
+        },
+        {
+          "month": "2020-05",
+          "n": 12908,
+          "coverage_pct": 29.5
+        },
+        {
+          "month": "2020-06",
+          "n": 15353,
+          "coverage_pct": 29.9
+        },
+        {
+          "month": "2020-07",
+          "n": 15907,
+          "coverage_pct": 20.7
+        },
+        {
+          "month": "2020-08",
+          "n": 13921,
+          "coverage_pct": 21.0
+        },
+        {
+          "month": "2020-09",
+          "n": 15497,
+          "coverage_pct": 21.8
+        },
+        {
+          "month": "2020-10",
+          "n": 15416,
+          "coverage_pct": 22.9
+        },
+        {
+          "month": "2020-11",
+          "n": 15466,
+          "coverage_pct": 100.0
+        },
+        {
+          "month": "2020-12",
+          "n": 12735,
+          "coverage_pct": 99.9
+        }
+      ]
+    },
+    "eleven_month_equal_weight_improvement_pp": 18.872727272727275,
+    "july_december_equal_weight_improvement_pp": 36.083333333333336,
+    "inference": "No independent-month or task assumption established; no p-value newly claimed"
+  },
+  "bootstrap": [
+    {
+      "subset": "SALT8",
+      "rho": 0.8333333333333335,
+      "seed": 42,
+      "requested_resamples": 10000,
+      "defined_resamples": 10000,
+      "percentile_95ci": [
+        0.29113924050632917,
+        1.0
+      ],
+      "scope": "Conditional task-bootstrap arithmetic on rounded summaries; task exchangeability/dependence not justified"
+    },
+    {
+      "subset": "primary16",
+      "rho": 0.8529411764705882,
+      "seed": 42,
+      "requested_resamples": 10000,
+      "defined_resamples": 10000,
+      "percentile_95ci": [
+        0.49998125937031473,
+        0.9612533044141649
+      ],
+      "scope": "Conditional task-bootstrap arithmetic on rounded summaries; task exchangeability/dependence not justified"
+    }
+  ]
+}

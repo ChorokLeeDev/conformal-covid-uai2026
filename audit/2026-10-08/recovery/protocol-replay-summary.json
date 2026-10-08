@@ -1,0 +1,72 @@
+{
+  "status": "passed",
+  "models": 24,
+  "model_condition_rows": 96,
+  "split_condition_rows": 192,
+  "paired_contrasts": 96,
+  "canonical_rows_verified": 48,
+  "canonical_numeric_cells_verified": 1248,
+  "v2_exact_crossing_models_verified": 6,
+  "v2_exact_crossing_numeric_cells_verified": 72,
+  "max_canonical_absolute_error": 0.0,
+  "correlations": [
+    {
+      "calibration": "exact",
+      "inversion": "strict",
+      "n_tasks": 8,
+      "rho": -0.2380952380952381,
+      "nominal_asymptotic_p": 0.5701563208157683
+    },
+    {
+      "calibration": "exact",
+      "inversion": "crossing",
+      "n_tasks": 8,
+      "rho": -0.261904761904762,
+      "nominal_asymptotic_p": 0.530922861565801
+    },
+    {
+      "calibration": "linear",
+      "inversion": "strict",
+      "n_tasks": 8,
+      "rho": -0.2380952380952381,
+      "nominal_asymptotic_p": 0.5701563208157683
+    },
+    {
+      "calibration": "linear",
+      "inversion": "crossing",
+      "n_tasks": 8,
+      "rho": -0.261904761904762,
+      "nominal_asymptotic_p": 0.530922861565801
+    }
+  ],
+  "scope": "Fixed current models and records; seeds averaged within task; eight dependent-domain task means, not 24 independent tasks; no fits or historical-model reconstruction.",
+  "definitions": {
+    "alpha": 0.1,
+    "quantile_exact": "kth smallest inclusive truth score, k=ceil((n+1)*0.9), one-based; infinity if k>n",
+    "quantile_linear": "numpy.quantile(truth_scores, min(k/n,1), method='linear')",
+    "order": "descending probability, stable ties in saved class-column order",
+    "score": "inclusive cumulative sum through candidate, clipped at 1",
+    "strict": "candidate inclusive score <= threshold; empty sets allowed",
+    "crossing": "prefix length min(K, count(cumulative<threshold)+1)",
+    "drop_pp": "100*(source audit coverage-target coverage)",
+    "unknown_labels": "-1 outside model alphabet: always uncovered, even at infinite threshold",
+    "inversion_contrast": "crossing minus strict at a fixed threshold",
+    "threshold_contrast": "linear minus exact at a fixed inversion",
+    "interaction": "(linear crossing-exact crossing)-(linear strict-exact strict); coverage columns are fractions; drop is percentage points",
+    "historical_caveat": "The original supplied code used default reversed argsort ties and unclipped running sums; this factorial holds current tie/clipping conventions fixed."
+  },
+  "environment": {
+    "python": "3.12.14",
+    "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+    "numpy": "2.3.5",
+    "scipy": "1.17.0"
+  },
+  "script_sha256": "de95131ea99034aa637ac5d97557acfae14abf46a72843cf39c74eb93751192b",
+  "output_sha256": {
+    "boundary_diagnostics.csv": "a62a088ef7d537aee28d3e48114230d33e7fe560472a76d7c71fb2770270c9b6",
+    "interactions.csv": "3b8fcc4d71acdf5593020fc41b928ccd9fb62af8d73865a53eadf4999806309b",
+    "model_metrics.csv": "9393541e9c989790f1ef53fc912d9318507dad3f0613a044b88d371657052350",
+    "paired_effects.csv": "f5b80a12d5f51e9841aed50da0bffb5c07872fe4475379a491ee40eec53cf01e",
+    "task_means.csv": "d69c8aef08defaa7e837998dc3015270c84d91380365a8eadda44c2dc86ac8a4"
+  }
+}

@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/workspace/conformal-covid-uai2026/audit/2026-10-08/recovery/replay_recovered_evidence.py", line 16, in <module>
+    from aps_reference import all_scores
+ModuleNotFoundError: No module named 'aps_reference'
