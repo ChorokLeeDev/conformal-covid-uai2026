@@ -68,3 +68,5 @@ python thesis_extension/deepening/breadth/run_breadth.py --data thesis_extension
 Preserved execution limits/failures: the first independent script stopped before data access because of an incorrect repository-relative import path; that path was corrected (`initial-import-failure.txt`). The first refit comparison failed its strict model-byte check; the exact empty GPU-field diff was inspected before adding that single documented serialization allowance. No numerical tolerance, seed, model or data change was introduced to pass this comparison.
 
 The official arXiv v2 source is byte-identical to the original camera-ready source. See `arxiv-assessment.md` for the material-update assessment. No arXiv or publisher submission was performed.
+
+Independent-review follow-up: removed the appendix operational decision table and concentration-based causal failure definitions, corrected the MLP statistic label to permutation importance, and replaced remaining pre-deployment/specificity claims with historical arithmetic or explicitly unvalidated research hypotheses. This change does not alter raw inputs, fits, arrays or quantitative recovery results.

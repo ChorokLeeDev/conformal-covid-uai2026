@@ -62,7 +62,7 @@ Our contributions:
 
 \textbf{Conformal Prediction Under Shift.} \citet{tibshirani2019conformal} study covariate shift with known propensity scores. \citet{podkopaev2021distribution} develop distribution-free uncertainty quantification for classification under label shift. \citet{barber2023conformal} provide a comprehensive treatment beyond exchangeability, bounding coverage loss by the total variation distance between test and calibration score distributions. \citet{kasa2023empirically} empirically characterize how CP degrades across many vision architectures and shift types, showing substantial degradation is common---our work addresses the complementary question of which tabular models will fail \textit{before} test data is observed. We complement these theoretical characterizations with an empirical diagnostic that is associated with this distributional divergence---and hence with which tasks fail---before deployment.
 
-\textbf{Adaptive Methods.} \citet{gibbs2021adaptive,gibbs2024conformal} develop Adaptive Conformal Inference (ACI) for non-stationary settings, with extensions by \citet{zaffran2022adaptive} for time series, \citet{feldman2023achieving} for online risk control, and \citet{bhatnagar2023improved} for strongly adaptive online learning. \citet{angelopoulos2024conformal} generalize conformal prediction to broader risk measures. \citet{kasa2025adapting} propose entropy-based methods (ECP/EACP) that adapt prediction sets using unlabeled test data at deployment time---a related but distinct goal from ours, which requires no test observations: SHAP concentration is a structural pre-deployment diagnostic computed solely on validation data. Our experiments show ACI recovers marginal coverage under severe shift but at a substantial cost in prediction set informativeness.
+\textbf{Adaptive Methods.} \citet{gibbs2021adaptive,gibbs2024conformal} develop Adaptive Conformal Inference (ACI) for non-stationary settings, with extensions by \citet{zaffran2022adaptive} for time series, \citet{feldman2023achieving} for online risk control, and \citet{bhatnagar2023improved} for strongly adaptive online learning. \citet{angelopoulos2024conformal} generalize conformal prediction to broader risk measures. \citet{kasa2025adapting} propose entropy-based methods (ECP/EACP) that adapt prediction sets using unlabeled test data at deployment time---a related but distinct goal from the proposed source-only concentration summary. Computing that summary from validation covariates does not make the historically test-aware fitting pipeline a pre-deployment procedure. Historical clipped-ACI summaries report larger sets and improved coverage, without establishing transfer of the cited guarantee.
 
 \textbf{Shift Detection.} WILDS~\citep{koh2021wilds} and Shifts~\citep{malinin2021shifts} provide benchmarks, while \citet{gulrajani2021search} show domain generalization methods often fail to improve over ERM under realistic distribution shifts. \citet{gardner2023tableshift} benchmark tabular distribution shift across 15 tasks---the closest tabular-specific benchmark; our SALT dataset differs in providing a naturalistic COVID-19 temporal split with documented business-disruption context rather than curated benchmark partitions. \citet{garg2022leveraging} use unlabeled test data to predict accuracy degradation---a related goal but requiring test-time observations. Kernel-based tests (MMD~\citep{gretton2012kernel}) and classifier two-sample tests (C2ST~\citep{lopez2017revisiting}) detect distributional differences but do not predict the \textit{severity} of downstream failure. We show empirically that MMD and C2ST detect shift for all tasks uniformly yet cannot distinguish catastrophic from robust conformal outcomes (Section~\ref{sec:shift_detection}). Our contribution is a \textit{pre-deployment} diagnostic using feature importance structure that predicts failure severity, not merely shift presence. \citet{miller2021accuracy} show that in-distribution (ID) validation accuracy predicts out-of-distribution (OOD) accuracy for image classifiers---a correlation that does not hold for conformal coverage in our tabular setting, where ID validation coverages cluster near the 90\% target, spanning 83.6\%--99.9\% (Table~\ref{tab:main_results}), yet test-time coverage spans 12--100\%, reinforcing the need for structure-based diagnostics beyond accuracy metrics.
 
@@ -339,7 +339,7 @@ We additionally compare against two \textit{post-hoc} baselines computed from 10
 
 \textbf{Expected Calibration Error change}: \mbox{$\Delta \text{ECE} = \text{ECE}_{\text{test}} - \text{ECE}_{\text{val}}$}.
 
-Both metrics can detect shift \textit{after} test data is observed, but neither is available at deployment time. SHAP concentration is computed solely on validation data, making it actionable for pre-deployment risk assessment. Comparison across 7 tasks in Appendix~\ref{app:baselines}.
+These distribution-comparison metrics require target observations, which can arrive during deployment. Concentration can be computed from source covariates, but its prospective risk value is not established, and the historical fitting pipeline used test information. The seven-task historical comparison is in Appendix~\ref{app:baselines}.
 
 \section{Extended Experiments}\label{sec:extended}
 
@@ -512,7 +512,7 @@ Tasks marked with $^*$ in Table~\ref{tab:main_results} exhibit extreme model var
 
 \section{Threshold Sensitivity Analysis}\label{app:threshold}
 
-Table~\ref{tab:threshold_sensitivity} shows threshold performance across $n=16$ multiclass tasks. Note that the 40\% threshold is derived from the SALT concentration gap (in-sample); the eight external datasets were not used to fit the displayed cutoff, but their post-outcome scope selection and test-aware pipelines prevent a clean prospective validation interpretation. On the external subset alone at 40\%: Precision~$=$~1.00, Recall~$=$~0.50 (1 TP: Covertype; 1 FN: KDDCup99; 6 TN). Low external recall reflects sparse catastrophic cases; the primary claim rests on the $n=16$ correlation ($\rho=0.853$) rather than threshold classification. Ground-truth labels use the at-risk rule (mean coverage drop $>$15~pp, consistent with 50-seed means in Table~\ref{tab:main_results}). For high-variance tasks, the mean and median labels can differ: i-shippoint has mean drop 18.5~pp (At-risk) but median drop 1.2~pp (robust); Table~\ref{tab:main_results} labels it ROB by median for descriptive purposes, while the framework uses the mean-based threshold for threshold evaluation.
+Table~\ref{tab:threshold_sensitivity} shows threshold performance across $n=16$ multiclass tasks. Note that the 40\% threshold is derived from the SALT concentration gap (in-sample); the eight external datasets were not used to fit the displayed cutoff, but their post-outcome scope selection and test-aware pipelines prevent a clean prospective validation interpretation. On the external subset alone at 40\%: Precision~$=$~1.00, Recall~$=$~0.50 (1 TP: Covertype; 1 FN: KDDCup99; 6 TN). Low external recall reflects sparse catastrophic cases; the original primary claim rested on the $n=16$ correlation ($\rho=0.853$) rather than threshold classification. Ground-truth labels use the at-risk rule (mean coverage drop $>$15~pp, consistent with 50-seed means in Table~\ref{tab:main_results}). For high-variance tasks, the mean and median labels can differ: i-shippoint has mean drop 18.5~pp (At-risk) but median drop 1.2~pp (robust); Table~\ref{tab:main_results} labels it ROB by median for descriptive purposes, while the framework uses the mean-based threshold for threshold evaluation.
 
 \begin{table}[htbp]
 \centering
@@ -534,7 +534,7 @@ Threshold & Prec & Rec & F1 & TP & FP & FN \\
 
 \raggedright
 \footnotesize
-At 40\%, the single FP is s-office (concentration 42.6\%) which has a protective secondary feature (SALESORG Jaccard $= 0.61$), and the single FN is KDDCup99 (intermediate regime; $C=21.1\%$, drop $=15.9$~pp). At 30\%, the two FPs are s-office and Shuttle ($C=30.7\%$); at 25\%, i-incoterms ($C=28.9\%$) is additionally flagged. Applying the protective-factor check at 40\% removes s-office (precision $= 1.00$) but leaves the KDDCup99 FN (recall $= 0.83$).
+At 40\%, the single FP is s-office (concentration 42.6\%) for which the original paper proposed a protective-feature explanation (reported SALESORG Jaccard $=0.61$, original feature ledger unavailable), and the single FN is KDDCup99 (intermediate regime; $C=21.1\%$, drop $=15.9$~pp). At 30\%, the two FPs are s-office and Shuttle ($C=30.7\%$); at 25\%, i-incoterms ($C=28.9\%$) is additionally flagged. Retrospectively exempting s-office raises the displayed precision to 1.00 while leaving recall 0.83; this exception was derived from the same case and is not independently validated.
 \end{table}
 
 \subsection{Leave-One-Out Cross-Validation}\label{app:loocv}
@@ -571,7 +571,7 @@ i-incoterms & 28.9 & 11.3 & 45 & Robust & Robust & \checkmark \\
 
 \begin{table}[htbp]
 \centering
-\caption{Concentration Check Applied to All Multiclass Tasks (Actual = At-risk if drop $>$15~pp).}\label{tab:framework_validation}
+\caption{Historical Concentration Classification (Not a Deployment Rule) Applied to All Multiclass Tasks (Actual = At-risk if drop $>$15~pp).}\label{tab:framework_validation}
 \small
 \begin{tabular}{@{}lcccc@{}}
 \toprule
@@ -791,105 +791,46 @@ RandomForest & Bagging & 0.30 & 0.47 \\
 
 \textbf{Interpretation.} The historical model/task summaries show heterogeneous outcomes and attribution profiles. They do not establish why RF or MLP correlations differ, nor that differences between correlations are statistically significant. Architectural explanations involving bagging smoothness or boosting reinforcement are hypotheses, requiring controlled comparisons and common attribution definitions.
 
-The diagnostic is \textit{model-specific}: it measures how a particular model's learned dependence structure creates vulnerability. Practitioners should compute concentration for their \textit{deployed} model class rather than transferring results across model families.
+Feature attribution depends on the fitted predictor, reference distribution and attribution method. These model-specific summaries do not identify causal vulnerability or justify transferring a risk cutoff between model families.
 
 \textbf{Neural network extension (historical, unverified).} The reported two-layer MLP uses permutation importance rather than TreeSHAP, with 10 seeds for sales tasks and 3 for item tasks. Its concentration ratio is therefore not the same attribution estimand as the tree-model SHAP ratio. The reported $\rho=0.43$, $p=0.29$ cannot isolate architecture from attribution-method differences. High-drop low-concentration examples motivate a possible multi-feature mechanism but do not prove it; original code/results are required to assess the claim.
 
 \subsection{MLP vs LightGBM Task-Level Comparison}\label{app:mlp_lgb_comparison}
 
-Table~\ref{tab:mlp_lgb_comparison} provides a structured comparison of SHAP concentration and coverage drop between MLP and LightGBM across all 8 SALT tasks.
+Table~\ref{tab:mlp_lgb_comparison} preserves historical model-family summaries. MLP concentration uses permutation importance, while LightGBM uses SHAP; they are not a common attribution estimand.
 
 \begin{table}[htbp]
 \centering
-\caption{Task-Level Comparison: MLP vs LightGBM. MLP\_C = MLP SHAP concentration; MLP\_Drop = MLP coverage drop (pp); LGB\_C = LightGBM SHAP concentration; LGB\_Drop = LightGBM coverage drop (pp); Mode = failure mode classification.}\label{tab:mlp_lgb_comparison}
+\caption{Task-Level Comparison: MLP vs LightGBM. MLP\_C = historical MLP permutation-importance concentration; MLP\_Drop = MLP coverage drop (pp); LGB\_C = LightGBM SHAP concentration; LGB\_Drop = LightGBM coverage drop (pp). Original numerical runs are unverified.}\label{tab:mlp_lgb_comparison}
 \small
-\begin{tabular}{@{}lccccc@{}}
+\begin{tabular}{@{}lcccc@{}}
 \toprule
-Task & MLP\_C & MLP\_Drop & LGB\_C & LGB\_Drop & Mode \\
+Task & MLP\_C & MLP\_Drop & LGB\_C & LGB\_Drop \\
 \midrule
-s-group & 27.5\% & 78.4pp & 47.3\% & 71.2pp & Global \\
-s-payterms & 28.0\% & 60.6pp & 54.2\% & 77.1pp & Global \\
-i-shippoint & 77.2\% & 82.3pp & 48.8\% & 18.5pp & Conc \\
-s-incoterms & 30.3\% & 42.3pp & 23.7\% & 8.5pp & Mixed \\
-s-shipcond & 53.1\% & 67.1pp & 50.7\% & 71.6pp & Conc \\
-i-incoterms & 31.0\% & 24.1pp & 28.9\% & 11.3pp & Mixed \\
-i-plant & 28.2\% & 26.7pp & 23.9\% & 10.6pp & Mixed \\
-s-office & 0.0\% & 0.1pp & 42.6\% & 0.1pp & N/A \\
+s-group & 27.5\% & 78.4pp & 47.3\% & 71.2pp \\
+s-payterms & 28.0\% & 60.6pp & 54.2\% & 77.1pp \\
+i-shippoint & 77.2\% & 82.3pp & 48.8\% & 18.5pp \\
+s-incoterms & 30.3\% & 42.3pp & 23.7\% & 8.5pp \\
+s-shipcond & 53.1\% & 67.1pp & 50.7\% & 71.6pp \\
+i-incoterms & 31.0\% & 24.1pp & 28.9\% & 11.3pp \\
+i-plant & 28.2\% & 26.7pp & 23.9\% & 10.6pp \\
+s-office & 0.0\% & 0.1pp & 42.6\% & 0.1pp \\
 \bottomrule
 \end{tabular}
 
 
 \raggedright
 \footnotesize
-Mode: Conc = concentrated-dependence failure (C $>$ 40\% predicts drop); Global = global-sensitivity failure (C $\leq$ 40\% yet catastrophic drop); Mixed = intermediate regime; N/A = no meaningful drop in either model. Critical observation: s-group and s-payterms show MLP C $\approx$ 28\% yet 60--78pp drops, demonstrating the global-sensitivity failure mode where SHAP concentration does not capture the MLP's vulnerability mechanism.
+These summaries do not distinguish a concentrated causal failure mechanism from a distributed one. In particular, low attribution concentration is not evidence of robustness, and the recovered full SALT panel does not reproduce the historical positive association.
 \end{table}
 
-\subsection{Failure Mode Definitions and Quantitative Criteria}\label{app:failure_modes}
+\subsection{Failure-Mechanism Hypotheses}\label{app:failure_modes}
 
-We formalize two distinct failure modes that determine when SHAP concentration is diagnostic.
+The original appendix defined concentration-based failure categories and recommended standard deployment below a 40\% threshold for boosted trees. We withdraw those definitions as operational criteria and remove the decision table. Neither a thresholded attribution statistic nor a Gini/top-three summary establishes a causal failure mechanism or a coverage guarantee. Concentrated versus distributed sensitivity remain hypotheses requiring controlled feature interventions on a fixed, correctly joined input cohort. The counterexamples and non-replicating follow-up panel rule out interpreting these numerical cutoffs as validated diagnostic boundaries.
 
-\smallskip
-\noindent\fbox{\parbox{0.97\columnwidth}{%
-\textbf{Definition 1: Concentrated-Dependence Failure}\\[2pt]
-\textit{Conditions}: SHAP concentration $C > 40\%$; dominant feature undergoes distribution shift.\\
-\textit{Diagnostic status}: \textbf{Applies}---SHAP concentration correctly predicts vulnerability.\\
-\textit{Characteristic}: Model depends on a single feature whose OOD shift causes coverage collapse.
-}}
+\subsection{Candidate Sensitivity Analyses}\label{app:alternative_diagnostics}
 
-\smallskip
-\noindent\fbox{\parbox{0.97\columnwidth}{%
-\textbf{Definition 2: Global-Sensitivity Failure}\\[2pt]
-\textit{Conditions}: SHAP concentration $C \leq 40\%$; coverage degrades via coordinated multi-feature sensitivity.\\
-\textit{Diagnostic status}: \textbf{Does NOT apply}---SHAP concentration fails to predict vulnerability.\\
-\textit{Characteristic}: Model distributes importance but fails through global sensitivity to shift; requires alternative diagnostics (Table~\ref{tab:alternative_diagnostics}).
-}}
-\smallskip
-
-\begin{table}[htbp]
-\centering
-\caption{Quantitative Criteria for Failure Mode Classification.}\label{tab:failure_mode_criteria}
-\small
-\begin{tabular}{@{}lcc@{}}
-\toprule
-Criterion & Concentrated & Global \\
-\midrule
-Top-1 SHAP & $C > 40\%$ & $C \leq 40\%$ \\
-Gini coefficient & $> 0.6$ & $\leq 0.6$ \\
-Top-3 cumulative & $> 70\%$ & $\leq 70\%$ \\
-\bottomrule
-\end{tabular}
-
-
-\raggedright
-\footnotesize
-Concentrated failure mode: SHAP concentration diagnostic applies. Global failure mode: alternative diagnostics required (see Table~\ref{tab:alternative_diagnostics}).
-\end{table}
-
-\begin{table}[htbp]
-\centering
-\caption{Decision Rule: When Does the SHAP Concentration Diagnostic Apply?}\label{tab:decision_rule}
-\small
-\begin{tabular}{@{}llll@{}}
-\toprule
-Model Class & Condition & Prediction & Recommendation \\
-\midrule
-\multirow{2}{*}{\shortstack[l]{GBM/XGBoost/\\LightGBM/CatBoost}} & $C > 40\%$ & \textbf{VULNERABLE} & Mitigate or monitor \\
- & $C \leq 40\%$ & Lower risk & Standard deployment \\
-\midrule
-\multirow{2}{*}{MLP/Neural Net} & $C > 40\%$ & VULNERABLE (likely) & Mitigate or monitor \\
- & $C \leq 40\%$ & \textit{Inconclusive} & Use gradient-based methods \\
-\bottomrule
-\end{tabular}
-
-
-\raggedright
-\footnotesize
-The diagnostic is not validated for gradient-boosted classifiers: the historical positive LightGBM association fails to replicate in the recovered complete follow-up panel. For MLPs, low concentration does not ensure robustness due to global-sensitivity failures ($\rho=0.43$, $p=0.29$).
-\end{table}
-
-\subsection{Alternative Diagnostics for MLPs When $C \leq 40\%$}\label{app:alternative_diagnostics}
-
-When SHAP concentration indicates low risk ($C \leq 40\%$) but the model is an MLP or other neural network, the following alternative diagnostics may capture global-sensitivity failures (Table~\ref{tab:alternative_diagnostics}).
+The following analyses may investigate predictor sensitivity but have not been validated as failure predictors for these data (Table~\ref{tab:alternative_diagnostics}).
 
 \begin{table}[htbp]
 \centering
@@ -908,7 +849,7 @@ Score-margin analysis & A coverage transfer bound requires control of score mass
 
 \raggedright
 \footnotesize
-These diagnostics target global-sensitivity failures where coordinated multi-feature shifts drive coverage degradation. They are proposed as complements to SHAP concentration for neural network deployments; empirical validation is left to future work.
+These are proposed research measurements. They do not identify the cause of historical failures, establish target coverage, or supply a deployment recommendation.
 \end{table}
 
 \section{Hyperparameter Sensitivity Analysis}\label{app:hp_sensitivity}
@@ -1023,13 +964,13 @@ $^\dagger$Covertype here uses a different split protocol from the main external 
 
 \textbf{Dataset details.}
 \begin{itemize}[nosep,leftmargin=*]
-    \item \textbf{CivilComments} (WILDS): Toxicity classification with demographic identity-based shift. TF-IDF features (1,000 dimensions). Low concentration (26.2\%) correctly predicts maintained coverage.
-    \item \textbf{Amazon Reviews} (WILDS): Product rating prediction with user/time domain shift. TF-IDF features (1,000 dimensions). Very low concentration (1.9\%) correctly predicts robustness.
-    \item \textbf{Covertype} (sklearn): Forest cover classification with geographic shift (wilderness area 1 vs.\ others). 54 cartographic features. Low concentration (12.5\%) correctly predicts mild degradation.
-    \item \textbf{Adult Income} (OpenML): Income prediction with age-based demographic shift (train: age$<$50, test: age$\geq$50). 14 demographic/employment features. Low concentration (27.5\%) correctly predicts maintained coverage.
+    \item \textbf{CivilComments} (WILDS): Toxicity classification with demographic identity-based shift. TF-IDF features (1,000 dimensions). The historical summary reports concentration 26.2\% and maintained coverage; recovered source uses 200 features, not the stated 1,000.
+    \item \textbf{Amazon Reviews} (WILDS): Product rating prediction with user/time domain shift. TF-IDF features (1,000 dimensions). The historical summary reports concentration 1.9\% and a small drop; original predictions are unavailable.
+    \item \textbf{Covertype} (sklearn): Forest cover classification with geographic shift (wilderness area 1 vs.\ others). 54 cartographic features. The historical summary reports concentration 12.5\% and a small drop; recovered source uses a positional split, conflicting with the stated wilderness split.
+    \item \textbf{Adult Income} (OpenML): Income prediction with age-based demographic shift (train: age$<$50, test: age$\geq$50). 14 demographic/employment features. The historical summary reports concentration 27.5\% and maintained coverage; recovered source uses age 40, conflicting with the stated age 50.
 \end{itemize}
 
-\textbf{Specificity validation.} The four reported benchmark evaluations have low SHAP concentration---\textbf{all below the 40\% threshold} (individual values: 26.2\%, 1.9\%, 12.5\%, 27.5\%; \textbf{mean concentration = 17.0\%}). The diagnostic correctly predicts robustness for all four, giving an observed 4/4 true-negative rate, with substantial sampling and selection uncertainty and without raw-run verification. This complements the sensitivity evidence from SALT, where high-concentration tasks correctly predict catastrophic failure.
+\textbf{Historical classification arithmetic.} The four reported benchmark evaluations have low SHAP concentration---\textbf{all below the 40\% threshold} (individual values: 26.2\%, 1.9\%, 12.5\%, 27.5\%; \textbf{mean concentration = 17.0\%}). Thresholding the reported values gives four historical true-negative classifications. Selection uncertainty, inconsistent execution protocols and missing raw predictions prevent interpreting this count as validated specificity. The recovered complete SALT panel fails to reproduce the original positive association, so these summaries do not establish a deployable sensitivity/specificity tradeoff.
 
 \textbf{Combined validation accuracy (SALT + WILDS).} Combining the 8 SALT tasks with these 4 WILDS benchmarks yields $n=12$ total tasks (distinct from the $n=16$ primary endpoint which uses 8 different external UCI datasets). The threshold accuracy is \textbf{91.7\% (11/12)}:
 \begin{itemize}[nosep,leftmargin=*]
