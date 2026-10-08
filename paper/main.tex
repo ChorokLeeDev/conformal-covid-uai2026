@@ -258,7 +258,7 @@ Drop = mean val $-$ mean test coverage (50 seeds).
 
 \subsection{SHAP Concentration Correlates with Failure}\label{sec:shap_results}
 
-Across all 8 SALT multiclass tasks, SHAP concentration correlates with coverage degradation: Spearman $\rho = 0.833$, $p = 0.010$ (Table~\ref{tab:stratified_correlation}, Figure~\ref{fig:n16_correlation}). Bootstrap 95\% CI: $[0.30, 1.00]$ (10,000 resamples, percentile method; BCa would yield a modestly tighter lower bound at $n=8$ but does not change the qualitative conclusion). The correlation magnitude is stable under leave-one-out analysis ($\rho \in [0.75, 0.96]$), though statistical significance is not maintained for 2 of 8 jackknife samples ($p = 0.052$) due to reduced power at $n=7$. SHAP concentration values are highly stable: bootstrap resampling (1,000 resamples of 10K validation samples) yields coefficient of variation below 1\% for all tasks, with 95\% CIs within $\pm$1 percentage point.
+Across all 8 SALT multiclass tasks, SHAP concentration correlates with coverage degradation: Spearman $\rho = 0.833$, $p = 0.010$ (Table~\ref{tab:stratified_correlation}, Figure~\ref{fig:n16_correlation}). Bootstrap 95\% CI: $[0.30, 1.00]$ (10,000 resamples, percentile method; a BCa interval has not been computed and no claim is made about its direction or width). The correlation magnitude is stable under leave-one-out analysis ($\rho \in [0.75, 0.96]$), though statistical significance is not maintained for 2 of 8 jackknife samples ($p = 0.052$) due to reduced power at $n=7$. SHAP concentration values are highly stable: bootstrap resampling (1,000 resamples of 10K validation samples) yields coefficient of variation below 1\% for all tasks, with 95\% CIs within $\pm$1 percentage point.
 
 \textbf{Mechanism.} Figure~\ref{fig:shap} reveals the distinction. Catastrophic tasks: the dominant feature experiences a concentrated importance explosion (4.5$\times$ increase). Robust tasks: importance redistributes across features with ranking reshuffle (10--20$\times$ increases distributed). These observations do not verify the probability-mixture assumptions of Theorem~\ref{thm:score_inflation}.
 
@@ -637,6 +637,8 @@ We analyze pseudo-replication in the 50-seed design using intraclass correlation
 
 \textbf{Multiple comparisons.} The reported concentration search includes eight metrics. Using the unrounded SALT $p$-value, the smallest Holm-adjusted value is $8\times0.0101755=0.0814$. The original five-metric family would give $0.0509$, not a value below 0.05. Intermediate and pooled subset analyses are retained as exploratory; reusing discovery tasks and selecting endpoints cannot be repaired solely by correcting three subset $p$-values.
 
+\textbf{Exact small-sample sensitivity.} The $0.0101755$ value above is SciPy's asymptotic Spearman approximation. Enumerating all $8!=40{,}320$ no-tie rank permutations for the displayed SALT $\rho=5/6$ gives 620 outcomes at least as extreme in absolute correlation: two-sided $p=0.015377$. The eight-test Holm first-step sensitivity is $8p=0.1230$; the full eight-metric exact analysis has not been rerun. This calculation assumes exchangeability of task pairs, which is not established for related SALT tasks. It checks small-sample calibration of the reported summary, not the original experiments or population generalization.
+
 \textbf{Multi-seed aggregation.} The primary $n=16$ correlation ($\rho = 0.853$) uses 10-seed means for all external datasets and 50-seed means for SALT tasks. The early $n=11$ result ($\rho = 0.909$) used single-seed external values; switching to multi-seed means at $n=11$ yields $\rho = 0.818$, $p = 0.002$, with the reduction driven by KDDCup99 whose multi-seed mean drop (15.9~pp) exceeds its single-seed value ($-$0.8~pp). This intermediate-concentration regime ($C=21.1\pm7.5\%$) exhibits high outcome variance characteristic of the boundary between robust and vulnerable. Extending to $n=16$ with consistent multi-seed means yields $\rho = 0.853$ ($p < 0.001$). Including Stack Overflow (3 classes, excluded scope subset) to make $n=17$ weakens correlation to $\rho = 0.654$.
 
 \section{Theory Details and Score CDFs}\label{app:theory_proof}
@@ -648,7 +650,7 @@ We analyze pseudo-replication in the 50-seed design using intraclass correlation
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\linewidth]{figures/conformity_score_cdfs}
-\caption{\textbf{Conformity score CDFs (seed=42).} Catastrophic tasks show rightward test-score shifts (stochastic dominance), while robust tasks can show near-degenerate or left-shift behavior.}\label{fig:cdfs}
+\caption{\textbf{Conformity score CDFs (seed=42).} The archived curves suggest rightward score shifts for some high-drop tasks and different patterns for lower-drop tasks. No stochastic-dominance test or original score arrays are available.}\label{fig:cdfs}
 \end{figure}
 
 \section{Conformity Score Stochastic Dominance}\label{app:ks}
@@ -945,41 +947,34 @@ Tasks sorted by Default concentration. Default = num\_leaves=31, lr=0.05, n\_est
 
 \section{Shift Characterization}\label{app:shift_characterization}
 
-To characterize the nature of distribution shift in SALT tasks, we decompose shift into covariate and concept components using standard metrics (Table~\ref{tab:shift_characterization}).
+The historical summaries in Table~\ref{tab:shift_characterization} describe marginal covariate and label differences. They do not decompose distribution shift into covariate versus concept mechanisms: changes in $P(X)$, $P(Y)$ or accuracy do not by themselves identify changes in $P(Y\mid X)$.
 
 \begin{table}[htbp]
 \centering
 \caption{Shift Characterization for SALT Tasks. Cov KS = mean Kolmogorov--Smirnov statistic across features (train vs.\ test); \%Sig = fraction of features with KS $p < 0.05$; Label JS = Jensen--Shannon divergence of label distributions; Acc Drop = test accuracy minus validation accuracy.}\label{tab:shift_characterization}
 \small
-\begin{tabular}{@{}lccccc@{}}
+\begin{tabular}{@{}lcccc@{}}
 \toprule
-Task & Cov KS & \%Sig & Label JS & Acc Drop & Classification \\
+Task & Cov KS & \%Sig & Label JS & Acc Drop \\
 \midrule
-s-shipcond & 0.50 & 50\% & 0.083 & +11.9\% & Cov + Concept \\
-s-group & 0.50 & 50\% & 0.330 & +1.0\% & Cov (dominant) \\
-s-payterms & 0.50 & 50\% & 0.078 & +4.0\% & Cov (dominant) \\
-i-plant & 0.86 & 86\% & 0.144 & $-$8.7\% & Cov (dominant) \\
-i-shippoint & 0.86 & 86\% & 0.152 & +13.1\% & Cov + Concept \\
-s-incoterms & 0.50 & 50\% & 0.085 & +7.6\% & Cov + Concept \\
-i-incoterms & 0.86 & 86\% & 0.140 & +63.4\% & Cov + Concept \\
-s-office & 0.50 & 50\% & 0.026 & $-$0.2\% & Cov (dominant) \\
+s-shipcond & 0.50 & 50\% & 0.083 & +11.9\% \\
+s-group & 0.50 & 50\% & 0.330 & +1.0\% \\
+s-payterms & 0.50 & 50\% & 0.078 & +4.0\% \\
+i-plant & 0.86 & 86\% & 0.144 & $-$8.7\% \\
+i-shippoint & 0.86 & 86\% & 0.152 & +13.1\% \\
+s-incoterms & 0.50 & 50\% & 0.085 & +7.6\% \\
+i-incoterms & 0.86 & 86\% & 0.140 & +63.4\% \\
+s-office & 0.50 & 50\% & 0.026 & $-$0.2\% \\
 \bottomrule
 \end{tabular}
 
 
 \raggedright
 \footnotesize
-Cov = covariate shift; Concept = concept shift (change in $P(Y|X)$). Accuracy changes can be positive under shift when the test distribution favors majority classes.
+The former mechanism-classification column is withdrawn: these marginal summaries do not identify concept shift. Accuracy can change solely because the covariate distribution changes, with $P(Y\mid X)$ fixed. Historical values remain unverified without original outputs.
 \end{table}
 
-\textbf{Key findings.}
-\begin{itemize}[nosep,leftmargin=*]
-    \item \textbf{Covariate shift is universal}: All SALT tasks exhibit substantial covariate shift (KS $\geq 0.50$, $\geq$50\% of features significantly different). This is expected given the COVID-19 temporal split.
-    \item \textbf{Concept shift varies}: Label distribution shift (JS divergence) ranges from 0.026 (s-office) to 0.330 (s-group). Tasks with both high covariate shift and substantial label shift (s-shipcond, i-incoterms) tend toward catastrophic failure.
-    \item \textbf{Accuracy is not diagnostic}: Accuracy changes are uninformative for coverage prediction---s-shipcond shows +11.9\% accuracy improvement yet 71.6~pp coverage drop, while s-office shows $-$0.2\% accuracy change and 0.1~pp coverage drop. This occurs because conformal prediction set size is sensitive to calibration--test score distribution mismatch, which accuracy does not capture.
-\end{itemize}
-
-\textbf{Interpretation.} Standard shift detection identifies covariate shift uniformly across all tasks (consistent with Section~\ref{sec:shift_detection}), while concept shift magnitude partially distinguishes catastrophic from robust outcomes. However, neither metric alone predicts failure severity as effectively as SHAP concentration ($\rho = 0.833$), which captures how the model's learned dependence structure interacts with the specific features that shift. The worst outcomes occur when concentrated dependence targets a feature experiencing both covariate and concept shift.
+\textbf{Interpretation.} The reported covariate KS and label JS values suggest marginal changes, subject to missing provenance and unresolved preprocessing. They do not establish which tasks have concept shift or why coverage changes. In particular, i-incoterms has a reported mean drop of 11.3~pp and should not be classified as catastrophic. Associations between accuracy, concentration and coverage require a common validated pipeline; no conditional-distribution or causal-mechanism conclusion follows from this table alone.
 
 \subsection{Per-Feature Covariate Shift Details}\label{app:perfeature_shift}
 

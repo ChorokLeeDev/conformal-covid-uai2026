@@ -1,0 +1,14 @@
+{
+  "data_status": "rounded published SALT summaries; original models not rerun",
+  "null_assumption": "task-pair exchangeability; not established for SALT",
+  "alternative": "two-sided absolute Spearman statistic, no ties",
+  "n": 8,
+  "rho": 0.8333333333333335,
+  "rank_squared_distance": 14,
+  "permutations": 40320,
+  "extreme_permutations": 620,
+  "exact_p": 0.015376984126984126,
+  "scipy_asymptotic_p": 0.010175540123456752,
+  "eight_test_holm_first_step": 0.12301587301587301,
+  "multiplicity_limit": "first-step sensitivity for reported smallest p; not an exact rerun of all eight metrics"
+}

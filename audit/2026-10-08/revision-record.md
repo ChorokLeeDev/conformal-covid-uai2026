@@ -76,3 +76,21 @@ External citation metadata/claim-support checks remain unavailable: primary-site
 HTTP requests returned proxy 403. No claim of a full literature/novelty audit is
 made. Independent recheck is a separate artifact and must be read alongside this
 record. No push was performed by this reviewer; root coordinates publication.
+
+## Follow-up after the first independent recheck
+
+The frozen first correction was `c5df94d0b571c2e61c256aacb2c7db92ced14dd0`.
+Independent recheck identified three remaining unsupported statements: concept
+shift inferred from marginal distributions/accuracy, stochastic dominance stated
+without a dominance test, and an uncomputed BCa interval described as tighter.
+The active manuscript now withdraws the mechanism-classification column, explains
+that marginal statistics do not identify changes in P(Y|X), removes the dominance
+assertion, and states that BCa has not been computed. The erroneous catastrophic
+label for i-incoterms is also corrected.
+
+At root's request, `exact-permutation-sensitivity.md` and its executable/JSON
+record add all 8! rank permutations for the published SALT summary, with exact
+two-sided p = 0.01537698 and the eight-test first-step sensitivity 0.12301587.
+The unestablished task-exchangeability assumption and absence of original model
+reruns are explicit. This supplement clarifies small-n inference; it does not
+repair selection, dependence, missing provenance or historical pipeline errors.
