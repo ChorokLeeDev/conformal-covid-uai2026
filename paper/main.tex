@@ -109,7 +109,7 @@ We define the SHAP concentration metric as:
 \begin{equation}\label{eq:concentration}
 C = \frac{\phi_1}{\sum_{j=1}^{p} \phi_j}
 \end{equation}
-where $\phi_j$ is the mean absolute SHAP value of the $j$-th feature computed on validation data using TreeExplainer~\citep{lundberg2020local}, and $\phi_1$ is the importance of the top-ranked feature. $C$ is computed \textbf{before deployment} using only validation data.
+where $\phi_j$ is the mean absolute SHAP value of the $j$-th feature computed on validation data using TreeExplainer~\citep{lundberg2020local}, and $\phi_1$ is the importance of the top-ranked feature. For a fixed model, $C$ can be computed from source validation covariates; the historical model-fitting pipeline nevertheless used test information.
 
 \subsection{Why SHAP Concentration?}\label{sec:why_shap}
 
@@ -117,7 +117,7 @@ A natural question is whether simpler diagnostics suffice.
 
 \textbf{Feature overlap (Jaccard) is insufficient.} Tasks relying on transaction IDs have Jaccard $\approx 0$ while tasks with entity-based features have Jaccard $> 0.5$ (Table~\ref{tab:overlap}), yet Jaccard alone cannot explain the full range of coverage drops.
 
-\textbf{Post-hoc metrics require test data.} Prediction entropy changes and Expected Calibration Error (ECE) shifts can detect failures---but only \textit{after} observing test data (Section~\ref{sec:baselines}). Among the diagnostics we evaluate, SHAP concentration is available before deployment and shows the strongest severity association.
+\textbf{Information requirements.} Target entropy changes require target covariates; target ECE additionally requires target labels. Concentration can use source covariates for a fixed model. The strongest association among the historical reported summaries does not establish superior prospective performance, particularly after metric selection and the failed follow-up replication (Section~\ref{sec:baselines}).
 
 \textbf{Why not raw feature importance?} Raw importance values are not comparable across tasks (different scales, feature counts). Concentration normalizes to a $[0,1]$ scale, enabling cross-task comparison.
 
@@ -612,7 +612,7 @@ $^\P$Stack Overflow ($K=3$, $C=48.9\%$) is a reported false positive with drop $
 
 \noindent\textbf{Seed stability protocol.} KDDCup99's multi-seed analysis ($C=21.1\pm7.5\%$) reveals that single-seed SHAP concentration can be unstable. We recommend computing $C$ over $k \geq 5$ seeds and using the mean. Tasks in the ambiguous zone (35--45\%) should receive additional scrutiny: if the upper 95\% CI exceeds 40\%, treat as potentially vulnerable. This safety override is designed to reduce KDDCup99-like false negatives in intermediate regimes. For SALT tasks, concentration is stable across 50 seeds (within-task CV $<$ 5\%); instability arises primarily when the top-feature identity varies across seeds.
 
-\noindent\textbf{Threshold selection.} The 40\% threshold is proposed based on the empirical distribution of SHAP concentration values on validation data: a natural gap separates low-concentration tasks (24--29\%) from high-concentration tasks (43--54\%), visible in Table~\ref{tab:framework_validation}. We emphasize that this threshold is \textit{exploratory}, derived from $n=8$ multiclass tasks, and should be validated before deployment in new domains.
+\noindent\textbf{Threshold selection.} The historical 40\% threshold was proposed based on the empirical distribution of SHAP concentration values on validation data: a natural gap separates low-concentration tasks (24--29\%) from high-concentration tasks (43--54\%), visible in Table~\ref{tab:framework_validation}. We emphasize that this threshold is \textit{exploratory}, derived from $n=8$ multiclass tasks. The active revision withdraws its operational interpretation; independent prospective validation would be necessary for any renewed proposal.
 
 \noindent\textbf{Cross-domain transfer test.} The 40\% threshold applied without tuning to 9 external domains yields 7/9 deterministic or near-deterministic outcomes (6 at 10/10, Shuttle at 9/10), with Covertype correctly flagged as catastrophic and Gas Sensor correctly unflagged as robust. KDDCup99 is the principal intermediate-regime false negative, while Stack Overflow (3 classes) is a false positive excluded from the selected endpoint. Across the $n=16$ multiclass set: $\rho = 0.853$, $p < 0.001$ (Section~\ref{sec:cross_domain}). The sensitivity analysis in Appendix~\ref{app:threshold} reports threshold performance across 30--50\%; given sparse catastrophic external cases, this threshold should be treated as provisional.
 

@@ -1,7 +1,7 @@
 {
   "stage": "recovery+raw replay+24 fixed refits",
-  "manuscript_sha256": "903f33f0246393b1b473035e67a2c95920c052c64695f2fe0b7f16334e03cd80",
-  "revised_pdf_sha256": "49b7c57f51b17f37319435678c1d67ef1ed32ab38b5eb7948e2ecb81665ec897",
+  "manuscript_sha256": "dd9fb7726bd67f2f18103b2da4d03e68241d60477724443b270720eae88f57f4",
+  "revised_pdf_sha256": "28214bc2800abb2e7fc6a65de7e0dde7697c29303fa537178963570e1e40e0c2",
   "original_artifacts_unchanged": true,
   "pdf_pages": 23,
   "latex_undefined_references": false,
