@@ -44,7 +44,7 @@ We examine the reported association between feature-importance concentration and
 
 Conformal prediction provides distribution-free coverage guarantees under the assumption of exchangeability~\citep{vovk2005algorithmic}. However, real-world deployments face distribution shifts that violate this assumption. While prior work characterizes \textit{how} conformal prediction degrades under shift~\citep{tibshirani2019conformal, barber2023conformal}, a critical gap remains: \textbf{Can we identify which deployed models will fail before observing test data?}
 
-We propose \textbf{SHAP concentration}---the fraction of total feature importance concentrated in the top feature---as a pre-deployment diagnostic for conformal prediction vulnerability. Using a supply chain benchmark with temporal splits aligned to COVID-19 (February--July 2020), we conduct an observational case study where 8 classification tasks experience common temporal periods yet exhibit coverage drops ranging from negligible ($<$1\%) to catastrophic ($>$70\%).
+We audit the historical proposal that \textbf{SHAP concentration}---the fraction of total feature importance concentrated in the top feature---could diagnose conformal prediction vulnerability before deployment. The original observational case study used a supply chain benchmark with temporal splits aligned to COVID-19 (February--July 2020), where 8 classification tasks experience common temporal periods yet exhibit coverage drops ranging from negligible ($<$1\%) to catastrophic ($>$70\%).
 
 Our contributions:
 
@@ -539,7 +539,7 @@ At 40\%, the single FP is s-office (concentration 42.6\%) for which the original
 
 \subsection{Leave-One-Out Cross-Validation}\label{app:loocv}
 
-To assess whether the 40\% threshold generalizes beyond post-hoc selection, we perform leave-one-out cross-validation on the SALT dataset ($n=8$). For each fold, we exclude one task, compute the optimal threshold from the remaining 7 tasks, and predict the held-out task's vulnerability status.
+The original paper reported leave-one-task-out threshold calculations on SALT ($n=8$). Reusing the task collection used to select the diagnostic does not provide an independent prospective test. For each fold, we exclude one task, compute the optimal threshold from the remaining 7 tasks, and predict the held-out task's vulnerability status.
 
 \textbf{Summary.} LOO-CV achieves 87.5\% accuracy (7/8 correct predictions). The threshold remains stable across folds: $43.1\% \pm 5.0\%$ (mean $\pm$ std). The effect size separating failed from robust tasks is Cohen's $d = 3.08$ (large), with bootstrap 95\% CI $[0.31, 1.00]$ for the underlying correlation.
 
@@ -610,15 +610,15 @@ In-sample F1 $= 0.89$ (1 FP: s-office). External: Covertype deterministic catast
 $^\P$Stack Overflow ($K=3$, $C=48.9\%$) is a reported false positive with drop $-7.0$~pp. Its exclusion from the historical $n=16$ subset is not justified by a general APS ceiling: binary and three-class predictors can also lose all coverage under shift. The all-17 association is $\rho=0.654$, $p=0.004$.
 \end{table}
 
-\noindent\textbf{Seed stability protocol.} KDDCup99's multi-seed analysis ($C=21.1\pm7.5\%$) reveals that single-seed SHAP concentration can be unstable. We recommend computing $C$ over $k \geq 5$ seeds and using the mean. Tasks in the ambiguous zone (35--45\%) should receive additional scrutiny: if the upper 95\% CI exceeds 40\%, treat as potentially vulnerable. This safety override is designed to reduce KDDCup99-like false negatives in intermediate regimes. For SALT tasks, concentration is stable across 50 seeds (within-task CV $<$ 5\%); instability arises primarily when the top-feature identity varies across seeds.
+\noindent\textbf{Historical seed-stability proposal (withdrawn).} The original paper recommended at least five seeds and a vulnerability override when a concentration confidence bound crossed 40\%. These operational suggestions were not prospectively validated and are withdrawn. Seed variation estimates conditional fitting variability; it does not turn the concentration cutoff into a calibrated risk rule. The reported KDDCup99 concentration $21.1\pm7.5\%$ and SALT within-task CV claims require the missing original seed ledger for verification.
 
 \noindent\textbf{Threshold selection.} The historical 40\% threshold was proposed based on the empirical distribution of SHAP concentration values on validation data: a natural gap separates low-concentration tasks (24--29\%) from high-concentration tasks (43--54\%), visible in Table~\ref{tab:framework_validation}. We emphasize that this threshold is \textit{exploratory}, derived from $n=8$ multiclass tasks. The active revision withdraws its operational interpretation; independent prospective validation would be necessary for any renewed proposal.
 
-\noindent\textbf{Cross-domain transfer test.} The 40\% threshold applied without tuning to 9 external domains yields 7/9 deterministic or near-deterministic outcomes (6 at 10/10, Shuttle at 9/10), with Covertype correctly flagged as catastrophic and Gas Sensor correctly unflagged as robust. KDDCup99 is the principal intermediate-regime false negative, while Stack Overflow (3 classes) is a false positive excluded from the selected endpoint. Across the $n=16$ multiclass set: $\rho = 0.853$, $p < 0.001$ (Section~\ref{sec:cross_domain}). The sensitivity analysis in Appendix~\ref{app:threshold} reports threshold performance across 30--50\%; given sparse catastrophic external cases, this threshold should be treated as provisional.
+\noindent\textbf{Historical cross-domain classification summary.} The 40\% threshold applied without tuning to 9 external domains yields 7/9 deterministic or near-deterministic outcomes (6 at 10/10, Shuttle at 9/10), with Covertype correctly flagged as catastrophic and Gas Sensor correctly unflagged as robust. KDDCup99 is the principal intermediate-regime false negative, while Stack Overflow (3 classes) is a false positive excluded from the selected endpoint. Across the $n=16$ multiclass set: $\rho = 0.853$, $p < 0.001$ (Section~\ref{sec:cross_domain}). The sensitivity analysis in Appendix~\ref{app:threshold} reports threshold performance across 30--50\%; sparse catastrophic external cases and the failed full-panel follow-up do not support operational use of this threshold.
 
-\section{Pre-Deployment vs Post-Hoc Baselines}\label{app:baselines}
+\section{Historical Baseline Comparisons and Information Requirements}\label{app:baselines}
 
-SHAP concentration is computed on validation data \textit{before} deployment. Prediction entropy and ECE require observing test data. This section reports entropy and ECE changes for completeness, noting that they are not available as pre-deployment diagnostics.
+Concentration can be computed on source covariates for a fixed model, whereas target entropy requires target covariates and target ECE requires target labels. The historical fitting pipeline nevertheless used test information. This section preserves reported entropy and ECE changes without establishing prospective diagnostic performance.
 
 \begin{table}[htbp]
 \centering
@@ -647,7 +647,7 @@ s-office & ROB & 42.6\% & +0.032 & +0.104 \\
 $^\dagger$Pre-deployment diagnostic (computed on validation data only). item-incoterms omitted (3-seed pilot only).
 \end{table}
 
-Counter-intuitively, all three catastrophic tasks (coverage drop $>$ 70\%) show \textit{decreasing} prediction entropy ($\Delta H < 0$): the model becomes \textit{more} confident at test time, not less. This occurs because concentrated dependence on an OOD feature produces arbitrary but confident predictions. In contrast, the two robust tasks with non-trivial drops (i-plant, i-shippoint; coverage drops of 10--19\%) show \textit{increasing} entropy ($\Delta H > 0$), consistent with standard distributional broadening. A practitioner monitoring only entropy would correctly detect shift in moderate cases but would be \textit{misled} in the most damaging catastrophic cases---observing decreasing uncertainty while coverage collapses. ECE increases across all tasks but does not discriminate between severity levels (both catastrophic and robust tasks show increases of +0.07 to +0.63). In this SALT comparison, SHAP concentration is the only evaluated pre-deployment metric that flags all three catastrophic tasks.
+The historical summaries report decreasing entropy on the three tasks with coverage drops above 70\% and increasing entropy on two tasks with smaller drops. These associations do not identify concentrated dependence as the cause, nor do they establish that an entropy-based detector would miss these cases under a specified alarm rule. ECE increases in the reported summaries likewise do not establish a general inability to distinguish severity. The original prediction ledger and a common correctly joined pipeline are needed to compare these diagnostics; no prospective superiority claim is made.
 
 \section{Task Independence Analysis}\label{app:icc}
 
@@ -766,7 +766,7 @@ s-office & 42.6 & 24.5 & 36.8 & 33.5 & 0.1 & 0.0 & 0.0 & $-$0.0 \\
 \end{tabular}
 \end{table}
 
-\textbf{Results.} The diagnostic's predictive power varies by model class (Table~\ref{tab:model_sensitivity}). All three gradient-boosted implementations show positive correlation: LightGBM ($\rho = 0.833$, $p = 0.010$), CatBoost ($\rho = 0.667$, $p = 0.071$), and XGBoost ($\rho = 0.548$, $p = 0.16$). RandomForest ($\rho = 0.30$, $p = 0.47$) does not replicate.
+\textbf{Historical reported results.} The concentration--drop association varies by model class (Table~\ref{tab:model_sensitivity}). All three gradient-boosted implementations show positive correlation: LightGBM ($\rho = 0.833$, $p = 0.010$), CatBoost ($\rho = 0.667$, $p = 0.071$), and XGBoost ($\rho = 0.548$, $p = 0.16$). RandomForest ($\rho = 0.30$, $p = 0.47$) does not replicate.
 
 \textbf{Mixed-effects analysis (historical, unverified).} The archived summary fits task random intercepts to 24 task/model combinations from eight tasks and reports $\beta_1=1.64$, Wald 95\% CI $[0.70,2.58]$, $p=0.0006$. With eight clusters, the adequacy of the asymptotic interval/test is uncertain. A previously suggested Kenward--Roger $p$ range was not computed and is withdrawn. The confidence interval and $p$-value share assumptions; one cannot claim the interval excludes zero under an uncomputed alternative correction. The original fitting code, model diagnostics and task/model data are missing. Random intercepts alone also do not establish independence of tasks sharing the benchmark.
 
@@ -959,7 +959,7 @@ Adult & OpenML & Age-based & 27.5 & +1.4 & Robust & Robust \\
 
 \raggedright
 \footnotesize
-$^\dagger$Covertype here uses a different split protocol from the main external validation (Table~\ref{tab:external_datasets}), which explains the different concentration and drop values. The main-text Covertype uses wilderness areas 1--2/3/4 geographic split (concentration 49.8\%, drop 81.8~pp); this validation uses a wilderness area 1 vs.\ others geographic split (concentration 12.5\%, drop 8.0~pp). Both results are consistent with the diagnostic: high concentration predicts failure, low concentration predicts robustness.
+$^\dagger$The original text attributed differing Covertype values (49.8\% concentration/81.8~pp drop versus 12.5\%/8.0~pp) to different wilderness splits. Recovered source for the latter evaluation instead uses a positional split. Without original prediction and split ledgers, neither the protocol identity nor the cause of the difference is established; these two reported points do not validate a concentration-based deployment rule.
 \end{table}
 
 \textbf{Dataset details.}
