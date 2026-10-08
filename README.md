@@ -1,5 +1,7 @@
 # Diagnosing Conformal Prediction Failures Under Distribution Shift: A COVID-19 Case Study
 
+> **Latest author-review candidate (9 October 2026 KST):** [submission/replacement-20261009/REVIEW.md](submission/replacement-20261009/REVIEW.md). Matching PDF, source ZIP, corrected arXiv metadata and validation are linked there. Proposed replacement only; arXiv submission is unconfirmed. Earlier PDFs/source bundles remain historical snapshots.
+
 **Original repository status: accepted at UAI 2026. Statistical audit revision in progress.**
 
 The active manuscript now documents material statistical and reproducibility

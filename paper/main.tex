@@ -202,9 +202,7 @@ Despite experiencing common COVID-era temporal periods, the 8 supply chain tasks
 
 \begin{table*}[t]
 \centering
-\caption{Coverage Degradation Under COVID-19 Distribution Shift (50 Seeds).
-95\% CIs from $t$-distribution. $p$-values from paired Wilcoxon signed-rank test
-(val $\rightarrow$ test, seed-level). All drops significant at $p \leq 0.005$.}\label{tab:main_results}
+\caption{Historical Reported Coverage Degradation (50 Seeds; Original Runs Unverified). Reported 95\% seed-level $t$ intervals and paired Wilcoxon $p$-values are retained for the record; the missing seed ledger prevents verification.}\label{tab:main_results}
 \small
 \begin{tabular}{@{}lcccccc@{}}
 \toprule
@@ -258,9 +256,9 @@ Drop = mean val $-$ mean test coverage (50 seeds).
 
 \subsection{SHAP Concentration Correlates with Failure}\label{sec:shap_results}
 
-Across all 8 SALT multiclass tasks, SHAP concentration correlates with coverage degradation: Spearman $\rho = 0.833$, $p = 0.010$ (Table~\ref{tab:stratified_correlation}, Figure~\ref{fig:n16_correlation}). A newly rerun percentile task bootstrap of the rounded summaries gives $[0.29,1.00]$ (10,000 resamples, seed 42), versus the historical report $[0.30,1.00]$. Treating shared-domain tasks as exchangeable resampling units is not justified by this calculation; it is a sensitivity summary, not an established population interval. A BCa interval has not been computed. The correlation magnitude is stable under leave-one-out analysis ($\rho \in [0.75, 0.96]$), though statistical significance is not maintained for 2 of 8 jackknife samples ($p = 0.052$) due to reduced power at $n=7$. SHAP concentration values are highly stable: bootstrap resampling (1,000 resamples of 10K validation samples) yields coefficient of variation below 1\% for all tasks, with 95\% CIs within $\pm$1 percentage point.
+Across all 8 SALT multiclass tasks, SHAP concentration correlates with coverage degradation: Spearman $\rho = 0.833$, $p = 0.010$ (Table~\ref{tab:stratified_correlation}, Figure~\ref{fig:n16_correlation}). A newly rerun percentile task bootstrap of the rounded summaries gives $[0.29,1.00]$ (10,000 resamples, seed 42), versus the historical report $[0.30,1.00]$. Treating shared-domain tasks as exchangeable resampling units is not justified by this calculation; it is a sensitivity summary, not an established population interval. A BCa interval has not been computed. The correlation magnitude is stable under leave-one-out analysis ($\rho \in [0.75, 0.96]$), though statistical significance is not maintained for 2 of 8 jackknife samples ($p = 0.052$) in the smaller $n=7$ subsets. The original manuscript reported within-model SHAP bootstrap CVs below 1\% and 95\% CIs within $\pm$1 percentage point (1,000 resamples of 10,000 validation rows), but the original attribution/bootstrap ledger is unavailable; this stability claim has not been verified.
 
-\textbf{Mechanism.} Figure~\ref{fig:shap} reveals the distinction. Catastrophic tasks: the dominant feature experiences a concentrated importance explosion (4.5$\times$ increase). Robust tasks: importance redistributes across features with ranking reshuffle (10--20$\times$ increases distributed). These observations do not verify the probability-mixture assumptions of Theorem~\ref{thm:score_inflation}.
+\textbf{Historical mechanism hypothesis.} Figure~\ref{fig:shap} illustrates the reported distinction. Catastrophic tasks: the dominant feature experiences a concentrated importance explosion (4.5$\times$ increase). Robust tasks: importance redistributes across features with ranking reshuffle (10--20$\times$ increases distributed). These historical plotted summaries have no recovered original attribution ledger and do not verify the probability-mixture assumptions of Theorem~\ref{thm:score_inflation}.
 
 \textbf{False positives.} Under the mean-drop $>$15~pp criterion, sales-office is the SALT false positive; item-shippoint is at risk by mean although most seeds have small drops. The proposed protective rule was derived from sales-office alone, and inconsistent descriptions of its feature identity and overlap split require the original feature ledger. No deployment guarantee follows from this retrospective rule.
 
@@ -298,7 +296,7 @@ $^\S$Combined row includes all 17 tasks (8 SALT + 9 external, 10 domains: SALT $
 \begin{figure*}[t]
 \centering
 \includegraphics[width=0.85\textwidth]{figures/figure3_feature_importance}
-\caption{\textbf{Feature Importance Dynamics Under Shift.} (A) Catastrophic task: dominant feature explodes 4.5$\times$ while maintaining top rank (concentrated dependence). (B) Robust task: importance redistributes across features with ranking reshuffle (diversified dependence). (C--D) Importance dynamics and ranking stability. Despite $\sim$0\% Jaccard similarity, coverage drops range from negligible to catastrophic.}\label{fig:shap}
+\caption{\textbf{Historical Feature Importance Dynamics (Original Runs Unverified).} (A) Catastrophic task: dominant feature explodes 4.5$\times$ while maintaining top rank (concentrated dependence). (B) Robust task: importance redistributes across features with ranking reshuffle (diversified dependence). (C--D) Importance dynamics and ranking stability. Despite $\sim$0\% Jaccard similarity, coverage drops range from negligible to catastrophic.}\label{fig:shap}
 \end{figure*}
 
 \begin{figure}[t]
@@ -319,7 +317,7 @@ Table~\ref{tab:diagnostic_comparison} preserves two alternative source-data diag
 
 \begin{table}[t]
 \centering
-\caption{Pre-Deployment Diagnostic Comparison ($n=8$). Spearman $\rho$ with 50-seed mean coverage drop. $\rho_{\text{partial}}$: partial Spearman controlling for the other variable in the SHAP--class-count pair.}\label{tab:diagnostic_comparison}
+\caption{Historical Source-Data Diagnostic Comparison ($n=8$; Original Runs Unverified). Spearman $\rho$ with 50-seed mean coverage drop. $\rho_{\text{partial}}$: partial Spearman controlling for the other variable in the SHAP--class-count pair.}\label{tab:diagnostic_comparison}
 \small
 \begin{tabular}{@{}lcccc@{}}
 \toprule
@@ -349,7 +347,7 @@ The historical clipped ACI variant reports coverage improvements on severe tasks
 
 \subsection{Alternative Conformal Scoring}\label{sec:raps}
 
-The historical Regularized Adaptive Prediction Sets (RAPS)~\citep{angelopoulos2021uncertainty} summaries report task-dependent differences: substantially reduces drops for high-cardinality tasks (s-group: $73.5\%\rightarrow10.4\%$; s-payterms: $79.9\%\rightarrow35.1\%$) but not the most concentrated task (s-shipcond: $60.4\%\rightarrow67.8\%$). These differences do not establish the idealized mechanism in Section~\ref{sec:theory}; its mixture weight is not measured SHAP concentration (Appendix~\ref{app:raps}; RAPS used random 50/50 calibration splits vs.\ deterministic main-experiment splits---within-experiment comparisons are unaffected).
+The historical Regularized Adaptive Prediction Sets (RAPS)~\citep{angelopoulos2021uncertainty} summaries report task-dependent differences: substantially reduces drops for high-cardinality tasks (s-group: $73.5\%\rightarrow10.4\%$; s-payterms: $79.9\%\rightarrow35.1\%$) but not s-shipcond ( $60.4\%\rightarrow67.8\%$). These differences do not establish the idealized mechanism in Section~\ref{sec:theory}; its mixture weight is not measured SHAP concentration (Appendix~\ref{app:raps}; RAPS used random 50/50 calibration splits vs.\ deterministic main-experiment splits---within-experiment comparisons are unaffected).
 
 \subsection{Comparison with Standard Shift Detection}\label{sec:shift_detection}
 
@@ -396,6 +394,8 @@ sales-shipcond & 32.41 & 2.24 & 2.26 \\
 \bottomrule
 \end{tabular}
 \end{table}
+
+Labels outside the historical-training alphabet are always counted as uncovered, including at an infinite threshold. Reported drops compare source-audit and target coverage; a small drop does not imply that target coverage attains 90\%.
 
 Eight-task Spearman correlations are $-0.2381$ for inclusive inversion and $-0.2619$ for crossing sets (nominal asymptotic $p=0.5702$ and $0.5309$). The existing exact-versus-linear quantile factorial replay yields the same task correlations under either threshold rule. These shared-domain task means are not 24 independent replications; the nonsignificant correlations do not establish equivalence or a population null. They show that this complete follow-up panel fails to reproduce the historical positive association.
 
@@ -453,11 +453,11 @@ Standard CPU (8 cores, 8GB RAM). Wall-clock: $\sim$3--4 hours for full 8-task, 5
 
 \subsection{External Dataset Protocols}\label{app:external_data}
 
-Table~\ref{tab:external_datasets} retains the reported external dataset protocols. The supplied code does not establish a common pipeline: SALT and external coverage use different set conventions, validation labels are reused for tuning, and most external loaders/results are absent. In particular, the supplied KDD loader contradicts the previously stated official-test protocol, as noted below. Historical results need provenance reconciliation and a common-protocol rerun.
+Table~\ref{tab:external_datasets} retains the reported external dataset protocols. The supplied code does not establish a common pipeline: SALT and external coverage use different set conventions, validation labels are reused for tuning, and recovered external loaders conflict with several historical descriptions while original per-record results remain unavailable. In particular, the supplied KDD loader contradicts the previously stated official-test protocol, as noted below. Historical results need provenance reconciliation and a common-protocol rerun.
 
 \begin{table}[htbp]
 \centering
-\caption{External Dataset Protocols. Historical reported protocols; supplied external code halves validation for calibration/evaluation; $n_\text{tr}$, $n_\text{te}$ = approximate train/test sizes used; Seeds = 10 for all external datasets. Type: \textbf{DS} = documented real-world shift; \textbf{NC} = null-shift control (random/pre-defined split, no genuine shift; low concentration and robust coverage are the expected and observed outcome).}\label{tab:external_datasets}
+\caption{External Dataset Protocols. Historical reported protocols; supplied external code halves validation for calibration/evaluation; $n_\text{tr}$, $n_\text{te}$ = approximate train/test sizes used; Seeds = 10 for all external datasets. Type: \textbf{DS} = documented real-world shift; \textbf{NC} = intended null-shift comparison (random/pre-defined split; absence of relevant shift and low concentration are not established by the split label).}\label{tab:external_datasets}
 \small
 \begin{tabular}{@{}lp{4.8cm}clllc@{}}
 \toprule
@@ -622,7 +622,7 @@ Concentration can be computed on source covariates for a fixed model, whereas ta
 
 \begin{table}[htbp]
 \centering
-\caption{Pre-Deployment (SHAP) vs Post-Hoc (Entropy, ECE) Shift Diagnostics (10-Seed ACI Experiments). SHAP concentration is computed on validation data only. $\Delta$Entropy and $\Delta$ECE require test-time observations.}\label{tab:baselines}
+\caption{Historical Source-Data (SHAP) and Target-Data (Entropy, ECE) Diagnostic Summaries (10-Seed ACI Experiments; Original Runs Unverified). SHAP concentration uses validation covariates for a historically test-aware fitted model. $\Delta$Entropy and $\Delta$ECE require test-time observations.}\label{tab:baselines}
 \small
 \begin{tabular}{@{}lcccc@{}}
 \toprule
@@ -644,7 +644,7 @@ s-office & ROB & 42.6\% & +0.032 & +0.104 \\
 
 \raggedright
 \footnotesize
-$^\dagger$Pre-deployment diagnostic (computed on validation data only). item-incoterms omitted (3-seed pilot only).
+$^\dagger$Computed on validation covariates for a historically test-aware fitted model; not a validated pre-deployment procedure. item-incoterms omitted (3-seed pilot only).
 \end{table}
 
 The historical summaries report decreasing entropy on the three tasks with coverage drops above 70\% and increasing entropy on two tasks with smaller drops. These associations do not identify concentrated dependence as the cause, nor do they establish that an entropy-based detector would miss these cases under a specified alarm rule. ECE increases in the reported summaries likewise do not establish a general inability to distinguish severity. The original prediction ledger and a common correctly joined pipeline are needed to compare these diagnostics; no prospective superiority claim is made.
@@ -738,7 +738,7 @@ s-office & 25 & $0.04\pm0.03$ & $0.04\pm0.03$ & 0.0 & Identical \\
 
 \raggedright
 \footnotesize
-All values are 10-seed means $\pm$ std. APS drops differ from 50-seed Table~\ref{tab:main_results} due to smaller seed range (10 vs.\ 50) and high variance. The key comparison is APS vs.\ RAPS within the same seed set. Note: RAPS experiments used a random 50/50 calibration split rather than the deterministic first-half/second-half split used in the main APS experiments (Appendix~\ref{app:reproducibility}); this protocol difference does not affect the within-experiment APS vs.\ RAPS comparison but means RAPS coverage values are not directly comparable to Table~\ref{tab:main_results}. The historical task differences do not identify whether class accumulation, input joins, score conventions or other model effects cause the apparent RAPS benefit. The original per-record comparison is unavailable. Item-shippoint ($K=69$) is an exception: RAPS worsens coverage by 11.2~pp (paired Wilcoxon $p=0.064$, 10 seeds), reflecting that the regularization penalty can disrupt calibration for intermediate-cardinality tasks with high seed variance.
+All values are 10-seed means $\pm$ std. APS drops differ from 50-seed Table~\ref{tab:main_results} due to smaller seed range (10 vs.\ 50) and high variance. The key comparison is APS vs.\ RAPS within the same seed set. Note: RAPS experiments used a random 50/50 calibration split rather than the deterministic first-half/second-half split used in the main APS experiments (Appendix~\ref{app:reproducibility}); this protocol difference does not affect the within-experiment APS vs.\ RAPS comparison but means RAPS coverage values are not directly comparable to Table~\ref{tab:main_results}. The historical task differences do not identify whether class accumulation, input joins, score conventions or other model effects cause the apparent RAPS benefit. The original per-record comparison is unavailable. For item-shippoint ($K=69$), the historical summary reports a larger RAPS coverage drop by 11.2~pp (paired Wilcoxon $p=0.064$, 10 seeds). Missing paired outputs prevent verifying this test or attributing the difference to a specific calibration mechanism.
 \end{table}
 
 \section{Model Class Sensitivity}\label{app:rf}
@@ -911,7 +911,7 @@ TRANSACTIONCURRENCY & No & 0.0 \\
 
 \raggedright
 \footnotesize
-KS = 1.0 indicates complete distribution non-overlap between train and test. 3/6 features (50\%) show significant covariate shift, consistent with the \%Sig values in Table~\ref{tab:shift_characterization}.
+For the encoded empirical samples, KS $=1$ denotes complete separation. The historical summary reports 3/6 features (50\%) as shifted. Original feature-level outputs and a correctly joined input cohort are needed to verify these values and interpret their source.
 \end{table}
 
 \begin{table}[htbp]
@@ -935,16 +935,16 @@ PAYERPARTY & \textbf{Yes} & 1.0 \\
 
 \raggedright
 \footnotesize
-6/7 features (86\%) show significant covariate shift, consistent with the \%Sig values in Table~\ref{tab:shift_characterization}. The high proportion of shifted features at item-level reflects COVID-19's impact on supply chain transactions: new products, parties, and item identifiers entered the system during the pandemic period.
+The historical summary reports 6/7 features (86\%) as shifted, consistent with Table~\ref{tab:shift_characterization}. Original feature-level outputs are unavailable. The recovered default-join defect prevents attributing these reported differences to pandemic-related changes in products, parties or identifiers.
 \end{table}
 
-\section{WILDS Benchmark Validation}\label{app:wilds}
+\section{Historical WILDS Benchmark Summaries}\label{app:wilds}
 
-To further validate the specificity of the SHAP concentration diagnostic, we evaluate on four additional benchmark datasets from the WILDS benchmark~\citep{koh2021wilds} and standard repositories. The historical summaries report low concentration and robust coverage in four evaluations. Their generating code and outputs are absent; Covertype is reused under another split, and CivilComments/Adult are binary tasks outside the selected primary subset.
+The original manuscript reported four additional evaluations using WILDS~\citep{koh2021wilds} and standard datasets. These historical summaries report low concentration and small coverage drops. Candidate generating code has since been recovered, but original outputs and execution provenance remain unavailable, and the recovered protocols conflict with several manuscript descriptions. Covertype is reused under another split, and CivilComments/Adult are binary tasks outside the selected primary subset. These reports do not establish independent specificity.
 
 \begin{table}[htbp]
 \centering
-\caption{WILDS and Standard Benchmark Validation (Specificity Test). Two evaluations use WILDS; two use standard datasets. Covertype also appears in the primary analysis under a different split. All datasets exhibit low SHAP concentration (\textbf{all $<$40\%}; mean = 17.0\%) and robust coverage, reporting four true negatives among this small selected sample; independent specificity is not established. Shift types: Demographic = identity-based subgroup shift; User/Time = user and temporal domain shift; Geographic = regional covariates; Age = demographic age-based shift. Note: This table tests specificity (low-$C$ $\rightarrow$ robust); for the catastrophic Covertype case (high-$C$ $\rightarrow$ failure), see Table~\ref{tab:framework_validation}.}\label{tab:wilds_validation}
+\caption{Historical WILDS and Standard Benchmark Summaries (Original Runs Unverified). Two evaluations use WILDS; two use standard datasets. Covertype also appears in the primary analysis under a different split. All datasets exhibit low SHAP concentration (\textbf{all $<$40\%}; mean = 17.0\%) and robust coverage, reporting four true negatives among this small selected sample; independent specificity is not established. Shift types: Demographic = identity-based subgroup shift; User/Time = user and temporal domain shift; Geographic = regional covariates; Age = demographic age-based shift. These historical classifications do not establish specificity; for the catastrophic Covertype case (high-$C$ $\rightarrow$ failure), see Table~\ref{tab:framework_validation}.}\label{tab:wilds_validation}
 \small
 \begin{tabular}{@{}lcccccc@{}}
 \toprule
@@ -972,10 +972,10 @@ $^\dagger$The original text attributed differing Covertype values (49.8\% concen
 
 \textbf{Historical classification arithmetic.} The four reported benchmark evaluations have low SHAP concentration---\textbf{all below the 40\% threshold} (individual values: 26.2\%, 1.9\%, 12.5\%, 27.5\%; \textbf{mean concentration = 17.0\%}). Thresholding the reported values gives four historical true-negative classifications. Selection uncertainty, inconsistent execution protocols and missing raw predictions prevent interpreting this count as validated specificity. The recovered complete SALT panel fails to reproduce the original positive association, so these summaries do not establish a deployable sensitivity/specificity tradeoff.
 
-\textbf{Combined validation accuracy (SALT + WILDS).} Combining the 8 SALT tasks with these 4 WILDS benchmarks yields $n=12$ total tasks (distinct from the $n=16$ primary endpoint which uses 8 different external UCI datasets). The threshold accuracy is \textbf{91.7\% (11/12)}:
+\textbf{Combined historical classification arithmetic (SALT + additional benchmarks).} Combining the 8 SALT tasks with these 4 additional benchmark summaries yields $n=12$ total tasks (distinct from the $n=16$ primary endpoint which uses 8 different external UCI datasets). The threshold accuracy is \textbf{91.7\% (11/12)}:
 \begin{itemize}[nosep,leftmargin=*]
     \item \textbf{Sensitivity} (SALT): 4/4 at-risk SALT tasks flagged under the $>$15~pp rule (historical descriptive counts)
-    \item \textbf{Specificity} (WILDS + robust SALT): 7/8 robust tasks correctly unflagged (87.5\%)
+    \item \textbf{Specificity} (additional benchmarks + robust SALT): 7/8 robust tasks correctly unflagged (87.5\%)
     \item \textbf{Single misclassification}: sales-office (concentration 42.6\%, protective secondary feature)
 \end{itemize}
 

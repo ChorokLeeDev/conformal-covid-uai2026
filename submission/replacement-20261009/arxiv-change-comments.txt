@@ -1,0 +1,1 @@
+24 pages. Post-publication correction to the UAI 2026 paper (PMLR 337:3453-3476). Corrects APS/statistical claims; a recovered follow-up does not reproduce the historical positive association. Withdraws unsupported robustness and deployment claims.

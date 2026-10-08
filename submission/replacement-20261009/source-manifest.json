@@ -1,0 +1,37 @@
+[
+  {
+    "path": "figures/conformity_score_cdfs.pdf",
+    "sha256": "d147ec3108effa37a2bdfda88bebe11ac1a76a37dfb1d49cc521fa262317fb92",
+    "bytes": 44911
+  },
+  {
+    "path": "figures/figure3_feature_importance.pdf",
+    "sha256": "e20d42380fd6474388664085245d4590fa310e90e18e39a7c651d3bd890c3a1e",
+    "bytes": 39074
+  },
+  {
+    "path": "figures/figure_n16_correlation.pdf",
+    "sha256": "b31d84913d33656b0bf6827a188edefd9d8fd82dcbde2070c486b6716057b31b",
+    "bytes": 20955
+  },
+  {
+    "path": "main.bbl",
+    "sha256": "765516fc49f0f7cc0d67026841edf1813677f407b6d22ea5dd21a46512cb62b9",
+    "bytes": 12224
+  },
+  {
+    "path": "main.tex",
+    "sha256": "61585b20caacdd4e7ab7b14f7ebcf0c4d8ecfb79335032e44a68ad0d9c540dc8",
+    "bytes": 90791
+  },
+  {
+    "path": "references.bib",
+    "sha256": "828ddfa60391b30216203b9a70950ad7987e022e0ee0f713c8a823170d8a3a97",
+    "bytes": 11662
+  },
+  {
+    "path": "uai2026.cls",
+    "sha256": "1afcc20384ca08bfe568f368ab6f73fe7a7985e205835b885c222abee62b11d5",
+    "bytes": 9618
+  }
+]

@@ -1,0 +1,12 @@
+{
+  "status": "prepared_not_submitted",
+  "verified_public_version": "2601.00908v2",
+  "verified_public_url": "https://arxiv.org/abs/2601.00908v2",
+  "proposed_next_version": "v3",
+  "title": "Diagnosing Conformal Prediction Failures Under Distribution Shift: A COVID-19 Case Study",
+  "authors": "Chorok Lee",
+  "abstract": "We examine the reported association between feature-importance concentration and conformal coverage degradation in a COVID-era supply-chain case study and external datasets. Rounded historical summaries yield Spearman $\\rho=0.853$ for a selected 16-task subset and $\\rho=0.654$ for all 17 reported tasks. A statistical audit identified test-aware preprocessing, reuse of calibration labels for early stopping, different prediction-set conventions across cohorts, and missing numerical artifacts. These findings limit the original pre-deployment and replication claims. A recovered, separate follow-up panel of all eight SALT tasks (three fixed seeds per task) gives $\\rho=-0.238$ under inclusive score inversion and $-0.262$ under crossing sets. Its frozen predictions and SHAP concentrations were independently regenerated from raw inputs and stored models, and all 24 follow-up fits were rerun. This panel does not reproduce the historical positive association; the original 50-seed models remain unavailable. We give a conditional score bound for an idealized probability mixture, whose weight is distinct from measured SHAP concentration, and withdraw unsupported class-count and ICC interpretations. The diagnostic and 40% threshold are unvalidated; no deployment rule is supported by these results.",
+  "comments": "24 pages. Post-publication correction to the UAI 2026 paper (PMLR 337:3453-3476). Corrects APS/statistical claims; a recovered follow-up does not reproduce the historical positive association. Withdraws unsupported robustness and deployment claims.",
+  "journal_ref": "Proceedings of the 42nd Conference on Uncertainty in Artificial Intelligence, PMLR 337:3453-3476, 2026",
+  "metadata_rule": "Existing subject categories and license are not changed by this preparation. Replace old abstract with this corrected manuscript abstract. Proposed version is not a receipt."
+}

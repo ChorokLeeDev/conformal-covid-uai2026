@@ -1,0 +1,33 @@
+{
+  "checked_at": "2026-10-09 Asia/Seoul",
+  "baseline_commit": "72132d32f8671fa099711211a5f54f0f55b22caf",
+  "public_version": "2601.00908v2",
+  "public_source_url": "https://arxiv.org/src/2601.00908v2",
+  "public_source_sha256": "df92d44b0941c01128eaccc9290ef60cb42a2f009be8afe5ac1644b5b36a8464",
+  "public_pdf_url": "https://arxiv.org/pdf/2601.00908v2",
+  "public_pdf_sha256": "6f5371bccd8e9427fff8948caa3d30035daa58a2e08fd332bbe2304b93113c1a",
+  "source_zip": "submission/replacement-20261009/UAI_2601.00908_v3_proposed_source.zip",
+  "source_zip_sha256": "52ddf109b958f22a3e73251a48cf1e0de66b82fdaa0b13324608cbb6ca6cf209",
+  "files": 7,
+  "members_sha256": {
+    "figures/conformity_score_cdfs.pdf": "d147ec3108effa37a2bdfda88bebe11ac1a76a37dfb1d49cc521fa262317fb92",
+    "figures/figure3_feature_importance.pdf": "e20d42380fd6474388664085245d4590fa310e90e18e39a7c651d3bd890c3a1e",
+    "figures/figure_n16_correlation.pdf": "b31d84913d33656b0bf6827a188edefd9d8fd82dcbde2070c486b6716057b31b",
+    "main.bbl": "765516fc49f0f7cc0d67026841edf1813677f407b6d22ea5dd21a46512cb62b9",
+    "main.tex": "61585b20caacdd4e7ab7b14f7ebcf0c4d8ecfb79335032e44a68ad0d9c540dc8",
+    "references.bib": "828ddfa60391b30216203b9a70950ad7987e022e0ee0f713c8a823170d8a3a97",
+    "uai2026.cls": "1afcc20384ca08bfe568f368ab6f73fe7a7985e205835b885c222abee62b11d5"
+  },
+  "pdf": "submission/replacement-20261009/UAI_2601.00908_v3_proposed.pdf",
+  "pdf_sha256": "d4d41c98be965640375aa41fc5fa3421b5074687990fdc6bdca12c2ca1eef454",
+  "pages": 24,
+  "engine": "pdfTeX 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian)",
+  "build": "3 x pdflatex -no-shell-escape -interaction=nonstopmode -halt-on-error main.tex in a fresh extraction of the ZIP; no outside source paths",
+  "undefined_references": false,
+  "undefined_citations": false,
+  "overfull_boxes": false,
+  "visual_review": "All pages inspected in rendered contact sheets; no clipping, overlapping or missing content observed. Underfull spacing diagnostics remain.",
+  "submission_performed": false,
+  "arxiv_processing_verified": false,
+  "linear_updates": "No new receipt/version evidence. Preparation files and commit links are being synchronized to the existing Todo issue; no completion claim."
+}
