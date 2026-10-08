@@ -1,0 +1,31 @@
+{
+  "staging": "/workspace/scratch/ab1459f847c7/uai-final-build-WcfyP8",
+  "pages": 23,
+  "changed_pages": [
+    6,
+    12,
+    17
+  ],
+  "pdf_sha256": "4afad8409176223827c0872862cf7a00a0a25cb0dee88cb980fce7c8b44cbc79",
+  "manuscript_sha256": "1195a39a006f16bb61cd712b9156dbe33768f6dc8b05a7593b5d925994917962",
+  "rendered_and_visually_inspected_pages": [
+    5,
+    6,
+    12,
+    17,
+    19,
+    20
+  ],
+  "original_and_previous_revision_hashes": {
+    "paper/main.pdf": "578db042a75d5734d2ca41c780a57b20c5e592a873cee80e565dd89f517558ae",
+    "submission/camera_ready_main.pdf": "578db042a75d5734d2ca41c780a57b20c5e592a873cee80e565dd89f517558ae",
+    "submission/camera_ready_source.zip": "deeb181077490fd1b0f0be33cabed8bc4fbf50d8cec2c656b07ccc04c5046d1f",
+    "submission/supplementary_material_fixed.zip": "84bd86738b78727dae50b25b358cac7bc18ef2e9045ba324aa9db2f345bd22cf",
+    "audit/2026-10-08/revision/uai-statistical-audit-revision.pdf": "5d46a447a9f0972660acb228c566eaeb0fda93b4fa365c4c09454bd0c400a9f9"
+  },
+  "undefined_references": false,
+  "overfull_boxes": false,
+  "underfull_boxes_present": true,
+  "pdf_readable_after_build": true,
+  "existing_experimental_code_modified": false
+}

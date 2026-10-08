@@ -1,0 +1,13 @@
+test_archived_crossing_rule_is_different (__main__.StatisticalAudit.test_archived_crossing_rule_is_different) ... ok
+test_binary_and_three_class_shift_can_destroy_coverage (__main__.StatisticalAudit.test_binary_and_three_class_shift_can_destroy_coverage) ... ok
+test_exact_order_statistic_and_small_calibration_boundary (__main__.StatisticalAudit.test_exact_order_statistic_and_small_calibration_boundary) ... ok
+test_negative_agreement_icc_does_not_imply_negative_correlation (__main__.StatisticalAudit.test_negative_agreement_icc_does_not_imply_negative_correlation) ... ok
+test_published_rounded_points_only (__main__.StatisticalAudit.test_published_rounded_points_only) ... ok
+test_quantile_one_includes_zero_probability_labels (__main__.StatisticalAudit.test_quantile_one_includes_zero_probability_labels) ... ok
+test_same_membership_event_for_coverage_and_size (__main__.StatisticalAudit.test_same_membership_event_for_coverage_and_size) ... ok
+test_ties_have_fixed_rank_order (__main__.StatisticalAudit.test_ties_have_fixed_rank_order) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.012s
+
+OK

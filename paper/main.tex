@@ -229,11 +229,11 @@ SEV = Severe ($>$50\% drop), ROB = Robust ($<$20\% drop); $^*$high model varianc
 
 \subsection{Diagnostic Analysis}
 
-Two factors account for much of the variance:
+The historical summaries motivate two descriptive hypotheses; neither identifies the cause of the reported coverage variation:
 
-\textbf{Factor 1: Feature temporal stability.} Tasks using transaction IDs (Jaccard $\approx 0.02$) fail catastrophically; tasks using stable entities (products, organizations; Jaccard $> 0.5$) maintain coverage (Table~\ref{tab:overlap}).
+\textbf{Feature temporal stability.} Table~\ref{tab:overlap} reports larger drops for two low-overlap transaction-ID tasks than for two higher-overlap entity tasks. The original feature ledger is unavailable, and the recovered input-join defect prevents attributing this contrast to feature stability alone.
 
-\textbf{Factor 2: Feature importance concentration.} Among tasks with universally low Jaccard, concentration determines vulnerability (Section~\ref{sec:shap_results}).
+\textbf{Feature importance concentration.} Concentration is associated with the historical reported drops (Section~\ref{sec:shap_results}), but does not establish vulnerability or a mechanism. The complete recovered follow-up panel does not reproduce the positive association.
 
 \begin{table}[t]
 \centering
@@ -309,11 +309,11 @@ $^\S$Combined row includes all 17 tasks (8 SALT + 9 external, 10 domains: SALT $
 
 \subsection{Diagnostic Comparison}\label{sec:baselines}
 
-We compare SHAP concentration against two alternative pre-deployment diagnostics that require no test data (Table~\ref{tab:diagnostic_comparison}).
+Table~\ref{tab:diagnostic_comparison} preserves two alternative source-data diagnostic summaries. Their definitions can use a fixed model and source data, but the historical fitting pipeline used test information; these comparisons do not establish prospective performance.
 
-\textbf{Native feature importance concentration}: top-1 LightGBM gain divided by total gain (zero SHAP cost, single seed; seed=42). Achieves $\rho = 0.667$ ($p = 0.071$)---directionally correct but not significant at $\alpha = 0.05$. The weaker discrimination arises because native gain conflates feature cardinality with predictive importance: sales-office shows 66.1\% native concentration (vs.\ 42.6\% SHAP) despite near-zero coverage drop.
+\textbf{Native feature importance concentration}: top-1 LightGBM gain divided by total gain (zero SHAP cost, single seed; seed=42). The reported association is $\rho = 0.667$ ($p = 0.071$). Sales-office has 66.1\% native concentration (vs.\ 42.6\% SHAP) despite near-zero reported coverage drop. These summaries do not identify the cause of the difference between attribution metrics or establish a difference in predictive performance.
 
-\textbf{Ensemble disagreement}: standard deviation of validation coverage across 50 seeds. Achieves $\rho = 0.452$ ($p = 0.260$). Disagreement captures model instability but not the feature-level mechanism driving conformal failure.
+\textbf{Ensemble disagreement}: standard deviation of validation coverage across 50 seeds. Its reported association is $\rho = 0.452$ ($p = 0.260$), describing seed variability on the shared data without identifying a feature-level failure mechanism.
 
 \textbf{Class cardinality as a possible confound.} The historical within-SALT partial correlations are non-significant ($0.629$, $p=0.131$ for concentration; $0.334$, $p=0.464$ for $\log K$). The reported pooled partial correlation is $0.771$ ($p=0.0008$) for concentration and $-0.010$ ($p=0.97$) for $\log K$. These are conditional associations, not evidence that concentration causally drives severity independently of model, domain, shift magnitude, or pipeline differences. Their numerical provenance and uncertainty require the original task/seed ledger.
 
@@ -431,13 +431,13 @@ The released supplement is incomplete. It contains six Python scripts but no ori
 
 \subsection{LightGBM Hyperparameters}
 
-All models trained with fixed LightGBM~\citep{ke2017lightgbm} settings: objective=multiclass, boosting=gbdt, num\_leaves=31, learning\_rate=0.05, feature\_fraction=0.8, bagging\_fraction=0.8, bagging\_freq=5, num\_boost\_round=500, early\_stopping\_rounds=50, seeds 42--91 (50 seeds). No task-specific tuning was performed.
+The archived 50-seed LightGBM~\citep{ke2017lightgbm} script specifies objective=multiclass, boosting=gbdt, num\_leaves=31, learning\_rate=0.05, feature\_fraction=0.8, bagging\_fraction=0.8, bagging\_freq=5, num\_boost\_round=500, early\_stopping\_rounds=50, seeds 42--91 (50 seeds), with no task-specific hyperparameter search. These settings do not describe every later follow-up or alternative-model run; original fitted-model provenance remains unavailable.
 
 \subsection{Conformal Prediction}
 
 Historical calibration uses the first half of validation records and evaluation the second half, after the same validation labels have already been used for early stopping. This chronological split need not be exchangeable even within validation. Historical code uses NumPy interpolated quantiles at $\min(\lceil(n+1)(1-\alpha)\rceil/n,1)$. The corrected reference instead selects the exact $\lceil(n+1)(1-\alpha)\rceil$th order statistic, using $+\infty$ when the required rank exceeds $n$; it also applies one score-inversion convention to coverage and set size. No historical results were replaced by this reference.
 
-\noindent\textbf{Calibration and test set sizes.} Sales-level tasks (s-shipcond, s-payterms, s-group, s-incoterms, s-office): $n_{\text{val}} = 71{,}474$, $n_{\text{cal}} = 35{,}737$, $n_{\text{test}} = 88{,}942$. Item-level tasks (i-plant, i-shippoint, i-incoterms): $n_{\text{val}} = 293{,}896$, $n_{\text{cal}} = 146{,}948$, $n_{\text{test}} = 402{,}855$. At these calibration set sizes, the finite-sample correction is negligible: $q - (1-\alpha) < 3 \times 10^{-5}$ for all tasks, so finite-sample effects do not contribute to the observed coverage gaps.
+\noindent\textbf{Calibration and test set sizes.} Sales-level tasks (s-shipcond, s-payterms, s-group, s-incoterms, s-office): $n_{\text{val}} = 71{,}474$, $n_{\text{cal}} = 35{,}737$, $n_{\text{test}} = 88{,}942$. Item-level tasks (i-plant, i-shippoint, i-incoterms): $n_{\text{val}} = 293{,}896$, $n_{\text{cal}} = 146{,}948$, $n_{\text{test}} = 402{,}855$. At $\alpha=0.1$, the historical quantile level $u_n=\lceil(n+1)(1-\alpha)\rceil/n$ exceeds $1-\alpha$ by $4.757\times10^{-5}$ for sales tasks and $1.225\times10^{-5}$ for item tasks. These are level differences, not score-threshold or coverage bounds. Atoms or gaps in the score distribution can amplify a small level change, and interpolation can differ from exact order-statistic calibration. The missing original scores prevent quantifying either effect on historical target coverage.
 
 \subsection{SHAP Computation}
 
@@ -677,9 +677,9 @@ We analyze pseudo-replication in the 50-seed design using intraclass correlation
 \caption{\textbf{Conformity score CDFs (seed=42).} The archived curves suggest rightward score shifts for some high-drop tasks and different patterns for lower-drop tasks. No stochastic-dominance test or original score arrays are available.}\label{fig:cdfs}
 \end{figure}
 
-\section{Conformity Score Stochastic Dominance}\label{app:ks}
+\section{APS Score Distribution Comparisons}\label{app:ks}
 
-Table~\ref{tab:ks} reports two-sample KS statistics comparing calibration and test APS conformity scores (seed=42, non-randomized APS). Higher conformity scores indicate the model requires more cumulative probability mass to reach the true label---i.e., the model is less confident about the correct class.
+Table~\ref{tab:ks} reports two-sample KS statistics comparing calibration and test APS scores (seed=42, non-randomized APS). An inclusive APS score is cumulative probability through the true label, not a monotone transform of the true-label probability. For example, if the true label stays top-ranked, increasing its probability from 0.6 to 0.9 also increases its APS score from 0.6 to 0.9. Score shifts alone therefore do not identify changes in true-class confidence.
 
 \begin{table}[htbp]
 \centering
@@ -706,7 +706,7 @@ i-shippoint & 0.505 & $<10^{-10}$ & 0.71 & 0.58 \\
 
 \raggedright
 \footnotesize
-All KS tests are two-sided. Historical deterministic APS scores; a conservative split-conformal guarantee requires the held-out/exchangeability assumptions absent from the supplied protocol. For catastrophic tasks, test scores reportedly shift rightward; two-sided KS and mean shifts alone do not establish stochastic dominance or verify Theorem~\ref{thm:score_inflation}. Two robust tasks (i-incoterms, i-shippoint) show test scores shifted \textit{leftward}---the model becomes more confident during COVID, possibly due to reduced product diversity.
+All KS tests are two-sided. Historical deterministic APS scores; a conservative split-conformal guarantee requires the held-out/exchangeability assumptions absent from the supplied protocol. For catastrophic tasks, test scores reportedly shift rightward; two-sided KS and mean shifts alone do not establish stochastic dominance or verify Theorem~\ref{thm:score_inflation}. Two lower-drop tasks (i-incoterms, i-shippoint) have lower reported mean test scores. This does not establish greater true-class confidence or a product-diversity mechanism.
 \end{table}
 
 \section{RAPS Comparison}\label{app:raps}
@@ -743,11 +743,11 @@ All values are 10-seed means $\pm$ std. APS drops differ from 50-seed Table~\ref
 
 \section{Model Class Sensitivity}\label{app:rf}
 
-To test whether SHAP concentration is diagnostic across model classes, we replicate the analysis with \texttt{RandomForestClassifier} (500 trees), \texttt{XGBClassifier}, and \texttt{CatBoostClassifier} (ordered boosting), all with seed=42 and the same data pipeline (Table~\ref{tab:rf}).
+Table~\ref{tab:rf} preserves the reported seed-42 analyses with \texttt{RandomForestClassifier} (500 trees), \texttt{XGBClassifier}, and \texttt{CatBoostClassifier} (ordered boosting). Its LightGBM coverage-drop column repeats the historical 50-seed means from Table~\ref{tab:main_results}; it is not a matched seed-42 comparison across all four models. Shared historical preprocessing defects and missing original fitted-model provenance further limit interpretation of model-family differences.
 
 \begin{table}[htbp]
 \centering
-\caption{SHAP Concentration and Coverage Drop Across Model Classes.}\label{tab:rf}
+\caption{Historical SHAP Concentration and Coverage Drop Across Model Classes. LightGBM drops are 50-seed means; alternative-model drops are reported seed-42 values. Original runs are unverified.}\label{tab:rf}
 \small
 \begin{tabular}{@{}lcccccccc@{}}
 \toprule
@@ -778,7 +778,7 @@ s-office & 42.6 & 24.5 & 36.8 & 33.5 & 0.1 & 0.0 & 0.0 & $-$0.0 \\
 \toprule
 Model & Method & Conc.--Drop $\rho$ & $p$ \\
 \midrule
-LightGBM & Boosting (GOSS) & \textbf{0.833} & \textbf{0.010} \\
+LightGBM & Boosting (GBDT) & \textbf{0.833} & \textbf{0.010} \\
 CatBoost & Boosting (ordered) & 0.667 & 0.071 \\
 XGBoost & Boosting (histogram) & 0.548 & 0.16 \\
 RandomForest & Bagging & 0.30 & 0.47 \\

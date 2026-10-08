@@ -1,0 +1,11 @@
+{
+  "staging": "/workspace/scratch/ab1459f847c7/uai-final-build-WcfyP8",
+  "pages": 23,
+  "changed_pages": [
+    6,
+    12,
+    17
+  ],
+  "pdf_sha256": "4afad8409176223827c0872862cf7a00a0a25cb0dee88cb980fce7c8b44cbc79",
+  "manuscript_sha256": "1195a39a006f16bb61cd712b9156dbe33768f6dc8b05a7593b5d925994917962"
+}

@@ -1,0 +1,22 @@
+Title:
+Subject:
+Keywords:
+Author:
+Creator:         LaTeX with hyperref
+Producer:        pdfTeX-1.40.25
+CreationDate:    Fri Oct  9 00:52:38 2026 KST
+ModDate:         Fri Oct  9 00:52:38 2026 KST
+Custom Metadata: yes
+Metadata Stream: no
+Tagged:          no
+UserProperties:  no
+Suspects:        no
+Form:            none
+JavaScript:      no
+Pages:           23
+Encrypted:       no
+Page size:       595.276 x 792 pts
+Page rot:        0
+File size:       449112 bytes
+Optimized:       no
+PDF version:     1.5
