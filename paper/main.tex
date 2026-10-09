@@ -202,9 +202,14 @@ Despite experiencing common COVID-era temporal periods, the 8 supply chain tasks
 
 \begin{table*}[t]
 \centering
-\caption{Coverage Degradation Under COVID-19 Distribution Shift (50 Seeds).
-95\% CIs from $t$-distribution. $p$-values from paired Wilcoxon signed-rank test
-(val $\rightarrow$ test, seed-level). All drops significant at $p \leq 0.005$.}\label{tab:main_results}
+\caption{Reported Historical Coverage Change, Validation vs.\ Test (50 Seeds;
+shift vs.\ input-join artifact unidentified). 95\% CIs from $t$-distribution.
+$p$-values from paired Wilcoxon signed-rank test (val $\rightarrow$ test,
+seed-level). On the recovered snapshot the historical default entity join leaves
+100\% of test rows unmatched (Section~\ref{sec:recovered}), which would
+mechanically depress test coverage on these same tasks; the tabulated drops
+therefore cannot be cleanly attributed to COVID distribution shift rather than
+the join artifact.}\label{tab:main_results}
 \small
 \begin{tabular}{@{}lcccccc@{}}
 \toprule
@@ -512,7 +517,7 @@ Tasks marked with $^*$ in Table~\ref{tab:main_results} exhibit extreme model var
 
 \section{Threshold Sensitivity Analysis}\label{app:threshold}
 
-Table~\ref{tab:threshold_sensitivity} shows threshold performance across $n=16$ multiclass tasks. Note that the 40\% threshold is derived from the SALT concentration gap (in-sample); the eight external datasets were not used to fit the displayed cutoff, but their post-outcome scope selection and test-aware pipelines prevent a clean prospective validation interpretation. On the external subset alone at 40\%: Precision~$=$~1.00, Recall~$=$~0.50 (1 TP: Covertype; 1 FN: KDDCup99; 6 TN). Low external recall reflects sparse catastrophic cases; the original primary claim rested on the $n=16$ correlation ($\rho=0.853$) rather than threshold classification. Ground-truth labels use the at-risk rule (mean coverage drop $>$15~pp, consistent with 50-seed means in Table~\ref{tab:main_results}). For high-variance tasks, the mean and median labels can differ: i-shippoint has mean drop 18.5~pp (At-risk) but median drop 1.2~pp (robust); Table~\ref{tab:main_results} labels it ROB by median for descriptive purposes, while the framework uses the mean-based threshold for threshold evaluation.
+Table~\ref{tab:threshold_sensitivity} shows threshold performance across $n=16$ multiclass tasks. Note that the 40\% threshold is derived from the SALT concentration gap (in-sample); the eight external datasets were not used to fit the displayed cutoff, but their post-outcome scope selection and test-aware pipelines prevent a clean prospective validation interpretation. On the external subset alone at 40\%: Precision~$=$~1.00, Recall~$=$~0.50 (1 TP: Covertype; 1 FN: KDDCup99; 6 TN). Low external recall reflects sparse catastrophic cases; the original primary claim rested on the $n=16$ correlation ($\rho=0.853$) rather than threshold classification. Ground-truth labels use the at-risk rule (mean coverage drop $>$15~pp, consistent with 50-seed means in Table~\ref{tab:main_results}). For high-variance tasks, the mean and median labels can differ: i-shippoint has mean drop 18.5~pp (At-risk) but median drop 1.2~pp (robust); Table~\ref{tab:main_results} labels it ROB by median for descriptive purposes, while the framework uses the mean-based threshold for threshold evaluation. \textbf{No-skill comparison.} Ground truth is imbalanced (6 at-risk : 10 robust): a trivial always-predict-robust classifier scores 62.5\% accuracy (10/16) with F1 $=0$ on the at-risk class. The 40\% threshold (accuracy 87.5\%, F1 $=0.83$) exceeds no-skill by $+25$~pp; but on the external-only subset (2 at-risk : 6 robust) the 7/8 result beats an always-robust baseline of 75\% by only $+12.5$~pp, so the external-transfer margin over no-skill is slim.
 
 \begin{table}[htbp]
 \centering
@@ -972,7 +977,7 @@ $^\dagger$The original text attributed differing Covertype values (49.8\% concen
 
 \textbf{Historical classification arithmetic.} The four reported benchmark evaluations have low SHAP concentration---\textbf{all below the 40\% threshold} (individual values: 26.2\%, 1.9\%, 12.5\%, 27.5\%; \textbf{mean concentration = 17.0\%}). Thresholding the reported values gives four historical true-negative classifications. Selection uncertainty, inconsistent execution protocols and missing raw predictions prevent interpreting this count as validated specificity. The recovered complete SALT panel fails to reproduce the original positive association, so these summaries do not establish a deployable sensitivity/specificity tradeoff.
 
-\textbf{Combined validation accuracy (SALT + WILDS).} Combining the 8 SALT tasks with these 4 WILDS benchmarks yields $n=12$ total tasks (distinct from the $n=16$ primary endpoint which uses 8 different external UCI datasets). The threshold accuracy is \textbf{91.7\% (11/12)}:
+\textbf{Combined validation accuracy (SALT + WILDS).} Combining the 8 SALT tasks with these 4 WILDS benchmarks yields $n=12$ total tasks (distinct from the $n=16$ primary endpoint which uses 8 different external UCI datasets). The threshold accuracy is \textbf{91.7\% (11/12)}, versus a trivial always-predict-robust baseline of 66.7\% (8/12) on this imbalanced 8-robust:4-at-risk set (a margin of $+25$~pp):
 \begin{itemize}[nosep,leftmargin=*]
     \item \textbf{Sensitivity} (SALT): 4/4 at-risk SALT tasks flagged under the $>$15~pp rule (historical descriptive counts)
     \item \textbf{Specificity} (WILDS + robust SALT): 7/8 robust tasks correctly unflagged (87.5\%)
