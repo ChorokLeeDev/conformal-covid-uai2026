@@ -1,1073 +1,304 @@
-% UAI 2026 Presentation: Diagnosing Conformal Prediction Failures Under Distribution Shift
-% Author: Chorok Lee, KAIST
-% Date: August 17-21, 2026, Amsterdam
+\documentclass[aspectratio=43,10pt]{beamer}
 
-\documentclass[aspectratio=169,11pt]{beamer}
-
-% Theme and colors
-\usetheme{Madrid}
-\usecolortheme{default}
-\definecolor{kaistblue}{RGB}{0,51,102}
-\definecolor{alertred}{RGB}{178,34,34}
-\definecolor{successgreen}{RGB}{34,139,34}
-\setbeamercolor{structure}{fg=kaistblue}
-\setbeamercolor{alerted text}{fg=alertred}
-
-% Packages
-\usepackage{amsmath,amssymb,amsthm}
-\usepackage{graphicx}
-\usepackage{booktabs}
+\usetheme{default}
+\usepackage{fontspec}
+\usepackage{amsmath,amssymb}
 \usepackage{tikz}
-\usetikzlibrary{shapes,arrows,positioning,calc}
-\usepackage{algorithm}
-\usepackage{algorithmic}
+\usepackage{booktabs}
+\usepackage{array}
 \usepackage{xcolor}
-\usepackage{colortbl}
-\usepackage{pifont}
 
-% Custom commands
-\newcommand{\rmark}{\textcolor{alertred}{\ding{55}}}
-\newcommand{\gmark}{\textcolor{successgreen}{\ding{51}}}
-\newcommand{\conc}{\mathcal{H}}
-\newcommand{\cov}{\mathcal{C}}
+% ---- Prof. Lee palette ----
+\definecolor{lblue}{HTML}{C7D6EC}   % title rule
+\definecolor{dred}{HTML}{A6271F}     % section labels / key terms / estimate
+\definecolor{dgreen}{HTML}{2E8B4F}   % observed / empirical
+\definecolor{yhi}{HTML}{FFF24A}      % highlight on key numbers
+\definecolor{pgrey}{HTML}{8A8A8A}    % page-number circle
 
-% Remove navigation symbols
+\setbeamercolor{background canvas}{bg=white}
 \setbeamertemplate{navigation symbols}{}
 
-% Slide numbers
-\setbeamertemplate{footline}[frame number]
+% ---- Fonts: Latin Modern via fontspec (xelatex), by OTF filename ----
+\setmainfont{lmroman10-regular.otf}[
+  BoldFont       = lmroman10-bold.otf,
+  ItalicFont     = lmroman10-italic.otf,
+  BoldItalicFont = lmroman10-bolditalic.otf ]
+\setsansfont{lmsans10-regular.otf}[
+  BoldFont       = lmsans10-bold.otf,
+  ItalicFont     = lmsans10-oblique.otf,
+  BoldItalicFont = lmsans10-boldoblique.otf ]
+\usefonttheme{professionalfonts}
+\renewcommand{\familydefault}{\sfdefault}
 
-% Title information
-\title[SHAP Concentration \& CP Failures]{Diagnosing Conformal Prediction Failures\\Under Distribution Shift}
-\subtitle{A COVID-19 Case Study}
-\author[Chorok Lee]{Chorok Lee}
-\institute[KAIST]{Korea Advanced Institute of Science and Technology (KAIST)}
-\date{UAI 2026 \\ Amsterdam, August 17--21}
+% ---- Frame title: bold black, left, thin light-blue rule ----
+\setbeamertemplate{frametitle}{%
+  \vspace*{0.5em}%
+  \begin{beamercolorbox}[wd=\paperwidth,leftskip=0.6cm,rightskip=0.6cm]{frametitle}%
+    {\color{black}\bfseries\large\insertframetitle}\par
+    \vspace{2pt}%
+    {\color{lblue}\rule{\dimexpr\paperwidth-1.2cm\relax}{1.6pt}}%
+  \end{beamercolorbox}%
+  \vspace*{0.3em}%
+}
+\setbeamercolor{frametitle}{fg=black,bg=white}
+
+% ---- Page number in grey circle, bottom-right. No footer/copyright. ----
+\setbeamertemplate{footline}{%
+  \hfill
+  \begin{tikzpicture}[overlay]
+    \node[circle,fill=pgrey,text=white,inner sep=1.6pt,font=\scriptsize]
+      at (-0.75,0.55) {\insertframenumber};
+  \end{tikzpicture}%
+  \hspace{0.35cm}\vspace{0.25cm}%
+}
+
+% ---- helper macros ----
+\newcommand{\obs}[1]{{\color{dgreen}#1}}        % observed/empirical
+\newcommand{\est}[1]{{\color{dred}#1}}          % estimate/claim
+\newcommand{\key}[1]{{\color{dred}\textbf{#1}}} % key term
+\newcommand{\hl}[1]{\colorbox{yhi}{#1}}         % yellow highlight
+\newcommand{\slab}[1]{{\color{dred}\textbf{#1}}}% A./B. section labels
+\newcommand{\eqnum}[1]{\hfill {\footnotesize\color{black}\dotfill\ (#1)}}
+
+\setbeamertemplate{itemize items}[circle]
+\setbeamercolor{itemize item}{fg=dred}
+\setbeamercolor{itemize subitem}{fg=pgrey}
 
 \begin{document}
 
-%==============================================================================
-% TITLE SLIDE
-%==============================================================================
-\begin{frame}
-\titlepage
+% ====================== 1. TITLE ======================
+{
+\setbeamertemplate{footline}{}
+\begin{frame}[plain]
+  \vspace{1.0cm}
+  {\color{lblue}\rule{\textwidth}{2pt}}\par
+  \vspace{0.6cm}
+  {\bfseries\LARGE Diagnosing Conformal Prediction Failures\\[4pt]
+   Under Distribution Shift}\par
+  \vspace{6pt}
+  {\large A COVID-19 Case Study}\par
+  \vspace{0.5cm}
+  {\color{lblue}\rule{\textwidth}{2pt}}\par
+  \vspace{1.0cm}
+  {\large\bfseries Chorok Lee}\par
+  \vspace{4pt}
+  {\small Korea Advanced Institute of Science and Technology (KAIST)}\par
+  \vspace{2pt}
+  {\footnotesize\ttfamily choroklee@kaist.ac.kr}\par
+  \vfill
+  {\footnotesize\color{dred}\textbf{UAI 2026}}\par
 \end{frame}
-
-%==============================================================================
-% MOTIVATION/PROBLEM (Slides 2-4)
-%==============================================================================
-
-\begin{frame}{The Promise of Conformal Prediction}
-
-\begin{columns}
-\begin{column}{0.55\textwidth}
-\textbf{Conformal Prediction} provides:
-\vspace{1em}
-\begin{itemize}
-    \item[$\checkmark$] \alert{Distribution-free} coverage guarantees
-    \item[$\checkmark$] Works with \textbf{any} base model
-    \item[$\checkmark$] Exact finite-sample validity
-\end{itemize}
-
-\vspace{1.5em}
-\textbf{Target:} 90\% coverage ($\alpha = 0.1$)
-
-\vspace{0.5em}
-$\Rightarrow$ True label in prediction set at least 90\% of the time
-\end{column}
-
-\begin{column}{0.45\textwidth}
-% CP illustration using methodology figure
-\includegraphics[width=\textwidth]{figures/fig2_cp_methodology.jpg}
-\end{column}
-\end{columns}
-
-\vspace{1em}
-\centering
-\textit{But there's a catch...}
-\end{frame}
-
-%------------------------------------------------------------------------------
-
-\begin{frame}{The Hidden Assumption}
-
-\begin{center}
-\begin{tikzpicture}[scale=1.2]
-% Training distribution
-\draw[thick,kaistblue,fill=kaistblue!20] (0,0) ellipse (1.5 and 1);
-\node at (0,0) {Training};
-\node[below] at (0,-1.3) {Calibration};
-
-% Arrow
-\draw[->,ultra thick,gray] (2,0) -- (3.5,0);
-\node[above] at (2.75,0.2) {\small i.i.d.?};
-
-% Test distribution
-\draw[thick,alertred,fill=alertred!20] (5.5,0) ellipse (1.5 and 1);
-\node at (5.5,0) {Test};
-\node[below] at (5.5,-1.3) {Deployment};
-
-% Question mark
-\node[scale=2] at (7.5,0) {\textbf{?}};
-\end{tikzpicture}
-\end{center}
-
-\vspace{1em}
-
-\begin{alertblock}{The Exchangeability Assumption}
-Conformal prediction \textbf{requires} calibration and test data to be exchangeable (approximately i.i.d.)
-\end{alertblock}
-
-\vspace{0.5em}
-
-\textbf{Problem:} In real-world deployments, \alert{distribution shift is inevitable}
-
-\begin{itemize}
-    \item Temporal shift (COVID-19 changing behavior patterns)
-    \item Geographic shift (new regions)
-    \item Demographic shift (new user populations)
-\end{itemize}
-
-\end{frame}
-
-%------------------------------------------------------------------------------
-
-\begin{frame}{The Research Gap}
-
-\begin{columns}
-\begin{column}{0.5\textwidth}
-\textbf{Standard Shift Detectors:}
-\vspace{0.5em}
-\begin{itemize}
-    \item MMD (Maximum Mean Discrepancy)
-    \item C2ST (Classifier Two-Sample Test)
-    \item PSI (Population Stability Index)
-\end{itemize}
-
-\vspace{1em}
-\textcolor{alertred}{\textbf{Their limitation:}}\\
-Detect shift \textbf{uniformly} across all tasks
-
-\vspace{0.5em}
-$\Rightarrow$ Cannot distinguish:
-\begin{itemize}
-    \item \textcolor{successgreen}{Robust outcomes} (coverage OK)
-    \item \textcolor{alertred}{Catastrophic failures} (coverage broken)
-\end{itemize}
-\end{column}
-
-\begin{column}{0.5\textwidth}
-% Standard detectors comparison - use text summary instead
-\begin{center}
-\textbf{Standard Detectors:}\\[0.5em]
-\begin{tabular}{lc}
-MMD & $\rho = 0.19$ \\
-C2ST & $\rho = 0.15$ \\
-PSI & $\rho = 0.12$ \\
-\end{tabular}
-
-\vspace{1em}
-\textcolor{gray}{\textit{All detect shift,}}\\
-\textcolor{gray}{\textit{none predict severity}}
-\end{center}
-\end{column}
-\end{columns}
-
-\vspace{1em}
-\centering
-\fbox{\textbf{Research Question:} Can we \textit{predict} when conformal prediction will fail?}
-\end{frame}
-
-%==============================================================================
-% BACKGROUND ON CONFORMAL PREDICTION (Slides 5-6)
-%==============================================================================
-
-\begin{frame}{Conformal Prediction: A Brief Primer}
-
-\textbf{Setup:} Classification with $K$ classes, base model outputs $\hat{\pi}(y|x)$
-
-\vspace{0.8em}
-
-\begin{columns}
-\begin{column}{0.48\textwidth}
-\textbf{1. Nonconformity score}
-$$s(x,y) = \sum_{k: \hat{\pi}_k \geq \hat{\pi}_y} \hat{\pi}_k$$
-
-\vspace{0.5em}
-
-\textbf{3. Prediction sets}
-$$\mathcal{C}(x) = \{y : s(x,y) \leq \hat{q}\}$$
-\end{column}
-
-\begin{column}{0.48\textwidth}
-\textbf{2. Calibrate threshold}
-$$\hat{q} = \text{Quantile}_{1-\alpha}\left(\{s_i\}_{i=1}^n\right)$$
-
-\vspace{0.5em}
-
-\textbf{4. Coverage guarantee}
-$$\mathbb{P}(Y \in \mathcal{C}(X)) \geq 1 - \alpha$$
-\end{column}
-\end{columns}
-
-\vspace{1em}
-\centering
-\textit{We use $\alpha = 0.1$ throughout (target: 90\% coverage)}
-\end{frame}
-
-%------------------------------------------------------------------------------
-
-\begin{frame}{What Happens Under Distribution Shift?}
-
-\begin{center}
-\begin{tikzpicture}[scale=0.9]
-% Left side - good coverage
-\node[align=center] at (0,3.5) {\textbf{No Shift}};
-\draw[thick,successgreen,fill=successgreen!20] (-1.5,0) rectangle (1.5,2.5);
-\node at (0,1.25) {\Large 90.2\%};
-\node[below] at (0,-0.3) {Coverage $\approx$ Target};
-
-% Middle - mild
-\node[align=center] at (5,3.5) {\textbf{Mild Shift}};
-\draw[thick,orange,fill=orange!20] (3.5,0) rectangle (6.5,2.1);
-\node at (5,1.05) {\Large 85.1\%};
-\node[below] at (5,-0.3) {Slight undercoverage};
-
-% Right - catastrophic
-\node[align=center] at (10,3.5) {\textbf{Severe Shift}};
-\draw[thick,alertred,fill=alertred!20] (8.5,0) rectangle (11.5,1.2);
-\node at (10,0.6) {\Large 49.8\%};
-\node[below] at (10,-0.3) {\textcolor{alertred}{Catastrophic failure}};
-
-% Target line
-\draw[dashed,thick,kaistblue] (-2,2.25) -- (12,2.25);
-\node[above left,kaistblue] at (11.5,2.25) {90\% target};
-\end{tikzpicture}
-\end{center}
-
-\vspace{1em}
-
-\begin{alertblock}{Key Observation}
-Distribution shift severity alone does \textbf{not} predict coverage failure.\\
-\textbf{What matters is \textit{how} features shift relative to model reliance.}
-\end{alertblock}
-
-\end{frame}
-
-%------------------------------------------------------------------------------
-
-\begin{frame}{Conformal Prediction Pipeline}
-
-\begin{center}
-% CP Methodology Pipeline Figure (FigureLabs generated)
-\includegraphics[width=0.95\textwidth]{figures/fig2_cp_methodology.jpg}
-\end{center}
-
-\vspace{0.3em}
-\centering
-\textit{Under distribution shift: calibrated threshold becomes invalid $\Rightarrow$ coverage breaks}
-
-\end{frame}
-
-%==============================================================================
-% OUR APPROACH: SHAP CONCENTRATION (Slides 7-9)
-%==============================================================================
-
-\begin{frame}{Our Key Insight}
-
-\begin{center}
-\Large
-\textit{``The vulnerability of conformal prediction is determined by}\\
-\textit{how \textbf{concentrated} the model's reliance is on shifting features.''}
-\end{center}
-
-\vspace{1.5em}
-
-\begin{columns}
-\begin{column}{0.5\textwidth}
-\centering
-\textbf{Low Concentration}\\[0.5em]
-\begin{tikzpicture}[scale=0.8]
-\foreach \i/\h in {1/0.8, 2/0.75, 3/0.7, 4/0.65, 5/0.6} {
-    \draw[fill=kaistblue!60] (\i*0.8-0.3,0) rectangle (\i*0.8+0.3,\h*2);
 }
-\node[below] at (2.4,-0.3) {\small Features};
-\node[rotate=90] at (-0.3,0.8) {\small SHAP};
-\end{tikzpicture}
-\\[0.5em]
-$\Rightarrow$ \textcolor{successgreen}{\textbf{Robust}}
-\end{column}
 
-\begin{column}{0.5\textwidth}
-\centering
-\textbf{High Concentration}\\[0.5em]
-\begin{tikzpicture}[scale=0.8]
-\foreach \i/\h in {1/2.5, 2/0.3, 3/0.2, 4/0.1, 5/0.05} {
-    \draw[fill=alertred!60] (\i*0.8-0.3,0) rectangle (\i*0.8+0.3,\h*0.7);
-}
-\node[below] at (2.4,-0.3) {\small Features};
-\node[rotate=90] at (-0.3,0.8) {\small SHAP};
-\end{tikzpicture}
-\\[0.5em]
-$\Rightarrow$ \textcolor{alertred}{\textbf{Vulnerable}}
-\end{column}
-\end{columns}
-
-\vspace{1em}
-\centering
-We measure concentration as \alert{Top-1 SHAP concentration} (share in the top feature)
+% ====================== 2. MOTIVATION ======================
+\begin{frame}{Why this matters: a guarantee that quietly breaks}
+  \begin{itemize}
+    \item \key{Conformal prediction} turns any model into one that outputs a
+          \emph{prediction set} with a coverage guarantee --- e.g.\ ``the true
+          label is inside the set \obs{90\%} of the time.''
+    \item That guarantee holds only under \key{exchangeability}: test data looks
+          like calibration data. Real deployments face \key{distribution shift}.
+    \vspace{4pt}
+    \item Prior work characterizes \emph{how much} coverage degrades under shift.
+          The open gap:
+  \end{itemize}
+  \vspace{2pt}
+  \begin{center}
+  \setbeamercolor{block body}{bg=lblue!40}
+  \begin{beamercolorbox}[wd=0.92\textwidth,sep=8pt,rounded=true]{block body}
+    \centering\bfseries
+    Can we identify \emph{which} deployed models will fail\\
+    \est{before observing any test data?}
+  \end{beamercolorbox}
+  \end{center}
+  \vspace{2pt}
+  \begin{itemize}
+    \item Our case study: \hl{8 tasks}, one \emph{identical} COVID-19 shift, yet
+          coverage drops span \obs{0.1\,pp} to \hl{77.1\,pp}. Same shift, opposite outcomes.
+  \end{itemize}
 \end{frame}
 
-%------------------------------------------------------------------------------
-
-\begin{frame}{SHAP Concentration: The Metric}
-
-\textbf{Step 1:} Compute mean absolute SHAP values on validation data
-$$\phi_j = \frac{1}{n}\sum_{i=1}^{n}|\text{SHAP}_j(x_i)| \quad \text{for each feature } j$$
-
-\vspace{0.8em}
-
-\textbf{Step 2:} Compute \alert{SHAP Concentration} --- fraction in top feature
-\begin{equation*}
-\boxed{C = \frac{\phi_1}{\sum_{j=1}^{p} \phi_j}}
-\end{equation*}
-where $\phi_1$ is the importance of the \textbf{top-ranked} feature.
-
-\vspace{1em}
-
-\begin{columns}
-\begin{column}{0.5\textwidth}
-\centering
-\textbf{Low $C$ ($<$ 40\%)}\\[0.3em]
-Importance spread across features\\
-\textcolor{successgreen}{\textbf{$\Rightarrow$ Robust to shift}}
-\end{column}
-\begin{column}{0.5\textwidth}
-\centering
-\textbf{High $C$ ($\geq$ 40\%)}\\[0.3em]
-Single feature dominates\\
-\textcolor{alertred}{\textbf{$\Rightarrow$ Vulnerable to shift}}
-\end{column}
-\end{columns}
-
-\vspace{0.5em}
-\centering
-\textit{Simple, interpretable, computed \textbf{before} deployment}
+% ====================== 3. PROBLEM SETUP ======================
+\begin{frame}{Problem setup: the COVID-19 natural experiment}
+  \slab{A.\ Data.} SALT supply-chain benchmark (RelBench), with a temporal split
+  aligned to COVID-19:
+  \begin{itemize}
+    \item \obs{Train}: before Feb 2020 (pre-COVID)\quad
+          \obs{Validation}: Feb--Jul 2020 (onset)\quad
+          \obs{Test}: after Jul 2020 (peak)
+    \item \key{SHAP $C$ and the initial 40\% cutoff} use \obs{validation-time data only}.
+          Test observations support held-out evaluation and post-hoc
+          mechanism/threshold analyses; they do not tune that initial cutoff.
+  \end{itemize}
+  \vspace{4pt}
+  \slab{B.\ Model + conformal method.} LightGBM classifier $+$ Adaptive Prediction
+  Sets (APS), target coverage $1-\alpha = \obs{90\%}$.
+  \vspace{4pt}
+  \slab{C.\ What ``failure'' means.} \key{Coverage drop} $=$ validation coverage
+  $-$ test coverage (percentage points). A big drop $=$ the guarantee broke.
+  \vspace{6pt}
+  \begin{center}\footnotesize
+    All 8 tasks pass through the \emph{same} pipeline and the \emph{same} shift ---
+    the only thing that varies is the task.
+  \end{center}
 \end{frame}
 
-%------------------------------------------------------------------------------
-
-\begin{frame}{Why Does Concentration Matter?}
-
-\begin{center}
-% Feature importance dynamics figure - maximized
-\includegraphics[width=0.9\textwidth,height=0.65\textheight,keepaspectratio]{figures/figure3_feature_importance.pdf}
-\end{center}
-
-\begin{columns}
-\begin{column}{0.5\textwidth}
-\centering
-\textbf{Few features} $\Rightarrow$ \alert{Large perturbation}
-\end{column}
-\begin{column}{0.5\textwidth}
-\centering
-\textbf{Many features} $\Rightarrow$ \textcolor{successgreen}{Stable coverage}
-\end{column}
-\end{columns}
-
+% ====================== 4. METHOD ======================
+\begin{frame}{Method: SHAP concentration as a pre-deployment diagnostic}
+  \key{Idea.} A model that leans on \emph{one} feature is fragile: if that feature
+  shifts, everything shifts. Measure how concentrated the model's reliance is.
+  \vspace{6pt}
+  \begin{equation*}
+    C \;=\; \frac{\phi_1}{\sum_{j=1}^{p}\phi_j}
+    \eqnum{1}
+  \end{equation*}
+  \begin{itemize}
+    \item $\phi_j$ = mean absolute \key{SHAP} value of feature $j$ (its average
+          contribution to predictions); $\phi_1$ = the top feature.
+    \item $C \in [0,1]$: fraction of total importance in the single top feature.
+          Normalized, so it compares across tasks.
+    \item Computed \est{before deployment}, on \obs{validation data only} --- no
+          test labels needed.
+  \end{itemize}
+  \vspace{4pt}
+  \begin{center}\small
+  \key{Decision rule (exploratory):}\;
+  $C \le \obs{40\%}$ lower risk\;\textbullet\;
+  $C > \obs{40\%}$ check protective factors, else flag as \est{vulnerable}.
+  \end{center}
 \end{frame}
 
-%==============================================================================
-% METHODOLOGY (Slides 10-11)
-%==============================================================================
-
-\begin{frame}{Experimental Setup: SALT Benchmark}
-
-\begin{columns}
-\begin{column}{0.5\textwidth}
-\textbf{SALT Benchmark:}
-\begin{itemize}
-    \item 8 e-commerce classification tasks
-    \item \alert{COVID-19 temporal split}
-    \begin{itemize}
-        \item Calibration: Pre-COVID
-        \item Test: During COVID
-    \end{itemize}
-    \item Natural distribution shift
-\end{itemize}
-
-\vspace{1em}
-
-\textbf{8 Tasks:}\\[0.3em]
-{\small
-\begin{tabular}{@{}ll@{}}
-1. s-payterms & 5. s-office \\
-2. s-shipcond & 6. i-incoterms \\
-3. i-shippoint & 7. i-plant \\
-4. s-group & 8. s-incoterms \\
-\end{tabular}
-}
-\end{column}
-
-\begin{column}{0.5\textwidth}
-% COVID Timeline Figure
-\includegraphics[width=\textwidth]{figures/fig1_covid_timeline.jpg}
-\end{column}
-\end{columns}
+% ====================== 5. THEORY ======================
+\begin{frame}{Theory: why concentration relates to failure}
+  \key{Theorem 1 (monotone vulnerability).} For a $K$-class APS predictor,
+  under three explicit assumptions ---
+  \begin{itemize}\small
+    \item[(A1)] \emph{additive decomposition}: prediction $=C\cdot g(y\mid x_1)+(1-C)\,h(\cdot)$
+    \item[(A2)] \emph{concentrated misclassification} under shift on the top feature $x_1$
+    \item[(A3)] \emph{residual exchangeability} of the remaining features
+  \end{itemize}
+  the \emph{lower bound} on the expected conformity score increases with $C$, and
+  the coverage \emph{upper bound} is \key{non-increasing} in $C$, on the stated
+  domain ($\varepsilon<\bar h$ and $\varepsilon<(1-\hat q_\alpha)/(K-1)$, $K\ge3$):
+  \begin{equation*}
+    \mathbb{E}[s_{\text{test}}] \;\geq\;
+      C\,(1-(K{-}1)\varepsilon) \;+\; (1-C)\,(1-(K{-}1)\bar h)
+    \eqnum{2}
+  \end{equation*}
+  \begin{itemize}
+    \item A \est{directional intuition} for an \emph{idealized probability-mixture}
+          model --- \est{not} a formal guarantee for the empirical SHAP-derived $C$
+          (TreeSHAP log-odds; footnote 3, p.4).
+    \item \obs{Empirically} consistent: catastrophic tasks show strong rightward
+          score shifts (KS $0.68$--$0.96$).
+  \end{itemize}
 \end{frame}
 
-%------------------------------------------------------------------------------
-
-\begin{frame}{Models and Methods}
-
-\begin{columns}
-\begin{column}{0.55\textwidth}
-\textbf{Models (GBM-specific diagnostic):}
-\vspace{0.5em}
-\begin{itemize}
-    \item \textbf{LightGBM} (primary): $\rho=0.833$
-    \item CatBoost, XGBoost: $\rho=0.55$--$0.67$
-    \item \textcolor{gray}{RF ($\rho=0.30$), MLP ($\rho=0.43$) -- not applicable}
-\end{itemize}
-
-\vspace{1em}
-
-\textbf{Conformal Method:}
-\begin{itemize}
-    \item Adaptive Prediction Sets (APS)
-    \item Target coverage: $1-\alpha = 90\%$
-\end{itemize}
-\end{column}
-
-\begin{column}{0.45\textwidth}
-\begin{center}
-\begin{tikzpicture}[scale=0.8]
-% Model comparison bar chart
-\draw[->] (0,0) -- (0,4) node[above,rotate=90,pos=0.5] {\small Correlation $\rho$};
-\draw[->] (0,0) -- (5,0);
-% Bars
-\draw[fill=kaistblue!80] (0.5,0) rectangle (1.2,3.33);
-\node[below,font=\tiny] at (0.85,-0.1) {LGB};
-\draw[fill=kaistblue!60] (1.5,0) rectangle (2.2,2.67);
-\node[below,font=\tiny] at (1.85,-0.1) {Cat};
-\draw[fill=kaistblue!40] (2.5,0) rectangle (3.2,2.19);
-\node[below,font=\tiny] at (2.85,-0.1) {XGB};
-\draw[fill=gray!40] (3.5,0) rectangle (4.2,1.2);
-\node[below,font=\tiny] at (3.85,-0.1) {RF};
-% Threshold line
-\draw[dashed,alertred,thick] (0,2) -- (4.5,2);
-\node[right,alertred,font=\tiny] at (4.5,2) {0.5};
-\end{tikzpicture}
-\end{center}
-\end{column}
-\end{columns}
-
-\vspace{0.5em}
-\centering
-\textit{Our diagnostic works best for gradient boosting models}
+% ====================== 6. EXPERIMENTS / MECHANISM ======================
+\begin{frame}{The mechanism: catastrophic vs.\ robust, same shift}
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \slab{Catastrophic} (s-shipcond, \obs{71.6\,pp} drop)
+      \begin{itemize}\small
+        \item One dominant feature \key{explodes} ($4.5\times$ importance).
+        \item Prediction sets \emph{shrink} while they should grow:
+              model is \est{confidently wrong}.
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \slab{Robust} (s-office, \obs{0.1\,pp} drop, yet $C=42.6\%$)
+      \begin{itemize}\small
+        \item Importance \key{redistributes} across many features
+              ($10$--$20\times$, spread out).
+        \item Rankings reshuffle gracefully; coverage holds ---
+              a \est{high-$C$ false positive} for the 40\% rule.
+      \end{itemize}
+    \end{column}
+  \end{columns}
+  \vspace{8pt}
+  \begin{center}\small
+  \begin{tabular}{lcc}
+    \toprule
+     & Catastrophic & Robust \\
+    \midrule
+    Feature-temporal stability (Jaccard) & \obs{$\approx 0.02$} & \obs{$>0.5$} \\
+    Top-feature SHAP concentration $C$   & \obs{high (50.7\%)} & \obs{high too (42.6\%)} \\
+    Prediction entropy under shift       & \est{$\downarrow$ (wrong\,\&\,sure)} & $\uparrow$ \\
+    \bottomrule
+  \end{tabular}
+  \end{center}
+  \vspace{4pt}
+  \centering\footnotesize
+  Standard shift tests (MMD, C2ST, PSI) fire on \obs{all 8} tasks equally --- they
+  see the shift but \est{not the severity}.
 \end{frame}
 
-%------------------------------------------------------------------------------
-
-\begin{frame}{Experimental Setup}
-
-\begin{columns}
-\begin{column}{0.5\textwidth}
-\textbf{Statistical Robustness:}
-\begin{itemize}
-    \item 50 random seeds per experiment
-    \item Spearman correlation with p-values
-    \item Bootstrap confidence intervals
-\end{itemize}
-
-\vspace{1em}
-
-\textbf{External Validation:}
-\begin{itemize}
-    \item WILDS: CivilComments, Amazon
-    \item UCI: Covertype, Adult
-    \item Combined accuracy: \textbf{91.7\%} (11/12)
-\end{itemize}
-\end{column}
-
-\begin{column}{0.5\textwidth}
-\begin{table}
-\centering
-\begin{tabular}{lc}
-\toprule
-\textbf{Component} & \textbf{Setting} \\
-\midrule
-Calibration size & 1K--5K \\
-Test size & 5K--50K \\
-Features & 20--150 \\
-Classes & 2--10 \\
-$\alpha$ & 0.1 \\
-Seeds & 50 \\
-\bottomrule
-\end{tabular}
-\caption{Experimental parameters}
-\end{table}
-\end{column}
-\end{columns}
+% ====================== 7. KEY RESULTS ======================
+\begin{frame}{Key result: concentration predicts severity}
+  \begin{center}
+    \small Primary endpoint: $\rho = \hl{0.853}$, $p<\obs{0.001}$ over
+    \hl{16 tasks} / \hl{9 domains} \;\textbullet\; within SALT ($n{=}8$)
+    $\rho=\obs{0.833}$ (exploratory) \;\textbullet\; shift detectors
+    $\rho\le\obs{0.19}$.
+  \end{center}
+  \vspace{-2pt}
+  \begin{center}
+    \includegraphics[width=0.72\linewidth]{assets/fig2.png}
+  \end{center}
+  \vspace{-4pt}
+  \centering\footnotesize
+  Boundary cases: s-office ($C=42.6\%$, drop $0.1$\,pp;
+  \est{high-$C$ false positive}); i-shippoint ($C=48.8\%$, drop $18.5$\,pp).
 \end{frame}
 
-%==============================================================================
-% MAIN RESULTS (Slides 12-16)
-%==============================================================================
-
-\begin{frame}{Main Result: Strong Correlation}
-
-\vspace{-0.5em}
-
-\begin{center}
-% Main correlation scatter plot (FigureLabs generated)
-\includegraphics[width=0.65\textwidth,height=0.6\textheight,keepaspectratio]{figures/fig3_correlation.jpg}
-\end{center}
-
-\vspace{-0.3em}
-
-\begin{block}{Primary Finding}
-SHAP concentration \textbf{strongly predicts} coverage failure severity\\
-\centering $\rho = 0.853$, $p < 0.001$, $n = 16$ multiclass tasks across 9 domains
-\end{block}
-
+% ====================== 8. LIMITATIONS (honest) ======================
+\begin{frame}{Limitations: what this diagnostic does \emph{not} do}
+  \slab{A.\ It is model-specific.} The signal is strong for gradient-boosted trees
+  (LightGBM $\rho=\obs{0.833}$, CatBoost $0.67$, XGBoost $0.55$) but \est{fails for
+  bagging}: Random Forest $\rho=\obs{0.30}$ ($p=0.47$). Compute $C$ on \emph{your}
+  deployed model class, don't transfer.
+  \vspace{4pt}
+  \slab{B.\ The 40\% threshold is exploratory.} Derived from \obs{8} SALT tasks;
+  within-SALT power is below convention. Treat as provisional; validate before a
+  new domain.
+  \vspace{4pt}
+  \slab{C.\ One false positive, honestly reported.} sales-office has $C=42.6\%$ yet
+  \obs{0.1\,pp} drop. The framework reports protective SALESORGANIZATION
+  (train--validation Jaccard $=.61$; treated as secondary), motivating a
+  \key{provisional protective-factor check}, not a hard cutoff.
+  \vspace{4pt}
+  \slab{D.\ It diagnoses, it does not fix.} Mitigation is mechanism-dependent:
+  quarterly retraining gives \obs{$+18.9$\,pp} on \emph{one} task (s-shipcond),
+  \est{single-seed, Holm-corrected $p=0.11$} --- suggestive, not a reliable average.
+  RAPS helps class-accumulation failures, not single-feature dependence.
 \end{frame}
 
-%------------------------------------------------------------------------------
-
-\begin{frame}{Within SALT COVID Tasks}
-
-\begin{center}
-\textbf{8 tasks, same COVID shift, different outcomes}
-
-\vspace{1em}
-
-\begin{tabular}{lccc}
-\toprule
-\textbf{Task} & \textbf{Conc. (\%)} & \textbf{Coverage} & \textbf{Drop (pp)} \\
-\midrule
-s-payterms & 54.2 & 13.7\% & \textcolor{alertred}{77.1} \\
-s-shipcond & 50.7 & 21.8\% & \textcolor{alertred}{71.6} \\
-s-group & 47.3 & 12.4\% & \textcolor{alertred}{71.2} \\
-i-shippoint & 48.8 & 72.7\% & 18.5 \\
-s-office & 42.6 & 99.9\% & 0.1 \\
-i-incoterms & 28.9 & 83.7\% & 11.3 \\
-i-plant & 23.9 & 81.4\% & 10.6 \\
-s-incoterms & 23.7 & 87.0\% & 8.5 \\
-\bottomrule
-\end{tabular}
-
-\vspace{1em}
-
-$\rho = 0.833$, $p = 0.010$ (within SALT, $n=8$)
-\end{center}
-
-\end{frame}
-
-%------------------------------------------------------------------------------
-
-\begin{frame}{Comparison: SHAP vs Standard Detectors}
-
-\begin{columns}
-\begin{column}{0.5\textwidth}
-\includegraphics[width=\textwidth]{figures/figure_n16_correlation.pdf}
-\end{column}
-
-\begin{column}{0.5\textwidth}
-\begin{center}
-\begin{tabular}{lcc}
-\toprule
-\textbf{Metric} & $\rho$ & $p$-value \\
-\midrule
-\alert{SHAP Conc.} & \alert{0.853} & $<$0.001 \\
-MMD & 0.19 & 0.48 \\
-C2ST & 0.15 & 0.58 \\
-PSI & 0.12 & 0.66 \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-\vspace{0.5em}
-
-\textbf{Why standard detectors fail:}\\
-They measure \textbf{marginal} shift, not shift in \textbf{model-relevant} features.
-\end{column}
-\end{columns}
-
-\end{frame}
-
-%------------------------------------------------------------------------------
-
-\begin{frame}{External Validation: Covertype Geographic Shift}
-
-\begin{columns}
-\begin{column}{0.32\textwidth}
-\textbf{Covertype:}
-\begin{itemize}
-    \item 7 classes
-    \item Geographic split
-\end{itemize}
-
-\vspace{0.3em}
-
-\textbf{Results:}
-\begin{itemize}
-    \item $C = 49.8\%$
-    \item \textcolor{alertred}{8.2\% cov.}
-    \item \textcolor{alertred}{81.8pp drop}
-\end{itemize}
-
-\alert{Correctly predicted!}
-\end{column}
-
-\begin{column}{0.68\textwidth}
-\includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{figures/conformity_score_cdfs.pdf}
-\end{column}
-\end{columns}
-
-\end{frame}
-
-%------------------------------------------------------------------------------
-
-\begin{frame}{Model Sensitivity Analysis}
-
-\begin{center}
-\begin{tabular}{lccc}
-\toprule
-\textbf{Model} & \textbf{Method} & \textbf{$\rho$} & \textbf{Diagnostic?} \\
-\midrule
-\textbf{LightGBM} & Boosting (GOSS) & \textbf{0.833} & \textcolor{successgreen}{\checkmark} \\
-CatBoost & Boosting (ordered) & 0.667 & \textcolor{successgreen}{\checkmark} \\
-XGBoost & Boosting (histogram) & 0.548 & \textcolor{successgreen}{\checkmark} \\
-Random Forest & Bagging & 0.300 & \textcolor{alertred}{$\times$} \\
-MLP & Neural Network & 0.430 & \textcolor{alertred}{$\times$} \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-\vspace{1em}
-
-\begin{columns}
-\begin{column}{0.33\textwidth}
-\centering
-\textbf{GBM} \textcolor{successgreen}{\checkmark}\\[0.3em]
-Sequential boosting\\
-$\Rightarrow$ concentrated dependence
-\end{column}
-\begin{column}{0.33\textwidth}
-\centering
-\textbf{RF} \textcolor{alertred}{$\times$}\\[0.3em]
-Bagging\\
-$\Rightarrow$ dilutes reliance
-\end{column}
-\begin{column}{0.33\textwidth}
-\centering
-\textbf{MLP} \textcolor{alertred}{$\times$}\\[0.3em]
-Global sensitivity\\
-$\Rightarrow$ different failure mode
-\end{column}
-\end{columns}
-
-\end{frame}
-
-%==============================================================================
-% THEORETICAL FOUNDATION (Slides 17-18)
-%==============================================================================
-
-\begin{frame}{Theoretical Foundation}
-
-\begin{theorem}[APS Score Bound Under Shift]
-Let $\mathcal{H}$ be the SHAP concentration and $\delta_j$ the shift magnitude in feature $j$. Under mild regularity conditions, the expected APS score deviation satisfies:
-$$\mathbb{E}[|s_{\text{test}} - s_{\text{cal}}|] \leq C \cdot g(\mathcal{H}) \cdot \|\boldsymbol{\delta}\|_2$$
-where $g(\mathcal{H})$ is \alert{monotonically increasing} in $\mathcal{H}$.
-\end{theorem}
-
-\vspace{1em}
-
-\textbf{Key implications:}
-\begin{enumerate}
-    \item Higher concentration $\Rightarrow$ larger score perturbation bounds
-    \item Score perturbation $\Rightarrow$ coverage deviation (via quantile shift)
-    \item \alert{Concentration acts as a ``fragility amplifier''}
-\end{enumerate}
-
-\vspace{0.5em}
-\centering
-\textit{Full proof in paper Appendix A}
-\end{frame}
-
-%------------------------------------------------------------------------------
-
-\begin{frame}{Intuition Behind the Theorem}
-
-\begin{center}
-\begin{tikzpicture}[scale=0.85]
-% Left: Low concentration
-\node at (-0.5,4) {\textbf{Low $\mathcal{H}$}};
-
-% Feature vector (uniform)
-\foreach \i in {1,...,5} {
-    \draw[fill=kaistblue!50] (\i*0.6-0.2,2.5) rectangle (\i*0.6+0.2,3);
-}
-\node at (1.8,2) {\small SHAP weights};
-
-% Shift vector
-\foreach \i/\c in {1/red,2/white,3/red,4/white,5/red} {
-    \draw[fill=\c!50] (\i*0.6-0.2,1) rectangle (\i*0.6+0.2,1.5);
-}
-\node at (1.8,0.5) {\small Shift};
-
-% Result
-\draw[->,thick] (4,2) -- (5,2);
-\node at (6.2,2) {\textcolor{successgreen}{Small}};
-\node at (6.2,1.5) {\textcolor{successgreen}{perturbation}};
-
-% Right: High concentration
-\node at (8.5,4) {\textbf{High $\mathcal{H}$}};
-
-% Feature vector (concentrated)
-\draw[fill=alertred!80] (8.8-0.2,2.5) rectangle (8.8+0.2,3.8);
-\foreach \i in {2,...,5} {
-    \draw[fill=alertred!20] (8+\i*0.6-0.2,2.5) rectangle (8+\i*0.6+0.2,2.7);
-}
-\node at (10.8,2) {\small SHAP weights};
-
-% Shift vector (hitting dominant feature)
-\draw[fill=red!80] (8.8-0.2,1) rectangle (8.8+0.2,1.5);
-\foreach \i in {2,...,5} {
-    \draw[fill=white] (8+\i*0.6-0.2,1) rectangle (8+\i*0.6+0.2,1.5);
-}
-\node at (10.8,0.5) {\small Shift};
-
-% Result
-\draw[->,thick] (12.5,2) -- (13.5,2);
-\node at (14.7,2) {\textcolor{alertred}{Large}};
-\node at (14.7,1.5) {\textcolor{alertred}{perturbation}};
-\end{tikzpicture}
-\end{center}
-
-\vspace{0.5em}
-
-\begin{block}{The Amplification Mechanism}
-When shift hits the dominant feature in a concentrated model, the weighted impact is much larger than when shift is spread across a model with uniform reliance.
-\end{block}
-
-\end{frame}
-
-%==============================================================================
-% PRACTICAL FRAMEWORK (Slides 19-20)
-%==============================================================================
-
-\begin{frame}{Operational Framework: 3-Step Protocol}
-
-\begin{center}
-\begin{tikzpicture}[node distance=2cm, scale=0.8, every node/.style={scale=0.8}]
-% Nodes
-\node[draw, rounded corners, fill=kaistblue!20, minimum width=2.5cm, minimum height=0.9cm] (step1) {\textbf{Step 1:} Compute $C$};
-\node[draw, rounded corners, fill=kaistblue!20, minimum width=2.5cm, minimum height=0.9cm, right=of step1] (step2) {\textbf{Step 2:} Check 40\%};
-\node[draw, rounded corners, fill=kaistblue!20, minimum width=2.5cm, minimum height=0.9cm, right=of step2] (step3) {\textbf{Step 3:} Decide};
-
-% Arrows
-\draw[->,thick] (step1) -- (step2);
-\draw[->,thick] (step2) -- (step3);
-
-% Decision outcomes
-\node[draw, rounded corners, fill=successgreen!30, minimum width=2.2cm, below left=1.2cm and -0.3cm of step3] (safe) {Deploy};
-\node[draw, rounded corners, fill=alertred!30, minimum width=2.2cm, below right=1.2cm and -0.3cm of step3] (unsafe) {Mitigate};
-
-\draw[->,thick] (step3) -- node[left,pos=0.6] {\small $C < 0.4$} (safe);
-\draw[->,thick] (step3) -- node[right,pos=0.6] {\small $C \geq 0.4$} (unsafe);
-\end{tikzpicture}
-\end{center}
-
-\vspace{0.8em}
-
-\begin{alertblock}{The 40\% Threshold}
-Empirically, $C \geq 0.40$ indicates elevated vulnerability to coverage failure under distribution shift.
-\end{alertblock}
-
-\end{frame}
-
-%------------------------------------------------------------------------------
-
-\begin{frame}{Mitigation Strategies}
-
-\vspace{0.5em}
-\textbf{When $C > 40\%$:}
-
-\vspace{0.8em}
-
-\begin{columns}
-\begin{column}{0.45\textwidth}
-\textbf{1. Feature Engineering}
-\begin{itemize}
-    \item Diversify signal sources
-    \item Reduce dominant feature reliance
-\end{itemize}
-
-\vspace{0.8em}
-
-\textbf{2. Model Regularization}
-\begin{itemize}
-    \item Feature dropout
-    \item Ensemble with diverse subsets
-\end{itemize}
-
-\vspace{0.8em}
-
-\textbf{3. Monitoring}
-\begin{itemize}
-    \item Track $C$ over time
-    \item Alert on threshold violations
-\end{itemize}
-\end{column}
-
-\begin{column}{0.55\textwidth}
-% Monitoring Framework Figure
-\includegraphics[width=\textwidth]{figures/fig4_monitoring.jpg}
-\end{column}
-\end{columns}
-
-\vspace{0.8em}
-\centering
-\fbox{\textbf{Key:} Address concentration \textit{before} deployment, not after failure}
-\end{frame}
-
-%==============================================================================
-% LIMITATIONS & FUTURE WORK (Slides 21-22)
-%==============================================================================
-
-\begin{frame}{Limitations}
-
-\begin{center}
-\begin{tabular}{@{}p{3.5cm}p{7.5cm}@{}}
-\toprule
-\textbf{Limitation} & \textbf{Implication} \\
-\midrule
-\textbf{Tabular focus} & Extension to images/text needs further study \\[0.3em]
-\textbf{GBM-specific} & RF ($\rho$=0.30), MLP ($\rho$=0.43) have different failure modes \\[0.3em]
-\textbf{K$\geq$4 classes} & Binary/ternary APS has structural ceiling \\[0.3em]
-\textbf{40\% threshold} & Exploratory (n=8); requires prospective validation \\[0.3em]
-\textbf{Diagnostic only} & Indicates vulnerability, does not fix it \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-\vspace{1em}
-
-\begin{alertblock}{Key Clarification}
-SHAP concentration \textbf{indicates} vulnerability to coverage failure under distribution shift --- it does not \textit{cause} the failure (but theory supports the mechanism).
-\end{alertblock}
-
-\end{frame}
-
-%------------------------------------------------------------------------------
-
-\begin{frame}{Future Directions}
-
-\begin{columns}
-\begin{column}{0.33\textwidth}
-\centering
-\textbf{Extensions}\\[0.5em]
-\begin{tikzpicture}
-\draw[thick,kaistblue,fill=kaistblue!20] (0,0) circle (1.2);
-\node[align=center] at (0,0) {\small Deep\\learning\\SHAP};
-\end{tikzpicture}
-\\[0.5em]
-\footnotesize{Gradient-based explanations for neural networks}
-\end{column}
-
-\begin{column}{0.33\textwidth}
-\centering
-\textbf{Automation}\\[0.5em]
-\begin{tikzpicture}
-\draw[thick,kaistblue,fill=kaistblue!20] (0,0) circle (1.2);
-\node[align=center] at (0,0) {\small Auto\\mitigation};
-\end{tikzpicture}
-\\[0.5em]
-\footnotesize{Automatic feature engineering to reduce $\mathcal{H}$}
-\end{column}
-
-\begin{column}{0.33\textwidth}
-\centering
-\textbf{Theory}\\[0.5em]
-\begin{tikzpicture}
-\draw[thick,kaistblue,fill=kaistblue!20] (0,0) circle (1.2);
-\node[align=center] at (0,0) {\small Tighter\\bounds};
-\end{tikzpicture}
-\\[0.5em]
-\footnotesize{Distribution-specific coverage bounds}
-\end{column}
-\end{columns}
-
-\vspace{1.5em}
-
-\textbf{Open Questions:}
-\begin{itemize}
-    \item Can we design models that are \textit{intrinsically} low-concentration?
-    \item Prospective validation of 40\% threshold on new domains
-    \item Online/streaming conformal prediction with concentration monitoring?
-\end{itemize}
-
-\end{frame}
-
-%==============================================================================
-% CONCLUSION (Slide 23)
-%==============================================================================
-
-\begin{frame}{Conclusion}
-
-\begin{center}
-\large
-\textbf{SHAP Concentration: A Pre-Deployment Diagnostic\\for Conformal Prediction Vulnerability}
-\end{center}
-
-\vspace{0.8em}
-
-\textbf{Key Contributions:}
-\begin{enumerate}
-    \item \alert{Predictive metric:} SHAP concentration correlates with coverage failure ($\rho = 0.853$, 95\% CI [0.50, 0.96]) \textbf{in GBMs}
-
-    \item \alert{Validation:} LOO-CV 87.5\%, External 91.7\% (11/12)
-
-    \item \alert{Practical protocol:} 3-step framework with 40\% threshold
-\end{enumerate}
-
-\vspace{0.8em}
-
-\begin{columns}
-\begin{column}{0.5\textwidth}
-\textbf{Scope:} GBM classifiers with K$\geq$4 classes
-\end{column}
-\begin{column}{0.5\textwidth}
-\textbf{Impact:} Proactive identification of vulnerable deployments \textbf{before} failures occur
-\end{column}
-\end{columns}
-
-\vspace{0.8em}
-\centering
-\textbf{Code \& Data:} \texttt{github.com/ChorokLeeDev/conformal-covid-uai2026}
-
-\end{frame}
-
-%==============================================================================
-% BACKUP SLIDES (Slides 24-26)
-%==============================================================================
-
-\begin{frame}{Backup: Full Results Table}
-
-\begin{center}
-\scriptsize
-\begin{tabular}{llcccc}
-\toprule
-\textbf{Domain} & \textbf{Task} & \textbf{$C$ (\%)} & \textbf{Test Cov.} & \textbf{Drop (pp)} & \textbf{Shift} \\
-\midrule
-SALT & s-payterms & 54.2 & 13.7\% & 77.1 & Temporal \\
-SALT & s-shipcond & 50.7 & 21.8\% & 71.6 & Temporal \\
-SALT & i-shippoint & 48.8 & 72.7\% & 18.5 & Temporal \\
-SALT & s-group & 47.3 & 12.4\% & 71.2 & Temporal \\
-SALT & s-office & 42.6 & 99.9\% & 0.1 & Temporal \\
-SALT & i-incoterms & 28.9 & 83.7\% & 11.3 & Temporal \\
-SALT & i-plant & 23.9 & 81.4\% & 10.6 & Temporal \\
-SALT & s-incoterms & 23.7 & 87.0\% & 8.5 & Temporal \\
-\midrule
-Covertype & Geographic & 49.8 & 8.2\% & \textcolor{alertred}{81.8} & Geographic \\
-KDDCup99 & Attack dist. & 21.1 & Variable & 15.9 & Distribution \\
-PAMAP2 & Subject & 19.2 & Robust & --- & Population \\
-Gas Sensor & Temporal & 7.3 & Robust & --- & Temporal \\
-Shuttle & Random & 30.7 & Robust & --- & None \\
-Pendigits & Pre-defined & 14.5 & Robust & --- & None \\
-Satimage & Random & 9.0 & Robust & --- & None \\
-Avila & Random & 20.5 & Robust & --- & None \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-\vspace{0.2em}
-\footnotesize{$C$ = SHAP Concentration. pp = percentage points. 8 SALT + 8 external = 16 multiclass tasks across 9 domains.}
-
-\end{frame}
-
-%------------------------------------------------------------------------------
-
-\begin{frame}{Backup: SHAP Computation Details}
-
-\textbf{TreeSHAP Implementation:}
-
-\begin{itemize}
-    \item Used SHAP library v0.42.1
-    \item TreeExplainer for gradient boosting models
-    \item Exact SHAP values (not approximate)
-    \item Computation time: $\sim$1 second per 1,000 samples
-\end{itemize}
-
-\vspace{0.8em}
-
-\textbf{Aggregation Method:}
-
-Per-sample, per-class SHAP: $\phi_j^{(k)}(x_i)$
-
-Averaged absolute importance:
-$|\phi_j| = \frac{1}{n \cdot K} \sum_{i=1}^{n} \sum_{k=1}^{K} |\phi_j^{(k)}(x_i)|$
-
-\vspace{0.8em}
-
-\textbf{Robustness:}
-\begin{itemize}
-    \item Results stable across calibration set sizes (1K--10K)
-    \item Bootstrap confidence intervals included in paper
-\end{itemize}
-
-\end{frame}
-
-%------------------------------------------------------------------------------
-
-\begin{frame}{Backup: Statistical Analysis}
-
-\textbf{Correlation Analysis:}
-
-\vspace{0.5em}
-
-\begin{columns}
-\begin{column}{0.5\textwidth}
-\textbf{Spearman Correlation:}
-\begin{itemize}
-    \item Overall: $\rho = 0.853$ ($p < 0.001$)
-    \item SALT only: $\rho = 0.833$ ($p = 0.010$)
-    \item 95\% CI: [0.71, 0.94]
-\end{itemize}
-
-\vspace{1em}
-
-\textbf{Why Spearman?}
-\begin{itemize}
-    \item Robust to outliers
-    \item Captures monotonic relationships
-    \item Appropriate for ordinal patterns
-\end{itemize}
-\end{column}
-
-\begin{column}{0.5\textwidth}
-\textbf{Comparison with Baselines:}
-
-\vspace{0.5em}
-\begin{tabular}{lcc}
-\toprule
-\textbf{Metric} & $\rho$ & $p$-value \\
-\midrule
-SHAP Conc. & 0.853 & $<$0.001 \\
-MMD & 0.19 & 0.48 \\
-C2ST & 0.15 & 0.58 \\
-PSI & 0.12 & 0.66 \\
-KL Div. & 0.21 & 0.43 \\
-\bottomrule
-\end{tabular}
-
-\vspace{0.5em}
-\footnotesize{Only SHAP concentration achieves statistical significance}
-\end{column}
-\end{columns}
-
+% ====================== 9. TAKEAWAY ======================
+\begin{frame}{Takeaway}
+  \vspace{4pt}
+  \begin{enumerate}
+    \item \key{The failure is silent.} Under shift, catastrophic tasks become
+          \est{confidently wrong} --- prediction sets shrink while coverage
+          collapses. Standard shift detectors cannot see this.
+    \vspace{6pt}
+    \item \key{One number, computed before deployment.} SHAP concentration
+          $C=\phi_1/\sum\phi_j$, on validation data only, is associated with
+          failure severity: \hl{$\rho=0.853$}, $p<0.001$ across 16 tasks, 9 domains.
+    \vspace{6pt}
+    \item \key{Honest scope.} Specific to gradient-boosted models with genuine
+          single-feature dependence; the threshold is exploratory; it flags risk,
+          it does not repair it.
+  \end{enumerate}
+  \vspace{10pt}
+  \begin{center}
+  \setbeamercolor{block body}{bg=lblue!40}
+  \begin{beamercolorbox}[wd=0.9\textwidth,sep=7pt,rounded=true]{block body}
+    \centering\bfseries
+    Check the concentration \emph{before} you trust the coverage.
+  \end{beamercolorbox}
+  \end{center}
+  \vspace{6pt}
+  \centering\footnotesize\ttfamily choroklee@kaist.ac.kr
 \end{frame}
 
 \end{document}
