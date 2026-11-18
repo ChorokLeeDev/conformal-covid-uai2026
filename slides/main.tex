@@ -149,37 +149,23 @@
   \key{Idea.} A model that leans on \emph{one} feature is fragile: if that feature
   shifts, everything shifts. We measure that reliance \est{before deployment},
   on \obs{validation data only} --- no test labels.
-  \vspace{0pt}
+  \vspace{6pt}
 
-  % ---- Visual 1: left-to-right diagnostic pipeline (Lee style) ----
+  % ---- Diagnostic flow as plain text (no drawn schematic) ----
   \begin{center}
-  \begin{tikzpicture}[
-      font=\scriptsize,
-      box/.style={rectangle, rounded corners=2pt, draw=pgrey, line width=0.6pt,
-                  minimum height=1.25cm, text width=2.05cm, align=center,
-                  inner sep=2pt, fill=white},
-      flag/.style={rectangle, rounded corners=2pt, draw=dred, line width=0.9pt,
-                  minimum height=1.25cm, text width=2.05cm, align=center,
-                  inner sep=2pt, fill=yhi!55},
-      arr/.style={-{Stealth[length=4pt]}, line width=0.9pt, color=pgrey}]
-    \node[box] (data) {\obs{\textbf{Validation}}\\\obs{\textbf{data}}\\[1pt]
-                        {\color{pgrey}(onset, no\\ test labels)}};
-    \node[box, right=0.55cm of data] (shap) {\key{SHAP}\\ feature\\ importance\\[1pt]
-                        {\color{pgrey}$\phi_j=$ mean$|$SHAP$|$}};
-    \node[box, right=0.55cm of shap] (conc) {\key{Concentration}\\[2pt]
-                        $C=\dfrac{\phi_1}{\sum_{j}\phi_j}$};
-    \node[flag, right=0.55cm of conc] (diag) {\est{\textbf{Exploratory}}\\
-                        \est{\textbf{40\% diagnostic}}\\[1pt]
-                        {\color{black}$C\!\le\!40\%$ lower risk}};
-    \draw[arr] (data) -- (shap);
-    \draw[arr] (shap) -- (conc);
-    \draw[arr] (conc) -- (diag);
-    % top rule tying the flow together (light-blue, Lee accent)
-    \draw[color=lblue, line width=1.4pt]
-      ([yshift=10pt]data.north west) -- ([yshift=10pt]diag.north east);
-  \end{tikzpicture}
+  \setbeamercolor{block body}{bg=lblue!40}
+  \begin{beamercolorbox}[wd=0.95\textwidth,sep=8pt,rounded=true]{block body}
+    \centering\small
+    \obs{\textbf{Validation data}} {\color{pgrey}(no test labels)}
+    \;$\longrightarrow$\;
+    \key{SHAP} importance $\phi_j=\text{mean}|\text{SHAP}|$
+    \;$\longrightarrow$\;
+    \key{Concentration} $C=\dfrac{\phi_1}{\sum_{j}\phi_j}$
+    \;$\longrightarrow$\;
+    \est{\textbf{40\% diagnostic}}
+  \end{beamercolorbox}
   \end{center}
-  \vspace{-4pt}
+  \vspace{4pt}
   \begin{itemize}\small
     \item $C \in [0,1]$: fraction of total importance in the single top feature
           $\phi_1$. Normalized, so it \emph{compares across tasks}.
@@ -235,65 +221,19 @@
       \end{itemize}
     \end{column}
   \end{columns}
-  \vspace{2pt}
-  % ---- Visual 2: normalized paired bars — concentration vs coverage drop ----
+  \vspace{-4pt}
+  % ---- Visual 2: authentic source figure (UAI Fig. 1A--B, p.7) ----
+  % Per-feature mean|SHAP| val vs.\ test: A explodes on one feature,
+  % B redistributes across many. Replaces the hand-drawn paired bars.
   \begin{center}
-  \begin{tikzpicture}[font=\scriptsize, yscale=0.9]
-    % geometry
-    \def\bx{0.0}      % left edge of importance bars
-    \def\bw{4.2}      % width = 100% importance
-    \def\bh{0.34}     % bar height
-    \def\dx{5.6}      % left edge of drop bars
-    \def\dw{3.2}      % width = 100 pp drop (max scale)
-    % ---- column headers ----
-    \node[anchor=west, font=\scriptsize\bfseries] at (\bx,1.55)
-      {Top feature ($C$) vs.\ remaining importance};
-    \node[anchor=west, font=\scriptsize\bfseries] at (\dx,1.55)
-      {Coverage drop (pp)};
-
-    % ================= s-shipcond (C=50.7, drop 71.6) =================
-    \node[anchor=east, font=\scriptsize] at (\bx-0.08,0.85)
-      {\slab{s-shipcond}};
-    % importance bar: top feature C=50.7%
-    \fill[dred] (\bx,0.68) rectangle (\bx+\bw*0.507,0.68+\bh);
-    \fill[pgrey!35] (\bx+\bw*0.507,0.68) rectangle (\bx+\bw,0.68+\bh);
-    \draw[pgrey,line width=0.5pt] (\bx,0.68) rectangle (\bx+\bw,0.68+\bh);
-    \node[white,font=\scriptsize\bfseries] at (\bx+\bw*0.507/2,0.68+\bh/2) {50.7\%};
-    % drop bar
-    \fill[dred] (\dx,0.68) rectangle (\dx+\dw*0.716,0.68+\bh);
-    \draw[pgrey,line width=0.5pt] (\dx,0.68) rectangle (\dx+\dw,0.68+\bh);
-    \node[anchor=west,font=\scriptsize\bfseries,color=dred]
-      at (\dx+\dw*0.716+0.08,0.68+\bh/2) {\hl{71.6}};
-
-    % ================= s-office (C=42.6, drop 0.1) =================
-    \node[anchor=east, font=\scriptsize] at (\bx-0.08,0.05)
-      {\slab{s-office}};
-    \fill[dred] (\bx,-0.12) rectangle (\bx+\bw*0.426,-0.12+\bh);
-    \fill[pgrey!35] (\bx+\bw*0.426,-0.12) rectangle (\bx+\bw,-0.12+\bh);
-    \draw[pgrey,line width=0.5pt] (\bx,-0.12) rectangle (\bx+\bw,-0.12+\bh);
-    \node[white,font=\scriptsize\bfseries] at (\bx+\bw*0.426/2,-0.12+\bh/2) {42.6\%};
-    % drop bar (0.1 pp — true near-zero sliver, explicit label; NOT padded)
-    \fill[dgreen] (\dx,-0.12) rectangle (\dx+\dw*0.001,-0.12+\bh);
-    \draw[pgrey,line width=0.5pt] (\dx,-0.12) rectangle (\dx+\dw,-0.12+\bh);
-    \node[anchor=west,font=\scriptsize\bfseries,color=dgreen]
-      at (\dx+0.12,-0.12+\bh/2) {0.1 pp (robust)};
-
-    % legend
-    \fill[dred] (\bx,-0.78) rectangle (\bx+0.28,-0.78+0.22);
-    \node[anchor=west,font=\tiny] at (\bx+0.34,-0.78+0.11) {top feature $C$};
-    \fill[pgrey!35] (\bx+1.85,-0.78) rectangle (\bx+2.13,-0.78+0.22);
-    \node[anchor=west,font=\tiny] at (\bx+2.19,-0.78+0.11) {remaining $1-C$};
-    % 40% reference line on importance axis
-    \draw[dred,dashed,line width=0.6pt] (\bx+\bw*0.40,-0.24) -- (\bx+\bw*0.40,1.08);
-    \node[anchor=west,font=\tiny,color=dred] at (\bx+\bw*0.40+0.04,0.52) {40\%};
-  \end{tikzpicture}
+    \includegraphics[width=0.72\linewidth]{assets/fig1ab.png}
   \end{center}
-  \vspace{-1pt}
-  \centering\footnotesize
-  \est{Both} tasks sit \emph{above} the 40\% line --- high $C$ alone flags both,
-  yet one collapses and one holds: high $C$ does \est{not} imply failure
-  (s-office is the high-$C$ robust exception). Shift tests (MMD, C2ST, PSI) fire
-  on \obs{all 8} tasks equally --- they see the shift, \est{not the severity}.
+  \vspace{-3pt}
+  \centering\scriptsize
+  Catastrophic ($C{=}\obs{50.7\%}$) vs.\ robust ($C{=}\obs{42.6\%}$): both \est{above} 40\%,
+  yet drops are \hl{71.6\,pp} vs.\ \obs{0.1\,pp} --- high $C$ does \est{not} imply failure
+  (s-office is the high-$C$ robust exception). Shift tests (MMD, C2ST, PSI) fire on
+  \obs{all 8} tasks equally --- they see the shift, \est{not the severity}.
 \end{frame}
 
 % ====================== 7. KEY RESULTS ======================
