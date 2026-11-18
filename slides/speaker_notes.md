@@ -38,13 +38,13 @@ Coverage drop is validation minus test coverage, in percentage points. A large d
 
 So what's the diagnostic? The intuition is simple. A model that leans almost entirely on one feature is fragile. If that single feature is the thing that shifts under COVID, the model's whole output shifts with it. A model that spreads its reliance across many features has somewhere to fall back on.
 
-I make that measurable with SHAP values. A SHAP value is a principled, per-feature attribution: how much, on average, each feature contributes to the model's predictions. I take the mean absolute SHAP value of every feature, and I define concentration, C, as the top feature's importance divided by the total importance across all features. That's equation one.
+I make that measurable with SHAP values. A SHAP value is a principled, per-feature attribution: how much, on average, each feature contributes to the model's predictions. The pipeline on this slide reads left to right: start from validation data only — no test labels — compute each feature's mean absolute SHAP value, then collapse them into one number. I define concentration, C, as the top feature's importance divided by the total importance across all features. That's the ratio in the third box, equation one.
 
 Because it's a ratio, C lives between zero and one, and it's comparable across tasks that have different numbers of features or different scales. A C near one means one feature dominates; a smaller C just means less of the total importance sits on the top feature — not that importance is perfectly uniform.
 
-The key property: C is computed before deployment, on validation data only. No test labels. That's the whole point.
+The key property, and the reason the whole pipeline starts at that first box: C is computed before deployment, on validation data only. No test labels. That's the whole point.
 
-And it gives a simple decision rule — which I'll stress is exploratory. If concentration is at or below forty percent, treat the model as lower risk. If it's above forty percent, don't flag it blindly: first check for protective factors, and only then flag it as vulnerable. I'll come back to why that protective check matters.
+And the last box gives a simple decision rule — which I'll stress is exploratory. If concentration is at or below forty percent, treat the model as lower risk. If it's above forty percent, don't flag it blindly: first check for protective factors, and only then flag it as vulnerable. I'll come back to why that protective check matters.
 
 ---
 
@@ -54,7 +54,7 @@ I don't want this to rest only on correlation, so there's a theorem behind it. T
 
 The setup is a K-class classifier with an APS conformal predictor, and it rests on three explicit assumptions. First, additive decomposition: the prediction splits into a piece driven by the top feature, weighted by C, and a remaining piece weighted by one minus C. Second, concentrated misclassification: under shift, the error concentrates on that top feature. Third, residual exchangeability: the remaining features are still well-behaved.
 
-Under those assumptions, and on a bounded domain — the per-class shift error staying below the baseline — a *lower bound* on the expected conformity score increases with C, and an *upper bound* on coverage is non-increasing in C. That's equation two. Note the care here: a rising lower bound doesn't by itself prove the actual scores rise, and a falling upper bound doesn't prove actual coverage falls — it's a ceiling, in an idealized model.
+Under those assumptions, and under the stated ε conditions — a bound on the top-feature component's true-class probability — a *lower bound* on the expected conformity score increases with C, and an *upper bound* on coverage is non-increasing in C. That's equation two. Note the care here: a rising lower bound doesn't by itself prove the actual scores rise, and a falling upper bound doesn't prove actual coverage falls — it's a ceiling, in an idealized model.
 
 This is mechanistic intuition, not a guarantee for measured TreeSHAP C: A1 mixes probabilities, whereas TreeSHAP explains log-odds. Catastrophic tasks show rightward score shifts, with KS statistics .68 to .96, consistent with the mechanism.
 
@@ -68,7 +68,7 @@ On the left, sales-shipcond — a seventy-one point drop. Here one dominant feat
 
 On the right, sales-office — a drop of one tenth of a percentage point. Here, importance redistributes across many features; the rankings reshuffle, but gracefully, and coverage holds.
 
-The table underneath separates them. Feature-temporal stability — Jaccard overlap of a feature's values before and after the shift — is near zero for the catastrophic task, above one-half for the robust one. The subtle part: concentration C is high for *both* — fifty-point-seven versus forty-two-point-six percent — so concentration alone would flag both. The framework reports a protective-feature stability contrast; its feature-ranking and split details are not fully consistent across the paper. Prediction entropy goes *down* on the catastrophic task — confidently wrong — while it rises on the robust one.
+The paired bars make the trap visible. Each left bar is normalized to one hundred percent of importance, split into just two parts the paper supports — the single top feature, that's C, in red, and everything else in grey. Sales-shipcond's top feature is fifty-point-seven percent; sales-office's is forty-two-point-six. Both bars cross the forty-percent line — so concentration alone would flag *both* as vulnerable. But look at the drop bars on the right: seventy-one-point-six points for shipcond, versus a sliver — one tenth of a point — for office. Same high concentration, opposite outcomes. That is the false positive in one picture: high C does not imply failure, and sales-office is the high-C robust exception the forty-percent rule gets wrong.
 
 Now, the crucial negative result at the bottom. Standard shift detectors — Maximum Mean Discrepancy, Classifier Two-Sample Tests, and PSI, the Population Stability Index from credit scoring — all fire on all eight tasks. They correctly see that a shift happened. But they cannot tell catastrophic apart from harmless. They detect the shift; they do not predict the severity. That's the space my diagnostic fills.
 

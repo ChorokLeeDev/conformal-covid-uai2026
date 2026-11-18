@@ -4,6 +4,7 @@
 \usepackage{fontspec}
 \usepackage{amsmath,amssymb}
 \usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning}
 \usepackage{booktabs}
 \usepackage{array}
 \usepackage{xcolor}
@@ -146,26 +147,45 @@
 % ====================== 4. METHOD ======================
 \begin{frame}{Method: SHAP concentration as a pre-deployment diagnostic}
   \key{Idea.} A model that leans on \emph{one} feature is fragile: if that feature
-  shifts, everything shifts. Measure how concentrated the model's reliance is.
-  \vspace{6pt}
-  \begin{equation*}
-    C \;=\; \frac{\phi_1}{\sum_{j=1}^{p}\phi_j}
-    \eqnum{1}
-  \end{equation*}
-  \begin{itemize}
-    \item $\phi_j$ = mean absolute \key{SHAP} value of feature $j$ (its average
-          contribution to predictions); $\phi_1$ = the top feature.
-    \item $C \in [0,1]$: fraction of total importance in the single top feature.
-          Normalized, so it compares across tasks.
-    \item Computed \est{before deployment}, on \obs{validation data only} --- no
-          test labels needed.
-  \end{itemize}
-  \vspace{4pt}
-  \begin{center}\small
-  \key{Decision rule (exploratory):}\;
-  $C \le \obs{40\%}$ lower risk\;\textbullet\;
-  $C > \obs{40\%}$ check protective factors, else flag as \est{vulnerable}.
+  shifts, everything shifts. We measure that reliance \est{before deployment},
+  on \obs{validation data only} --- no test labels.
+  \vspace{0pt}
+
+  % ---- Visual 1: left-to-right diagnostic pipeline (Lee style) ----
+  \begin{center}
+  \begin{tikzpicture}[
+      font=\scriptsize,
+      box/.style={rectangle, rounded corners=2pt, draw=pgrey, line width=0.6pt,
+                  minimum height=1.25cm, text width=2.05cm, align=center,
+                  inner sep=2pt, fill=white},
+      flag/.style={rectangle, rounded corners=2pt, draw=dred, line width=0.9pt,
+                  minimum height=1.25cm, text width=2.05cm, align=center,
+                  inner sep=2pt, fill=yhi!55},
+      arr/.style={-{Stealth[length=4pt]}, line width=0.9pt, color=pgrey}]
+    \node[box] (data) {\obs{\textbf{Validation}}\\\obs{\textbf{data}}\\[1pt]
+                        {\color{pgrey}(onset, no\\ test labels)}};
+    \node[box, right=0.55cm of data] (shap) {\key{SHAP}\\ feature\\ importance\\[1pt]
+                        {\color{pgrey}$\phi_j=$ mean$|$SHAP$|$}};
+    \node[box, right=0.55cm of shap] (conc) {\key{Concentration}\\[2pt]
+                        $C=\dfrac{\phi_1}{\sum_{j}\phi_j}$};
+    \node[flag, right=0.55cm of conc] (diag) {\est{\textbf{Exploratory}}\\
+                        \est{\textbf{40\% diagnostic}}\\[1pt]
+                        {\color{black}$C\!\le\!40\%$ lower risk}};
+    \draw[arr] (data) -- (shap);
+    \draw[arr] (shap) -- (conc);
+    \draw[arr] (conc) -- (diag);
+    % top rule tying the flow together (light-blue, Lee accent)
+    \draw[color=lblue, line width=1.4pt]
+      ([yshift=10pt]data.north west) -- ([yshift=10pt]diag.north east);
+  \end{tikzpicture}
   \end{center}
+  \vspace{-4pt}
+  \begin{itemize}\small
+    \item $C \in [0,1]$: fraction of total importance in the single top feature
+          $\phi_1$. Normalized, so it \emph{compares across tasks}.
+    \item \key{Decision rule (exploratory):}\; $C \le \obs{40\%}$ lower risk\;\textbullet\;
+          $C > \obs{40\%}$ check protective factors, else flag \est{vulnerable}.
+  \end{itemize}
 \end{frame}
 
 % ====================== 5. THEORY ======================
@@ -200,37 +220,80 @@
     \begin{column}{0.5\textwidth}
       \slab{Catastrophic} (s-shipcond, \obs{71.6\,pp} drop)
       \begin{itemize}\small
-        \item One dominant feature \key{explodes} ($4.5\times$ importance).
-        \item Prediction sets \emph{shrink} while they should grow:
-              model is \est{confidently wrong}.
+        \item Top feature \key{explodes} ($4.5\times$ importance).
+        \item Sets \emph{shrink} while they should grow:
+              \est{confidently wrong}.
       \end{itemize}
     \end{column}
     \begin{column}{0.5\textwidth}
       \slab{Robust} (s-office, \obs{0.1\,pp} drop, yet $C=42.6\%$)
       \begin{itemize}\small
-        \item Importance \key{redistributes} across many features
-              ($10$--$20\times$, spread out).
+        \item Importance \key{redistributes} across many
+              features ($10$--$20\times$).
         \item Rankings reshuffle gracefully; coverage holds ---
-              a \est{high-$C$ false positive} for the 40\% rule.
+              a \est{high-$C$ false positive}.
       \end{itemize}
     \end{column}
   \end{columns}
-  \vspace{8pt}
-  \begin{center}\small
-  \begin{tabular}{lcc}
-    \toprule
-     & Catastrophic & Robust \\
-    \midrule
-    Feature-temporal stability (Jaccard) & \obs{$\approx 0.02$} & \obs{$>0.5$} \\
-    Top-feature SHAP concentration $C$   & \obs{high (50.7\%)} & \obs{high too (42.6\%)} \\
-    Prediction entropy under shift       & \est{$\downarrow$ (wrong\,\&\,sure)} & $\uparrow$ \\
-    \bottomrule
-  \end{tabular}
+  \vspace{2pt}
+  % ---- Visual 2: normalized paired bars — concentration vs coverage drop ----
+  \begin{center}
+  \begin{tikzpicture}[font=\scriptsize, yscale=0.9]
+    % geometry
+    \def\bx{0.0}      % left edge of importance bars
+    \def\bw{4.2}      % width = 100% importance
+    \def\bh{0.34}     % bar height
+    \def\dx{5.6}      % left edge of drop bars
+    \def\dw{3.2}      % width = 100 pp drop (max scale)
+    % ---- column headers ----
+    \node[anchor=west, font=\scriptsize\bfseries] at (\bx,1.55)
+      {Top feature ($C$) vs.\ remaining importance};
+    \node[anchor=west, font=\scriptsize\bfseries] at (\dx,1.55)
+      {Coverage drop (pp)};
+
+    % ================= s-shipcond (C=50.7, drop 71.6) =================
+    \node[anchor=east, font=\scriptsize] at (\bx-0.08,0.85)
+      {\slab{s-shipcond}};
+    % importance bar: top feature C=50.7%
+    \fill[dred] (\bx,0.68) rectangle (\bx+\bw*0.507,0.68+\bh);
+    \fill[pgrey!35] (\bx+\bw*0.507,0.68) rectangle (\bx+\bw,0.68+\bh);
+    \draw[pgrey,line width=0.5pt] (\bx,0.68) rectangle (\bx+\bw,0.68+\bh);
+    \node[white,font=\scriptsize\bfseries] at (\bx+\bw*0.507/2,0.68+\bh/2) {50.7\%};
+    % drop bar
+    \fill[dred] (\dx,0.68) rectangle (\dx+\dw*0.716,0.68+\bh);
+    \draw[pgrey,line width=0.5pt] (\dx,0.68) rectangle (\dx+\dw,0.68+\bh);
+    \node[anchor=west,font=\scriptsize\bfseries,color=dred]
+      at (\dx+\dw*0.716+0.08,0.68+\bh/2) {\hl{71.6}};
+
+    % ================= s-office (C=42.6, drop 0.1) =================
+    \node[anchor=east, font=\scriptsize] at (\bx-0.08,0.05)
+      {\slab{s-office}};
+    \fill[dred] (\bx,-0.12) rectangle (\bx+\bw*0.426,-0.12+\bh);
+    \fill[pgrey!35] (\bx+\bw*0.426,-0.12) rectangle (\bx+\bw,-0.12+\bh);
+    \draw[pgrey,line width=0.5pt] (\bx,-0.12) rectangle (\bx+\bw,-0.12+\bh);
+    \node[white,font=\scriptsize\bfseries] at (\bx+\bw*0.426/2,-0.12+\bh/2) {42.6\%};
+    % drop bar (0.1 pp — true near-zero sliver, explicit label; NOT padded)
+    \fill[dgreen] (\dx,-0.12) rectangle (\dx+\dw*0.001,-0.12+\bh);
+    \draw[pgrey,line width=0.5pt] (\dx,-0.12) rectangle (\dx+\dw,-0.12+\bh);
+    \node[anchor=west,font=\scriptsize\bfseries,color=dgreen]
+      at (\dx+0.12,-0.12+\bh/2) {0.1 pp (robust)};
+
+    % legend
+    \fill[dred] (\bx,-0.78) rectangle (\bx+0.28,-0.78+0.22);
+    \node[anchor=west,font=\tiny] at (\bx+0.34,-0.78+0.11) {top feature $C$};
+    \fill[pgrey!35] (\bx+1.85,-0.78) rectangle (\bx+2.13,-0.78+0.22);
+    \node[anchor=west,font=\tiny] at (\bx+2.19,-0.78+0.11) {remaining $1-C$};
+    % 40% reference line on importance axis
+    \draw[dred,dashed,line width=0.6pt] (\bx+\bw*0.40,-0.24) -- (\bx+\bw*0.40,1.08);
+    \node[anchor=west,font=\tiny,color=dred] at (\bx+\bw*0.40+0.04,0.52) {40\%};
+  \end{tikzpicture}
   \end{center}
-  \vspace{4pt}
+  \vspace{-1pt}
   \centering\footnotesize
-  Standard shift tests (MMD, C2ST, PSI) fire on \obs{all 8} tasks equally --- they
-  see the shift but \est{not the severity}.
+  \est{Both} tasks sit \emph{above} the 40\% line --- high $C$ alone flags both,
+  yet one collapses and one holds: high $C$ does \est{not} imply failure
+  (s-office is the high-$C$ robust exception). Shift tests (MMD, C2ST, PSI) fire
+  on \obs{all 8} tasks equally --- they see the shift, \est{not the severity}.
 \end{frame}
 
 % ====================== 7. KEY RESULTS ======================
