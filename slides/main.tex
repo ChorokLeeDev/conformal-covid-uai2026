@@ -65,243 +65,93 @@
 \setbeamercolor{itemize item}{fg=dred}
 \setbeamercolor{itemize subitem}{fg=pgrey}
 
+% Intuitive deck helpers
+\newcommand{\deckstage}[2]{{\scriptsize\color{pgrey}#2\hfill\color{dred}\textbf{#1}}\par\vspace{0.18cm}}
+\newcommand{\deckpoint}[1]{\vfill{\small\color{dred}\textbf{#1}}\par}
 \begin{document}
-
-% ====================== 1. TITLE ======================
-{
-\setbeamertemplate{footline}{}
-\begin{frame}[plain]
-  \vspace{1.0cm}
-  {\color{lblue}\rule{\textwidth}{2pt}}\par
-  \vspace{0.6cm}
-  {\bfseries\LARGE Diagnosing Conformal Prediction Failures\\[4pt]
-   Under Distribution Shift}\par
-  \vspace{6pt}
-  {\large A COVID-19 Case Study}\par
-  \vspace{0.5cm}
-  {\color{lblue}\rule{\textwidth}{2pt}}\par
-  \vspace{1.0cm}
-  {\large\bfseries Chorok Lee}\par
-  \vspace{4pt}
-  {\small Korea Advanced Institute of Science and Technology (KAIST)}\par
-  \vspace{2pt}
-  {\footnotesize\ttfamily choroklee@kaist.ac.kr}\par
-  \vfill
-  {\footnotesize\color{dred}\textbf{UAI 2026}}\par
+% Slide 1:  —
+\begin{frame}[t]{Diagnosing Conformal Prediction Failures}
+\begin{itemize}
+\item Under Distribution Shift: A COVID-19 Case Study
+\item Chorok Lee · KAIST · UAI 2026
+\item Question: what does a model rely on, and does its set still include the answer?
+\end{itemize}
+\deckpoint{What does the model rely on?}
 \end{frame}
-}
-
-% ====================== 2. MOTIVATION ======================
-\begin{frame}{Why this matters: a guarantee that quietly breaks}
-  \begin{itemize}
-    \item \key{Conformal prediction} turns any model into one that outputs a
-          \emph{prediction set} with a coverage guarantee --- e.g.\ ``the true
-          label is inside the set \obs{90\%} of the time.''
-    \item That guarantee holds only under \key{exchangeability}: test data looks
-          like calibration data. Real deployments face \key{distribution shift}.
-    \vspace{4pt}
-    \item Prior work characterizes \emph{how much} coverage degrades under shift.
-          The open gap:
-  \end{itemize}
-  \vspace{2pt}
-  \begin{center}
-  \setbeamercolor{block body}{bg=lblue!40}
-  \begin{beamercolorbox}[wd=0.92\textwidth,sep=8pt,rounded=true]{block body}
-    \centering\bfseries
-    Can we identify \emph{which} deployed models will fail\\
-    \est{before observing any test data?}
-  \end{beamercolorbox}
-  \end{center}
-  \vspace{2pt}
-  \begin{itemize}
-    \item Our case study: \hl{8 tasks}, one \emph{identical} COVID-19 shift, yet
-          coverage drops span \obs{0.1\,pp} to \hl{77.1\,pp}. Same shift, opposite outcomes.
-  \end{itemize}
+% Slide 2: Setup —
+\begin{frame}[t]{Setup: feature row to label set}
+\deckstage{Setup}{}
+\begin{itemize}
+\item Input features $\rightarrow$ LightGBM $\rightarrow$ class probabilities
+\item APS uses probabilities and a labelled calibration sample to make a label set.
+\item Coverage: how often the set includes the true label.
+\end{itemize}
+\deckpoint{Feature row, class probabilities, label set.}
 \end{frame}
-
-% ====================== 3. PROBLEM SETUP ======================
-\begin{frame}{Problem setup: the COVID-19 natural experiment}
-  \slab{A.\ Data.} SALT supply-chain benchmark (RelBench), with a temporal split
-  aligned to COVID-19:
-  \begin{itemize}
-    \item \obs{Train}: before Feb 2020 (pre-COVID)\quad
-          \obs{Validation}: Feb--Jul 2020 (onset)\quad
-          \obs{Test}: after Jul 2020 (peak)
-    \item \key{SHAP $C$ and the initial 40\% cutoff} use \obs{validation-time data only}.
-          Test observations support held-out evaluation and post-hoc
-          mechanism/threshold analyses; they do not tune that initial cutoff.
-  \end{itemize}
-  \vspace{4pt}
-  \slab{B.\ Model + conformal method.} LightGBM classifier $+$ Adaptive Prediction
-  Sets (APS), target coverage $1-\alpha = \obs{90\%}$.
-  \vspace{4pt}
-  \slab{C.\ What ``failure'' means.} \key{Coverage drop} $=$ validation coverage
-  $-$ test coverage (percentage points). A big drop $=$ the guarantee broke.
-  \vspace{6pt}
-  \begin{center}\footnotesize
-    All 8 tasks pass through the \emph{same} pipeline and the \emph{same} shift ---
-    the only thing that varies is the task.
-  \end{center}
+% Slide 3: Assumptions —
+\begin{frame}[t]{Assumptions: what must stay stable?}
+\deckstage{Assumptions}{}
+\begin{itemize}
+\item The conformal promise needs exchangeable calibration and future cases, with independent model fitting.
+\item The tasks share COVID periods, not identical distributions.
+\item The mechanism theorem assumes a damaged probability component, a stable remaining component and a fixed threshold.
+\end{itemize}
+\deckpoint{The promise and the mechanism each have assumptions.}
 \end{frame}
-
-% ====================== 4. METHOD ======================
-\begin{frame}{Method: SHAP concentration as a pre-deployment diagnostic}
-  \key{Idea.} A model that leans on \emph{one} feature is fragile: if that feature
-  shifts, everything shifts. We measure that reliance \est{before deployment},
-  on \obs{validation data only} --- no test labels.
-  \vspace{6pt}
-
-  % ---- Diagnostic flow as plain text (no drawn schematic) ----
-  \begin{center}
-  \setbeamercolor{block body}{bg=lblue!40}
-  \begin{beamercolorbox}[wd=0.95\textwidth,sep=8pt,rounded=true]{block body}
-    \centering\small
-    \obs{\textbf{Validation data}} {\color{pgrey}(no test labels)}
-    \;$\longrightarrow$\;
-    \key{SHAP} importance $\phi_j=\text{mean}|\text{SHAP}|$
-    \;$\longrightarrow$\;
-    \key{Concentration} $C=\dfrac{\phi_1}{\sum_{j}\phi_j}$
-    \;$\longrightarrow$\;
-    \est{\textbf{40\% diagnostic}}
-  \end{beamercolorbox}
-  \end{center}
-  \vspace{4pt}
-  \begin{itemize}\small
-    \item $C \in [0,1]$: fraction of total importance in the single top feature
-          $\phi_1$. Normalized, so it \emph{compares across tasks}.
-    \item \key{Decision rule (exploratory):}\; $C \le \obs{40\%}$ lower risk\;\textbullet\;
-          $C > \obs{40\%}$ check protective factors, else flag \est{vulnerable}.
-  \end{itemize}
+% Slide 4: Hypothesis —
+\begin{frame}[t]{Hypothesis: can reliance help explain loss?}
+\deckstage{Hypothesis}{}
+\begin{itemize}
+\item SHAP explains the fitted model’s output through feature contributions.
+\item Concentration: the top feature’s average absolute contribution divided by the total.
+\item Could a change in that feature’s predictive relationship help explain coverage loss?
+\end{itemize}
+\deckpoint{The changed relationship matters.}
 \end{frame}
+% Slide 5: Result —
+\begin{frame}[t]{Result: a historical association}
+\deckstage{Result}{}
+\begin{center}\includegraphics[width=0.65\linewidth]{assets/fig2.png}\end{center}
+\vspace{-0.15cm}
+{\small Historical selected 16: rho = 0.853; all 17: 0.654. Later separate checks did not reproduce the positive pattern.}
 
-% ====================== 5. THEORY ======================
-\begin{frame}{Theory: why concentration relates to failure}
-  \key{Theorem 1 (monotone vulnerability).} For a $K$-class APS predictor,
-  under three explicit assumptions ---
-  \begin{itemize}\small
-    \item[(A1)] \emph{additive decomposition}: prediction $=C\cdot g(y\mid x_1)+(1-C)\,h(\cdot)$
-    \item[(A2)] \emph{concentrated misclassification} under shift on the top feature $x_1$
-    \item[(A3)] \emph{residual exchangeability} of the remaining features
-  \end{itemize}
-  the \emph{lower bound} on the expected conformity score increases with $C$, and
-  the coverage \emph{upper bound} is \key{non-increasing} in $C$, on the stated
-  domain ($\varepsilon<\bar h$ and $\varepsilon<(1-\hat q_\alpha)/(K-1)$, $K\ge3$):
-  \begin{equation*}
-    \mathbb{E}[s_{\text{test}}] \;\geq\;
-      C\,(1-(K{-}1)\varepsilon) \;+\; (1-C)\,(1-(K{-}1)\bar h)
-    \eqnum{2}
-  \end{equation*}
-  \begin{itemize}
-    \item A \est{directional intuition} for an \emph{idealized probability-mixture}
-          model --- \est{not} a formal guarantee for the empirical SHAP-derived $C$
-          (TreeSHAP log-odds; footnote 3, p.4).
-    \item \obs{Empirically} consistent: catastrophic tasks show strong rightward
-          score shifts (KS $0.68$--$0.96$).
-  \end{itemize}
+\deckpoint{Historical association, with its empirical scope.}
 \end{frame}
+% Slide 6: Result —
+\begin{frame}[t]{Result: different attribution patterns}
+\deckstage{Result}{}
+\begin{center}\includegraphics[width=0.65\linewidth]{assets/fig1ab.png}\end{center}
+\vspace{-0.15cm}
+{\small Historical examples. Attribution patterns do not establish the theoretical mixture assumptions.}
 
-% ====================== 6. EXPERIMENTS / MECHANISM ======================
-\begin{frame}{The mechanism: catastrophic vs.\ robust, same shift}
-  \begin{columns}[T]
-    \begin{column}{0.5\textwidth}
-      \slab{Catastrophic} (s-shipcond, \obs{71.6\,pp} drop)
-      \begin{itemize}\small
-        \item Top feature \key{explodes} ($4.5\times$ importance).
-        \item Sets \emph{shrink} while they should grow:
-              \est{confidently wrong}.
-      \end{itemize}
-    \end{column}
-    \begin{column}{0.5\textwidth}
-      \slab{Robust} (s-office, \obs{0.1\,pp} drop, yet $C=42.6\%$)
-      \begin{itemize}\small
-        \item Importance \key{redistributes} across many
-              features ($10$--$20\times$).
-        \item Rankings reshuffle gracefully; coverage holds ---
-              a \est{high-$C$ false positive}.
-      \end{itemize}
-    \end{column}
-  \end{columns}
-  \vspace{-4pt}
-  % ---- Visual 2: authentic source figure (UAI Fig. 1A--B, p.7) ----
-  % Per-feature mean|SHAP| val vs.\ test: A explodes on one feature,
-  % B redistributes across many. Replaces the hand-drawn paired bars.
-  \begin{center}
-    \includegraphics[width=0.72\linewidth]{assets/fig1ab.png}
-  \end{center}
-  \vspace{-3pt}
-  \centering\scriptsize
-  Catastrophic ($C{=}\obs{50.7\%}$) vs.\ robust ($C{=}\obs{42.6\%}$): both \est{above} 40\%,
-  yet drops are \hl{71.6\,pp} vs.\ \obs{0.1\,pp} --- high $C$ does \est{not} imply failure
-  (s-office is the high-$C$ robust exception). Shift tests (MMD, C2ST, PSI) fire on
-  \obs{all 8} tasks equally --- they see the shift, \est{not the severity}.
+\deckpoint{A pattern suggests a question; it does not prove its cause.}
 \end{frame}
-
-% ====================== 7. KEY RESULTS ======================
-\begin{frame}{Key result: concentration predicts severity}
-  \begin{center}
-    \small Primary endpoint: $\rho = \hl{0.853}$, $p<\obs{0.001}$ over
-    \hl{16 tasks} / \hl{9 domains} \;\textbullet\; within SALT ($n{=}8$)
-    $\rho=\obs{0.833}$ (exploratory) \;\textbullet\; shift detectors
-    $\rho\le\obs{0.19}$.
-  \end{center}
-  \vspace{-2pt}
-  \begin{center}
-    \includegraphics[width=0.72\linewidth]{assets/fig2.png}
-  \end{center}
-  \vspace{-4pt}
-  \centering\footnotesize
-  Boundary cases: s-office ($C=42.6\%$, drop $0.1$\,pp;
-  \est{high-$C$ false positive}); i-shippoint ($C=48.8\%$, drop $18.5$\,pp).
+% Slide 7: Theorem —
+\begin{frame}[t]{Theorem: a conditional explanation}
+\deckstage{Theorem}{}
+\begin{itemize}
+\item A simplified model combines two probability components.
+\item One becomes unreliable after shift; the other stays stable.
+\item Under the stated conditions, weighting the damaged component more worsens bounds on the APS score and coverage.
+\end{itemize}
+\deckpoint{A bound for a simplified model.}
 \end{frame}
-
-% ====================== 8. LIMITATIONS (honest) ======================
-\begin{frame}{Limitations: what this diagnostic does \emph{not} do}
-  \slab{A.\ It is model-specific.} The signal is strong for gradient-boosted trees
-  (LightGBM $\rho=\obs{0.833}$, CatBoost $0.67$, XGBoost $0.55$) but \est{fails for
-  bagging}: Random Forest $\rho=\obs{0.30}$ ($p=0.47$). Compute $C$ on \emph{your}
-  deployed model class, don't transfer.
-  \vspace{4pt}
-  \slab{B.\ The 40\% threshold is exploratory.} Derived from \obs{8} SALT tasks;
-  within-SALT power is below convention. Treat as provisional; validate before a
-  new domain.
-  \vspace{4pt}
-  \slab{C.\ One false positive, honestly reported.} sales-office has $C=42.6\%$ yet
-  \obs{0.1\,pp} drop. The framework reports protective SALESORGANIZATION
-  (train--validation Jaccard $=.61$; treated as secondary), motivating a
-  \key{provisional protective-factor check}, not a hard cutoff.
-  \vspace{4pt}
-  \slab{D.\ It diagnoses, it does not fix.} Mitigation is mechanism-dependent:
-  quarterly retraining gives \obs{$+18.9$\,pp} on \emph{one} task (s-shipcond),
-  \est{single-seed, Holm-corrected $p=0.11$} --- suggestive, not a reliable average.
-  RAPS helps class-accumulation failures, not single-feature dependence.
+% Slide 8:  —
+\begin{frame}[t]{Limits: what is still unvalidated?}
+\begin{itemize}
+\item The historical 40\% cutoff is not a validated deployment rule.
+\item The positive historical association was not reproduced in the separate later panel.
+\item Measured SHAP concentration and a theoretical mixture share are different objects.
+\end{itemize}
+\deckpoint{What evidence would support a stronger claim?}
 \end{frame}
-
-% ====================== 9. TAKEAWAY ======================
-\begin{frame}{Takeaway}
-  \vspace{4pt}
-  \begin{enumerate}
-    \item \key{The failure is silent.} Under shift, catastrophic tasks become
-          \est{confidently wrong} --- prediction sets shrink while coverage
-          collapses. Standard shift detectors cannot see this.
-    \vspace{6pt}
-    \item \key{One number, computed before deployment.} SHAP concentration
-          $C=\phi_1/\sum\phi_j$, on validation data only, is associated with
-          failure severity: \hl{$\rho=0.853$}, $p<0.001$ across 16 tasks, 9 domains.
-    \vspace{6pt}
-    \item \key{Honest scope.} Specific to gradient-boosted models with genuine
-          single-feature dependence; the threshold is exploratory; it flags risk,
-          it does not repair it.
-  \end{enumerate}
-  \vspace{10pt}
-  \begin{center}
-  \setbeamercolor{block body}{bg=lblue!40}
-  \begin{beamercolorbox}[wd=0.9\textwidth,sep=7pt,rounded=true]{block body}
-    \centering\bfseries
-    Check the concentration \emph{before} you trust the coverage.
-  \end{beamercolorbox}
-  \end{center}
-  \vspace{6pt}
-  \centering\footnotesize\ttfamily choroklee@kaist.ac.kr
+% Slide 9:  —
+\begin{frame}[t]{Takeaway: ask what the evidence supports}
+\begin{itemize}
+\item Start with the classifier, its output and its prediction set.
+\item Explain the assumptions before interpreting a failure.
+\item Treat attribution as a measured clue with a stated scope.
+\end{itemize}
+\deckpoint{What does the evidence establish?}
 \end{frame}
-
 \end{document}
