@@ -1,0 +1,101 @@
+\documentclass[aspectratio=43,11pt]{beamer}
+\usetheme{default}
+\usefonttheme{serif}
+\usepackage{fontspec}
+\setmainfont{Charter}
+\usepackage{amsmath,amssymb,graphicx}
+\definecolor{struct}{HTML}{8B2E2E}
+\definecolor{tagc}{HTML}{8A8F98}
+\setbeamercolor{structure}{fg=struct}
+\setbeamercolor{frametitle}{fg=black}
+\setbeamerfont{frametitle}{series=\bfseries,size=\Large}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{frametitle}{\vspace{0.6em}\insertframetitle\par\vspace{-0.2em}{\color{tagc!60}\rule{\linewidth}{0.4pt}}}
+\setbeamertemplate{footline}{\hfill\color{tagc}\footnotesize\insertframenumber\hspace{1em}\vspace{0.5em}}
+\setbeamertemplate{itemize item}{\color{struct}\textbullet}
+\begin{document}
+\begin{frame}{Diagnosing Conformal Prediction Failures}
+\begin{itemize}
+  \item Under Distribution Shift: A COVID-19 Case Study
+  \item Chorok Lee $\cdot$ KAIST $\cdot$ UAI 2026
+  \item Same COVID shock hit many tasks --- why did some break and others hold?
+\end{itemize}
+\vfill
+{\color{struct}\small What does the model rely on?}
+\end{frame}
+\begin{frame}{Setup: feature row to label set}
+\begin{center}\includegraphics[height=0.52\textheight]{/Users/i767700/Desktop/ProjectJH/PhD_Applications/TU_Darmstadt_RMT4DL_Seleznova_20261110/interview/figures/paper_1_aps_coverage.png}\end{center}
+\begin{itemize}
+  \item A row of tabular features $\to$ LightGBM classifier $\to$ a probability for each label.
+  \item APS adds the highest-probability labels into a set until their total clears a calibrated threshold.
+  \item Coverage: how often that set contains the true label.
+\end{itemize}
+\vfill
+{\color{struct}\small Feature row in, class probabilities, label set out.}
+\end{frame}
+\begin{frame}{Assumptions: two to keep straight}
+\begin{itemize}
+  \item \textbf{First --- what the guarantee needs:} calibration and test cases must be interchangeable.
+  \item Splitting the timeline around COVID-19 breaks exactly that, so coverage can fall.
+  \item \textbf{Second --- what my theorem assumes:} a clean setting where one part breaks, the rest stays put.
+  \item The first is a real condition that fails; the second explains \emph{why} it fails.
+\end{itemize}
+\vfill
+{\color{struct}\small The guarantee's assumption vs the theorem's assumption.}
+\end{frame}
+\begin{frame}{Hypothesis: can reliance help explain the loss?}
+\begin{itemize}
+  \item Intuition: a model leaning on one feature breaks when a \emph{distribution shift} changes that feature.
+  \item SHAP splits a prediction into each feature's contribution, relative to a baseline.
+  \item Concentration: the share of total SHAP importance held by the single top feature (0 to 1).
+  \item A stable, useful feature can be concentrated too --- concentration alone is not ``bad''.
+\end{itemize}
+\vfill
+{\color{struct}\small A changed, heavily-used feature is the suspect.}
+\end{frame}
+\begin{frame}{Result: higher concentration, larger coverage loss}
+\begin{itemize}
+  \item Across my main set of 16 tasks, higher top-feature concentration went with larger coverage loss.
+  \item A strong positive association: $\rho = 0.853$.
+  \item Standard shift detectors showed almost no such association.
+  \item A retrospective finding --- limits on the next slide but one.
+\end{itemize}
+\vfill
+{\color{struct}\small A real association, stated with its scope.}
+\end{frame}
+\begin{frame}{Result: two tasks, same shock, different outcome}
+\begin{center}\includegraphics[height=0.52\textheight]{/Users/i767700/Desktop/ProjectJH/PhD_Applications/TU_Darmstadt_RMT4DL_Seleznova_20261110/interview/figures/paper_1_shap_concentration.png}\end{center}
+\vfill
+{\color{struct}\small A pattern that raises a question; it doesn't prove the cause.}
+\end{frame}
+\begin{frame}{Theorem: a conditional explanation}
+\begin{itemize}
+  \item A toy model's probability is a \emph{mixture of two parts}: one rides the top feature, one the rest.
+  \item The \emph{mixing weight} is how much it leans on the top part --- 0.8 means 80\%.
+  \item After the shift that part breaks: the bigger the mixing weight, the lower the coverage.
+  \item That theoretical mixing weight is \emph{not} the same number as measured SHAP concentration.
+\end{itemize}
+\vfill
+{\color{struct}\small A coverage bound for a simplified mixture model.}
+\end{frame}
+\begin{frame}{Limits: where the tool stops --- and where I want to go next}
+\begin{itemize}
+  \item Not bulletproof: one more borderline task pulls $\rho$ from 0.85 to 0.65; a separate group didn't replicate.
+  \item The 40\% cutoff is a rule of thumb, not a validated rule; a SHAP plot does not prove a cause.
+  \item The tool is model-specific: it works for boosted trees, not entangled deep networks.
+  \item For neural nets: dissect the network itself --- its gradient and spectral structure --- for the same kind of check.
+\end{itemize}
+\vfill
+{\color{struct}\small What would support a stronger claim?}
+\end{frame}
+\begin{frame}{Takeaway: start from the model and the evidence}
+\begin{itemize}
+  \item Distribution shift causes failures that are easy to miss: the model shrinks its set, wrong with confidence.
+  \item For boosted models, SHAP concentration on validation data is a practical pre-deployment warning.
+  \item Where it stops is deep learning.
+  \item \textbf{Direction:} the same lightweight robustness diagnostic, built on analysis inside the network.
+\end{itemize}
+\vfill
+{\color{struct}\small What does the evidence actually establish?}
+\end{frame}
+\end{document}
